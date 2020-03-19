@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Path.copy
+================
+
+.. currentmodule:: pathpy
+
+.. automethod:: Path.copy

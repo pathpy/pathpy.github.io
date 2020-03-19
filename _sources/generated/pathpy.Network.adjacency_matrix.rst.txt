@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Network.adjacency\_matrix
+================================
+
+.. currentmodule:: pathpy
+
+.. automethod:: Network.adjacency_matrix

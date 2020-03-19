@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pathpy.core.edge &#8212; pathpy 3.0.0a1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../examples/index.html">Gallery</a></li>
+                <li><a href="../../../tutorial.html">Tutorial</a></li>
+                <li><a href="../../../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pathpy.core.edge</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python -tt</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># File      : edge.py -- Base class for an single edge</span>
+<span class="c1"># Author    : Jürgen Hackl &lt;hackl@ifi.uzh.ch&gt;</span>
+<span class="c1"># Time-stamp: &lt;Thu 2020-03-19 14:30 juergen&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2016-2020 Pathpy Developers</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseClass</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">NodeDict</span>
+<span class="kn">from</span> <span class="nn">.utils.separator</span> <span class="k">import</span> <span class="n">separator</span>
+<span class="kn">from</span> <span class="nn">.utils._check_node</span> <span class="k">import</span> <span class="n">_check_node</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">Node</span>
+
+<span class="c1"># create logger for the Edge class</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Edge"><a class="viewcode-back" href="../../../generated/pathpy.Edge.html#pathpy.Edge">[docs]</a><span class="k">class</span> <span class="nc">Edge</span><span class="p">(</span><span class="n">BaseClass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for an single edge.</span>
+
+<span class="sd">    An edge is (together with nodes) one of the two basic units out of which</span>
+<span class="sd">    networks are constructed. Each edge has two nodes to which it is attached,</span>
+<span class="sd">    called its endpoints. Edges may be directed or undirected; undirected edges</span>
+<span class="sd">    are also called lines and directed edges are also called arcs or arrows. In</span>
+<span class="sd">    an undirected network, an edge may be represented as the set of its nodes,</span>
+<span class="sd">    and in a directed network it may be represented as an ordered pair of its</span>
+<span class="sd">    vertices.</span>
+
+<span class="sd">    The two nodes forming an :py:class:`Edge` are said to be the endpoints of</span>
+<span class="sd">    this edge, and the edge is said to be incident to the nodes.</span>
+
+<span class="sd">    In ``pathpy`` the edge is referenced by its unique identifier (``uid``),</span>
+<span class="sd">    connects two :py:class:`Node` objects and can store any arbitrary python</span>
+<span class="sd">    objects as attributes.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">       To generate an edge, only two nodes have to be defined. ``pathpy`` will</span>
+<span class="sd">       automatically create a unique identifier (``uid``) for the edge based on</span>
+<span class="sd">       the node uids. In this case, the edge ``uid`` is defined as a</span>
+<span class="sd">       combination of the node uids separated by ``-``. The separation sign can</span>
+<span class="sd">       be changed in the config file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    v : Node</span>
+
+<span class="sd">        This parameter defines the source of the edge (if directed),</span>
+<span class="sd">        i.e. v-&gt;w. Beside a py:class:`Node` object also a ``str`` node uid can</span>
+<span class="sd">        be entered, in this case, a new :py:class:`Node` will be created.</span>
+
+<span class="sd">    w : Node</span>
+
+<span class="sd">        This parameter defines the target of the edge (if directed)</span>
+<span class="sd">        i.e. u-&gt;v. Beside a py:class:`Node` object also a ``str`` node uid can</span>
+<span class="sd">        be entered, in this case, a new :py:class:`Node` will be created.</span>
+
+<span class="sd">    uid : str, optional (default = None)</span>
+
+<span class="sd">        The parameter ``uid`` is the unique identifier for the edge. Every edge</span>
+<span class="sd">        should have an uid. The uid is converted to a string value and is used</span>
+<span class="sd">        as a key value for all dict which saving edge objects. If no edge uid</span>
+<span class="sd">        is specified the edge ``uid`` will be defined as a combination of the</span>
+<span class="sd">        node uids separated by ``-``. The separation sign can be changed in the</span>
+<span class="sd">        config file.</span>
+
+<span class="sd">    directed : bool, optional (default = True)</span>
+
+<span class="sd">        If ``True`` the edge is directed, i.e. quantities can only transmited</span>
+<span class="sd">        from the source node ``v`` to the traget node ``w``. If ``False`` the</span>
+<span class="sd">        edge is undirected, i.e. quantities can be transmited in both</span>
+<span class="sd">        directions. Per default edges in ``pathpy`` are directed.</span>
+
+<span class="sd">    kwargs : Any</span>
+
+<span class="sd">        Keyword arguments to store edge attributes. Attributes are added to the</span>
+<span class="sd">        edge as ``key=value`` pairs.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    From the ``pathpy`` import the :py:class:`Node` and :py:class:`Edge` classes.</span>
+
+<span class="sd">    &gt;&gt;&gt; from pathpy import Node, Edge</span>
+
+<span class="sd">    Create an edge ``e`` with given nodes.</span>
+
+<span class="sd">    &gt;&gt;&gt; v = Node(&#39;w&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; w = Node(&#39;v&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; e = Edge(v, w, uid=&#39;e&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; e.uid</span>
+<span class="sd">    e</span>
+
+<span class="sd">    Create an edge with given node uids and no edge uid.</span>
+
+<span class="sd">    &gt;&gt;&gt; ab = Edge(&#39;a&#39;, &#39;b&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ab.uid</span>
+<span class="sd">    a-b</span>
+
+<span class="sd">    Show the associated node objects</span>
+
+<span class="sd">    &gt;&gt;&gt; ab.nodes</span>
+<span class="sd">    NodeDict(&lt;class &#39;dict&#39;&gt;, {&#39;a&#39;: Node a, &#39;b&#39;: Node b})</span>
+
+<span class="sd">    Create an edge with attached attribute.</span>
+
+<span class="sd">    &gt;&gt;&gt; ab = Edge(&#39;a&#39;,&#39;b&#39;, length=10)</span>
+
+<span class="sd">    Add attribute to the edge.</span>
+
+<span class="sd">    &gt;&gt;&gt; ab[&#39;capacity&#39;] = 5.5</span>
+
+<span class="sd">    Show attached attributes</span>
+
+<span class="sd">    &gt;&gt;&gt; ab.attributes</span>
+<span class="sd">    {&#39;length&#39;: 10, &#39;capacity&#39;: 5}</span>
+
+<span class="sd">    Change attribute.</span>
+
+<span class="sd">    &gt;&gt;&gt; ab[&#39;length&#39;] = 5</span>
+
+<span class="sd">    Update attributes (and add new).</span>
+
+<span class="sd">    &gt;&gt;&gt; ab.update(length = 2, capacity = 3, speed = 10)</span>
+<span class="sd">    &gt;&gt;&gt; ab.attributes</span>
+<span class="sd">    {&#39;length&#39;: 2, &#39;capacity&#39;: 3, &#39;speed&#39;: 10}</span>
+
+<span class="sd">    Get the weight of the edge. Per default the attribute with the key &#39;weight&#39;</span>
+<span class="sd">    is used as weight. Should there be no such attribute, a new one will be</span>
+<span class="sd">    crated with weight = 1.0.</span>
+
+<span class="sd">    &gt;&gt;&gt; ab.weight()</span>
+<span class="sd">    1.0</span>
+
+<span class="sd">    If an other attribute should be used as weight, the option weight has to be</span>
+<span class="sd">    changed.</span>
+
+<span class="sd">    &gt;&gt;&gt; ab.weight(&#39;length&#39;)</span>
+<span class="sd">    2</span>
+
+<span class="sd">    If a weight is assigned but for calculation a weight of 1.0 is needed, the</span>
+<span class="sd">    weight can be disabled with ``False`` or None.</span>
+
+<span class="sd">    &gt;&gt;&gt; ab[&#39;weight&#39;] = 4</span>
+<span class="sd">    &gt;&gt;&gt; ab.weight()</span>
+<span class="sd">    4.0</span>
+<span class="sd">    &gt;&gt;&gt; ab.weight(False)</span>
+<span class="sd">    1.0</span>
+
+<span class="sd">    Make copy of the edge.</span>
+
+<span class="sd">    &gt;&gt;&gt; ef = ab.copy()</span>
+<span class="sd">    &gt;&gt;&gt; ef.uid</span>
+<span class="sd">    &#39;a-b&#39;</span>
+
+<span class="sd">    Make a plot element and plot the edge as a png image.</span>
+
+<span class="sd">    .. todo::</span>
+
+<span class="sd">        Make a single plot command for plotting edges.</span>
+<span class="sd">        The code below is not working yet!</span>
+
+<span class="sd">    &gt;&gt;&gt; plt = ab.plot()</span>
+<span class="sd">    &gt;&gt;&gt; plt.show(&#39;png&#39;)</span>
+
+<span class="sd">    .. plot::</span>
+
+<span class="sd">       import pathpy as pp</span>
+<span class="sd">       ab = pp.Edge(&#39;a&#39;,&#39;b&#39;)</span>
+<span class="sd">       net = pp.Network()</span>
+<span class="sd">       net.add_edge(ab)</span>
+<span class="sd">       plt = net.plot()</span>
+<span class="sd">       plt.show(&#39;png&#39;)</span>
+
+<span class="sd">    Create an undirected edge.</span>
+
+<span class="sd">    &gt;&gt;&gt; cd = Edge(&#39;c&#39;, &#39;d&#39;, directed=False)</span>
+<span class="sd">    &gt;&gt;&gt; plt = ab.plot()</span>
+<span class="sd">    &gt;&gt;&gt; plt.show(&#39;png&#39;)</span>
+
+<span class="sd">    .. plot::</span>
+
+<span class="sd">       import pathpy as pp</span>
+<span class="sd">       cd = pp.Edge(&#39;c&#39;,&#39;d&#39;,directed=False)</span>
+<span class="sd">       net = pp.Network(directed=False)</span>
+<span class="sd">       net.add_edge(cd)</span>
+<span class="sd">       plt = net.plot()</span>
+<span class="sd">       plt.show(&#39;png&#39;)</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    Node</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Edge.__init__"><a class="viewcode-back" href="../../../generated/pathpy.Edge.html#pathpy.Edge.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">w</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the edge object.&quot;&quot;&quot;</span>
+
+        <span class="c1"># initialize the base class</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># set unique identifier of the edge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span><span class="p">:</span> <span class="nb">str</span>
+
+        <span class="c1"># inidcator whether the edge is directed or undirected</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">directed</span>
+
+        <span class="c1"># a dictionary containing node objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">:</span> <span class="n">NodeDict</span> <span class="o">=</span> <span class="n">NodeDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+        <span class="c1"># use separator if given otherwise use config default value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">separator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add attributes to the edge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">])</span>
+
+        <span class="c1"># set source and target nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_w</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span>
+
+        <span class="c1"># set uid of the edge</span>
+        <span class="k">if</span> <span class="n">uid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">[</span><span class="s1">&#39;edge&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span> <span class="o">=</span> <span class="n">uid</span>
+
+        <span class="c1"># update associated nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">outgoing</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">incoming</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">outgoing</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">incoming</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the description of the edge.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Returns the description of the edge with the class and assigned</span>
+<span class="sd">            edge uid.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate new edge without dedicated uid</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node, Edge</span>
+<span class="sd">        &gt;&gt;&gt; vw = Edge(&#39;v&#39;, &#39;w&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; vw</span>
+<span class="sd">        Edge v-w</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_desc</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_desc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return a string *Edge()*.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the unique hash of the edge.</span>
+
+<span class="sd">        Here the hash value is defined by the unique edge id!</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Delete the edge.&quot;&quot;&quot;</span>
+        <span class="c1"># update associated nodes</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">outgoing</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">incoming</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">incoming</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">outgoing</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">uid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the unique identifier (uid) of the edge.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Return the edge identifier as a string.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a single edge and print the id.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Edge</span>
+<span class="sd">        &gt;&gt;&gt; vw = Edge(&#39;v&#39;,&#39;w&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; vw.uid</span>
+<span class="sd">        &#39;v-w&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeDict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the associated nodes of the edge.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :py:class:`NodeDict`</span>
+
+<span class="sd">            Return a dictionary with the :py:class:`Node` uids as key and the</span>
+<span class="sd">            :py:class:`Node` objects as values, associated with the edge.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a single edge with a color attribute.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Edge</span>
+<span class="sd">        &gt;&gt;&gt; vw = Edge(&#39;v&#39;,&#39;w&#39;, color=&#39;red&#39;)</span>
+
+<span class="sd">        Get the nodes of the edge</span>
+
+<span class="sd">        &gt;&gt;&gt; vw.nodes</span>
+<span class="sd">        {&#39;v&#39;: Node v, &#39;w&#39;: Node w}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">v</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the source node v of the edge.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :py:class:`Node`</span>
+
+<span class="sd">            Retun the source :py:class:`Node` of the edge.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate an single edge and return the source node.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Edge</span>
+<span class="sd">        &gt;&gt;&gt; vw = Edge(&#39;v&#39;,&#39;w&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; vw.v</span>
+<span class="sd">        Node v</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">w</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the target node w of the edge.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :py:class:`Node`</span>
+
+<span class="sd">            Retun the target :py:class:`Node` of the edge.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate an single edge and return the target node.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Edge</span>
+<span class="sd">        &gt;&gt;&gt; vw = Edge(&#39;v&#39;,&#39;w&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; vw.w</span>
+<span class="sd">        Node w</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_w</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">directed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return if the edge is directed (True) or undirected (False).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+
+<span class="sd">            Retun ``True`` if the edge is directed or ``False`` if the edge is</span>
+<span class="sd">            undirected.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate an undirected edge.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Edge</span>
+<span class="sd">        &gt;&gt;&gt; vw = Edge(&#39;v&#39;, &#39;w&#39;, directed=False)</span>
+<span class="sd">        &gt;&gt;&gt; vw.directed</span>
+<span class="sd">        False</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_directed</span>
+
+<div class="viewcode-block" id="Edge.add_node"><a class="viewcode-back" href="../../../generated/pathpy.Edge.add_node.html#pathpy.Edge.add_node">[docs]</a>    <span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add a single node to the edge.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node : Node</span>
+
+<span class="sd">            The :py:class:`Node` object, which will be added to the edge.</span>
+
+<span class="sd">        kwargs : Any, optional (default = {})</span>
+
+<span class="sd">            Attributes assigned to the node as key=value pairs.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This function is only used internally. It can be used to consider</span>
+<span class="sd">            hyperedges in a futher version of pathpy.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check if the right object is provided.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">_check_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add node to the edge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span>
+
+        <span class="c1"># update node counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">increase_counter</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Edge.add_nodes_from"><a class="viewcode-back" href="../../../generated/pathpy.Edge.add_nodes_from.html#pathpy.Edge.add_nodes_from">[docs]</a>    <span class="k">def</span> <span class="nf">add_nodes_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Node</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add multiple nodes from a list.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nodes : List[Node]</span>
+
+<span class="sd">            Nodes from a list of :py:class:`Node` objects are added to the</span>
+<span class="sd">            edge.</span>
+
+<span class="sd">        kwargs : Any, optional (default = {})</span>
+
+<span class="sd">            Attributes assigned to all nodes in the list as key=value pairs.</span>
+
+<span class="sd">       .. note::</span>
+
+<span class="sd">            This function is only used internally. It can be used to consider</span>
+<span class="sd">            hyperedges in a futher version of pathpy.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># iterate over a list of nodes</span>
+        <span class="c1"># TODO: parallelize this function</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Edge.update"><a class="viewcode-back" href="../../../generated/pathpy.Edge.update.html#pathpy.Edge.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Edge</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+               <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Update of the edge object.</span>
+
+<span class="sd">        Update the edge with new kwargs or based on an other given</span>
+<span class="sd">        :py:class:`Edge` object. If an other object is given, the other</span>
+<span class="sd">        attributes can be used or not.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : Edge, optional (default = None)</span>
+
+<span class="sd">            An other :py:class:`Edge` object, which is used to update the edge</span>
+<span class="sd">            attributes and properties.</span>
+
+<span class="sd">        attributes : bool, optional (default = True)</span>
+
+<span class="sd">            If ``True`` the attributes from the other edge are written to the</span>
+<span class="sd">            initial edge. If ``False`` only the information about the</span>
+<span class="sd">            associated nodes is updated.</span>
+
+<span class="sd">        kwargs : Any</span>
+
+<span class="sd">            Keyword arguments stored as edges attributes. Attributes are added</span>
+<span class="sd">            to the edge as ``key=value`` pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create an :py:class:`Edge` object with an assigned attribute.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Edge</span>
+<span class="sd">        &gt;&gt;&gt; ab = Edge(&#39;a&#39;,&#39;b&#39;, length=10)</span>
+<span class="sd">        &gt;&gt;&gt; ab[&#39;length&#39;]</span>
+<span class="sd">        10</span>
+
+<span class="sd">        Update attributes (and add new).</span>
+
+<span class="sd">        &gt;&gt;&gt; ab.update(length = 2, capacity = 3, speed = 10)</span>
+<span class="sd">        &gt;&gt;&gt; ab.attributes</span>
+<span class="sd">        {&#39;length&#39;: 2, &#39;capacity&#39;: 3, &#39;speed&#39;: 10}</span>
+
+<span class="sd">        Create a new edge.</span>
+
+<span class="sd">        &gt;&gt;&gt; cd = Edge(&#39;c&#39;, &#39;d&#39;, length=4, speed=30)</span>
+<span class="sd">        &gt;&gt;&gt; ab.update(cd)</span>
+<span class="sd">        &gt;&gt;&gt; ab.attributes</span>
+<span class="sd">        {&#39;length&#39;: 4, &#39;capacity&#39;: 3, &#39;speed&#39;: 30}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">other</span><span class="p">:</span>
+            <span class="c1"># get relations with the associated nodes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># get the attributes</span>
+            <span class="k">if</span> <span class="n">attributes</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="o">**</span><span class="n">other</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">history</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># eof</span>
+<span class="c1">#</span>
+<span class="c1"># Local Variables:</span>
+<span class="c1"># mode: python</span>
+<span class="c1"># mode: linum</span>
+<span class="c1"># mode: auto-fill</span>
+<span class="c1"># fill-column: 79</span>
+<span class="c1"># End:</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

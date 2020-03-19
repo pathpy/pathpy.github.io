@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Network.add\_edges\_from
+===============================
+
+.. currentmodule:: pathpy
+
+.. automethod:: Network.add_edges_from

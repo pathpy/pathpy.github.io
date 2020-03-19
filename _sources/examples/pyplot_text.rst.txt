@@ -1,0 +1,25 @@
+
+
+.. _pyplot_text:
+
+
+Pyplot Text
+===========
+
+
+
+.. image:: _images/pyplot_text.png
+
+**Python source code:** :download:`[download source: pyplot_text.py]<pyplot_text.py>`
+
+.. raw:: html
+
+    <div class="col-md-9">
+
+.. literalinclude:: pyplot_text.py
+    :lines: 6-
+
+.. raw:: html
+
+    </div>
+

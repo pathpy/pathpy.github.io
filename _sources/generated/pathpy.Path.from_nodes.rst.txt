@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Path.from\_nodes
+=======================
+
+.. currentmodule:: pathpy
+
+.. automethod:: Path.from_nodes

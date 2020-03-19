@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Path.add\_edge
+=====================
+
+.. currentmodule:: pathpy
+
+.. automethod:: Path.add_edge

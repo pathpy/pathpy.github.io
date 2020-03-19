@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pathpy.Edge &#8212; pathpy 3.0.0a1 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pathpy.Edge.directed" href="pathpy.Edge.directed.html" />
+    <link rel="prev" title="pathpy.Node.weight" href="pathpy.Node.weight.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../examples/index.html">Gallery</a></li>
+                <li><a href="../tutorial.html">Tutorial</a></li>
+                <li><a href="../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">pathpy.Edge</a><ul>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  </div>
+<div class=col-md-9 content><div class="section" id="pathpy-edge">
+<h1>pathpy.Edge<a class="headerlink" href="#pathpy-edge" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pathpy.Edge">
+<em class="property">class </em><code class="sig-prename descclassname">pathpy.</code><code class="sig-name descname">Edge</code><span class="sig-paren">(</span><em class="sig-param">v: pathpy.core.node.Node</em>, <em class="sig-param">w: pathpy.core.node.Node</em>, <em class="sig-param">uid: Optional[str] = None</em>, <em class="sig-param">directed: bool = True</em>, <em class="sig-param">**kwargs: Any</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/core/edge.html#Edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for an single edge.</p>
+<p>An edge is (together with nodes) one of the two basic units out of which
+networks are constructed. Each edge has two nodes to which it is attached,
+called its endpoints. Edges may be directed or undirected; undirected edges
+are also called lines and directed edges are also called arcs or arrows. In
+an undirected network, an edge may be represented as the set of its nodes,
+and in a directed network it may be represented as an ordered pair of its
+vertices.</p>
+<p>The two nodes forming an <a class="reference internal" href="#pathpy.Edge" title="pathpy.Edge"><code class="xref py py-class docutils literal notranslate"><span class="pre">Edge</span></code></a> are said to be the endpoints of
+this edge, and the edge is said to be incident to the nodes.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> the edge is referenced by its unique identifier (<code class="docutils literal notranslate"><span class="pre">uid</span></code>),
+connects two <a class="reference internal" href="pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> objects and can store any arbitrary python
+objects as attributes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To generate an edge, only two nodes have to be defined. <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> will
+automatically create a unique identifier (<code class="docutils literal notranslate"><span class="pre">uid</span></code>) for the edge based on
+the node uids. In this case, the edge <code class="docutils literal notranslate"><span class="pre">uid</span></code> is defined as a
+combination of the node uids separated by <code class="docutils literal notranslate"><span class="pre">-</span></code>. The separation sign can
+be changed in the config file.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>v</strong><span class="classifier">Node</span></dt><dd><p>This parameter defines the source of the edge (if directed),
+i.e. v-&gt;w. Beside a py:class:<cite>Node</cite> object also a <code class="docutils literal notranslate"><span class="pre">str</span></code> node uid can
+be entered, in this case, a new <a class="reference internal" href="pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> will be created.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">Node</span></dt><dd><p>This parameter defines the target of the edge (if directed)
+i.e. u-&gt;v. Beside a py:class:<cite>Node</cite> object also a <code class="docutils literal notranslate"><span class="pre">str</span></code> node uid can
+be entered, in this case, a new <a class="reference internal" href="pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> will be created.</p>
+</dd>
+<dt><strong>uid</strong><span class="classifier">str, optional (default = None)</span></dt><dd><p>The parameter <code class="docutils literal notranslate"><span class="pre">uid</span></code> is the unique identifier for the edge. Every edge
+should have an uid. The uid is converted to a string value and is used
+as a key value for all dict which saving edge objects. If no edge uid
+is specified the edge <code class="docutils literal notranslate"><span class="pre">uid</span></code> will be defined as a combination of the
+node uids separated by <code class="docutils literal notranslate"><span class="pre">-</span></code>. The separation sign can be changed in the
+config file.</p>
+</dd>
+<dt><strong>directed</strong><span class="classifier">bool, optional (default = True)</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code> the edge is directed, i.e. quantities can only transmited
+from the source node <code class="docutils literal notranslate"><span class="pre">v</span></code> to the traget node <code class="docutils literal notranslate"><span class="pre">w</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code> the
+edge is undirected, i.e. quantities can be transmited in both
+directions. Per default edges in <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> are directed.</p>
+</dd>
+<dt><strong>kwargs</strong><span class="classifier">Any</span></dt><dd><p>Keyword arguments to store edge attributes. Attributes are added to the
+edge as <code class="docutils literal notranslate"><span class="pre">key=value</span></code> pairs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<p>From the <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> import the <a class="reference internal" href="pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> and <a class="reference internal" href="#pathpy.Edge" title="pathpy.Edge"><code class="xref py py-class docutils literal notranslate"><span class="pre">Edge</span></code></a> classes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="k">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Edge</span>
+</pre></div>
+</div>
+<p>Create an edge <code class="docutils literal notranslate"><span class="pre">e</span></code> with given nodes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;e&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">uid</span>
+<span class="go">e</span>
+</pre></div>
+</div>
+<p>Create an edge with given node uids and no edge uid.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span><span class="o">.</span><span class="n">uid</span>
+<span class="go">a-b</span>
+</pre></div>
+</div>
+<p>Show the associated node objects</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span><span class="o">.</span><span class="n">nodes</span>
+<span class="go">NodeDict(&lt;class &#39;dict&#39;&gt;, {&#39;a&#39;: Node a, &#39;b&#39;: Node b})</span>
+</pre></div>
+</div>
+<p>Create an edge with attached attribute.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Add attribute to the edge.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span><span class="p">[</span><span class="s1">&#39;capacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.5</span>
+</pre></div>
+</div>
+<p>Show attached attributes</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span><span class="o">.</span><span class="n">attributes</span>
+<span class="go">{&#39;length&#39;: 10, &#39;capacity&#39;: 5}</span>
+</pre></div>
+</div>
+<p>Change attribute.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+</pre></div>
+</div>
+<p>Update attributes (and add new).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">length</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">capacity</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">speed</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span><span class="o">.</span><span class="n">attributes</span>
+<span class="go">{&#39;length&#39;: 2, &#39;capacity&#39;: 3, &#39;speed&#39;: 10}</span>
+</pre></div>
+</div>
+<p>Get the weight of the edge. Per default the attribute with the key ‘weight’
+is used as weight. Should there be no such attribute, a new one will be
+crated with weight = 1.0.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span><span class="o">.</span><span class="n">weight</span><span class="p">()</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p>If an other attribute should be used as weight, the option weight has to be
+changed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">)</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>If a weight is assigned but for calculation a weight of 1.0 is needed, the
+weight can be disabled with <code class="docutils literal notranslate"><span class="pre">False</span></code> or None.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span><span class="o">.</span><span class="n">weight</span><span class="p">()</span>
+<span class="go">4.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ab</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p>Make copy of the edge.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span> <span class="o">=</span> <span class="n">ab</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ef</span><span class="o">.</span><span class="n">uid</span>
+<span class="go">&#39;a-b&#39;</span>
+</pre></div>
+</div>
+<p>Make a plot element and plot the edge as a png image.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Make a single plot command for plotting edges.
+The code below is not working yet!</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span> <span class="o">=</span> <span class="n">ab</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../_images/pathpy-Edge-1.png" src="../_images/pathpy-Edge-1.png" />
+</div>
+<p>Create an undirected edge.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cd</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span> <span class="o">=</span> <span class="n">ab</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../_images/pathpy-Edge-2.png" src="../_images/pathpy-Edge-2.png" />
+</div>
+<dl class="method">
+<dt id="pathpy.Edge.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">v: 'Node'</em>, <em class="sig-param">w: 'Node'</em>, <em class="sig-param">uid: 'str' = None</em>, <em class="sig-param">directed: 'bool' = True</em>, <em class="sig-param">**kwargs: 'Any'</em><span class="sig-paren">)</span> &#x2192; 'None'<a class="reference internal" href="../_modules/pathpy/core/edge.html#Edge.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Edge.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the edge object.</p>
+</dd></dl>
+
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Edge.directed.html#pathpy.Edge.directed" title="pathpy.Edge.directed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">directed</span></code></a></p></td>
+<td><p>Return if the edge is directed (True) or undirected (False).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Edge.nodes.html#pathpy.Edge.nodes" title="pathpy.Edge.nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes</span></code></a></p></td>
+<td><p>Return the associated nodes of the edge.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Edge.uid.html#pathpy.Edge.uid" title="pathpy.Edge.uid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uid</span></code></a></p></td>
+<td><p>Return the unique identifier (uid) of the edge.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Edge.v.html#pathpy.Edge.v" title="pathpy.Edge.v"><code class="xref py py-obj docutils literal notranslate"><span class="pre">v</span></code></a></p></td>
+<td><p>Return the source node v of the edge.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Edge.w.html#pathpy.Edge.w" title="pathpy.Edge.w"><code class="xref py py-obj docutils literal notranslate"><span class="pre">w</span></code></a></p></td>
+<td><p>Return the target node w of the edge.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Edge.add_node.html#pathpy.Edge.add_node" title="pathpy.Edge.add_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_node</span></code></a>(self, node, \*\*kwargs)</p></td>
+<td><p>Add a single node to the edge.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Edge.add_nodes_from.html#pathpy.Edge.add_nodes_from" title="pathpy.Edge.add_nodes_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_nodes_from</span></code></a>(self, nodes, \*\*kwargs)</p></td>
+<td><p>Add multiple nodes from a list.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Edge.copy.html#pathpy.Edge.copy" title="pathpy.Edge.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>(self)</p></td>
+<td><p>Return a copy of the node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Edge.update.html#pathpy.Edge.update" title="pathpy.Edge.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(self, other, attributes, \*\*kwargs)</p></td>
+<td><p>Update of the edge object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Edge.weight.html#pathpy.Edge.weight" title="pathpy.Edge.weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">weight</span></code></a>(self, weight, default)</p></td>
+<td><p>Returns the weight of the object.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

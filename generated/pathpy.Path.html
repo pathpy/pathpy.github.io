@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pathpy.Path &#8212; pathpy 3.0.0a1 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pathpy.Path.as_edges" href="pathpy.Path.as_edges.html" />
+    <link rel="prev" title="pathpy.Edge.weight" href="pathpy.Edge.weight.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../examples/index.html">Gallery</a></li>
+                <li><a href="../tutorial.html">Tutorial</a></li>
+                <li><a href="../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">pathpy.Path</a><ul>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  </div>
+<div class=col-md-9 content><div class="section" id="pathpy-path">
+<h1>pathpy.Path<a class="headerlink" href="#pathpy-path" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pathpy.Path">
+<em class="property">class </em><code class="sig-prename descclassname">pathpy.</code><code class="sig-name descname">Path</code><span class="sig-paren">(</span><em class="sig-param">*args: pathpy.core.edge.Edge</em>, <em class="sig-param">uid: str = ''</em>, <em class="sig-param">directed: bool = True</em>, <em class="sig-param">**kwargs: Any</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/core/path.html#Path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for a path.</p>
+<p>Paths are fundamental parts of networks. A path in a network is a finite or
+infinite sequence of edges which joins a sequence of nodes. In a directed
+path edges are all directed in the same direction.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> the path is constructed based on consecutive edges. Per
+default the path is directed. A <a class="reference internal" href="#pathpy.Path" title="pathpy.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> object can store any
+arbitrary python objects as attributes. A path is referenced by its unique
+identifier (<code class="docutils literal notranslate"><span class="pre">uid</span></code>). A path can have various lengths, i.e. number of
+associated edges. Paths with length 0 consists only of one node and no
+edges.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To generate a path, a sequence of edges is needed. <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> will
+automatically create a unique identifier (<code class="docutils literal notranslate"><span class="pre">uid</span></code>) for the path based on
+the edge uids. In this case, the path <code class="docutils literal notranslate"><span class="pre">uid</span></code> is defined as a
+combination of the edge uids separated by <code class="docutils literal notranslate"><span class="pre">|</span></code>. The separation sign can
+be changed in the config file.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>uid</strong><span class="classifier">str, optional (default = None)</span></dt><dd><p>The parameter <code class="docutils literal notranslate"><span class="pre">uid</span></code> is the unique identifier for the edge. Every edge
+should have an uid. The uid is converted to a string value and is used
+as a key value for all dict which saving edge objects. If no edge uid
+is specified the edge <code class="docutils literal notranslate"><span class="pre">uid</span></code> will be defined as a combination of the
+node uids separated by <code class="docutils literal notranslate"><span class="pre">-</span></code>. The separation sign can be changed in the
+config file.</p>
+</dd>
+<dt><strong>directed</strong><span class="classifier">bool, optional (default = True)</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code> the edge is directed, i.e. quantities can only transmited
+from the source node <code class="docutils literal notranslate"><span class="pre">v</span></code> to the traget node <code class="docutils literal notranslate"><span class="pre">w</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code> the
+edge is undirected, i.e. quantities can be transmited in both
+directions. Per default edges in <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> are directed.</p>
+</dd>
+<dt><strong>args</strong><span class="classifier">Edge</span></dt><dd><p><a class="reference internal" href="pathpy.Edge.html#pathpy.Edge" title="pathpy.Edge"><code class="xref py py-class docutils literal notranslate"><span class="pre">Edge</span></code></a> objects can be used as arguments to build a
+path. While the default options is using edges. <cite>pathpy</cite> also supports
+<a class="reference internal" href="pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> objects and <code class="docutils literal notranslate"><span class="pre">str</span></code> uid to generate a path.</p>
+</dd>
+<dt><strong>kwargs</strong><span class="classifier">Any</span></dt><dd><p>Keyword arguments to store path attributes. Attributes are added to the
+path as <code class="docutils literal notranslate"><span class="pre">key=value</span></code> pairs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>, <a class="reference internal" href="pathpy.Edge.html#pathpy.Edge" title="pathpy.Edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<p>From the <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> import the <a class="reference internal" href="pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a>, <a class="reference internal" href="pathpy.Edge.html#pathpy.Edge" title="pathpy.Edge"><code class="xref py py-class docutils literal notranslate"><span class="pre">Edge</span></code></a> and
+<a class="reference internal" href="#pathpy.Path" title="pathpy.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> classes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="k">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Edge</span><span class="p">,</span> <span class="n">Path</span>
+</pre></div>
+</div>
+<p>Create an empty path</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+<p>Create some edges and add them to the path.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([</span><span class="n">e1</span><span class="p">,</span><span class="n">e2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>Print the uid of the path.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">uid</span>
+<span class="go">&#39;a-b|b-c&#39;</span>
+</pre></div>
+</div>
+<p>Get the associated nodes and edges</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">nodes</span>
+<span class="go">NodeDict(&lt;class &#39;dict&#39;&gt;, {&#39;a&#39;: Node a, &#39;b&#39;: Node b, &#39;c&#39;: Node c})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">edges</span>
+<span class="go">EdgeDict(&lt;class &#39;dict&#39;&gt;, {&#39;a-b&#39;: Edge a-b, &#39;b-c&#39;: Edge b-c})</span>
+</pre></div>
+</div>
+<p>Get the path as a sequence of node and edge uids</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">as_nodes</span>
+<span class="go">[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">as_edges</span>
+<span class="go">[&#39;a-b&#39;, &#39;b-c&#39;]</span>
+</pre></div>
+</div>
+<p>Extend path with a new node.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">uid</span>
+<span class="go">&#39;a-b|b-c|c-d&#39;</span>
+</pre></div>
+</div>
+<p>Plot the path.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Make a single plot command for plotting paths.
+The code below is not working yet!</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../_images/pathpy-Path-1.png" src="../_images/pathpy-Path-1.png" />
+</div>
+<p>Create paths from string uids.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;a-b&#39;</span><span class="p">,</span> <span class="s1">&#39;b-c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p3</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;a,b,c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p4</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;a-b,b-c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p5</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;a-b-c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p6</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;a-b|b-c&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="pathpy.Path.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">*args: 'Edge'</em>, <em class="sig-param">uid: 'str' = ''</em>, <em class="sig-param">directed: 'bool' = True</em>, <em class="sig-param">**kwargs: 'Any'</em><span class="sig-paren">)</span> &#x2192; 'None'<a class="reference internal" href="../_modules/pathpy/core/path.html#Path.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Path.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the path object.</p>
+</dd></dl>
+
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Path.as_edges.html#pathpy.Path.as_edges" title="pathpy.Path.as_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">as_edges</span></code></a></p></td>
+<td><p>Return the adjacend edge uids in the path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Path.as_nodes.html#pathpy.Path.as_nodes" title="pathpy.Path.as_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">as_nodes</span></code></a></p></td>
+<td><p>Return the adjacend node uids in the path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Path.directed.html#pathpy.Path.directed" title="pathpy.Path.directed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">directed</span></code></a></p></td>
+<td><p>Return if the path is directed (True) or undirected (False).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Path.edges.html#pathpy.Path.edges" title="pathpy.Path.edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges</span></code></a></p></td>
+<td><p>Return the associated edges of the path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Path.name.html#pathpy.Path.name" title="pathpy.Path.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
+<td><p>Returns the name of the path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Path.nodes.html#pathpy.Path.nodes" title="pathpy.Path.nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes</span></code></a></p></td>
+<td><p>Return the associated nodes of the path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Path.uid.html#pathpy.Path.uid" title="pathpy.Path.uid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uid</span></code></a></p></td>
+<td><p>Returns the unique identifier (uid) of the path.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Path.add_edge.html#pathpy.Path.add_edge" title="pathpy.Path.add_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edge</span></code></a>(self, edge, \*args, \*\*kwargs)</p></td>
+<td><p>Add a single edge to the path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Path.add_edges_from.html#pathpy.Path.add_edges_from" title="pathpy.Path.add_edges_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edges_from</span></code></a>(self, edges, \*\*kwargs)</p></td>
+<td><p>Add multiple edges from a list to the path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Path.add_node.html#pathpy.Path.add_node" title="pathpy.Path.add_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_node</span></code></a>(self, node, \*\*kwargs)</p></td>
+<td><p>Add a single node to the path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Path.add_nodes_from.html#pathpy.Path.add_nodes_from" title="pathpy.Path.add_nodes_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_nodes_from</span></code></a>(self, nodes, \*\*kwargs)</p></td>
+<td><p>Add multiple nodes from a list to the path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Path.copy.html#pathpy.Path.copy" title="pathpy.Path.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>(self)</p></td>
+<td><p>Return a copy of the node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Path.from_edges.html#pathpy.Path.from_edges" title="pathpy.Path.from_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_edges</span></code></a>(edges, \*\*kwargs)</p></td>
+<td><p>Generate a Path object from a list of edges.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Path.from_nodes.html#pathpy.Path.from_nodes" title="pathpy.Path.from_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_nodes</span></code></a>(nodes, \*\*kwargs)</p></td>
+<td><p>Generate a Path object from a list of nodes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Path.number_of_edges.html#pathpy.Path.number_of_edges" title="pathpy.Path.number_of_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_edges</span></code></a>(self, unique)</p></td>
+<td><p>Return the number of edges in the path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Path.number_of_nodes.html#pathpy.Path.number_of_nodes" title="pathpy.Path.number_of_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_nodes</span></code></a>(self, unique)</p></td>
+<td><p>Return the number of nodes in the path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Path.subpaths.html#pathpy.Path.subpaths" title="pathpy.Path.subpaths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subpaths</span></code></a>(self, min_length, max_length, …)</p></td>
+<td><p>Returns a list of subpaths.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Path.summary.html#pathpy.Path.summary" title="pathpy.Path.summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summary</span></code></a>(self)</p></td>
+<td><p>Returns a summary of the path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Path.update.html#pathpy.Path.update" title="pathpy.Path.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(self, other, attributes, \*\*kwargs)</p></td>
+<td><p>Update of the path object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Path.weight.html#pathpy.Path.weight" title="pathpy.Path.weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">weight</span></code></a>(self, weight, default)</p></td>
+<td><p>Returns the weight of the object.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

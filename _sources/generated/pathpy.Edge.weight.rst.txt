@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Edge.weight
+==================
+
+.. currentmodule:: pathpy
+
+.. automethod:: Edge.weight

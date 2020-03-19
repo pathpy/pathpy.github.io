@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Edge.add\_nodes\_from
+============================
+
+.. currentmodule:: pathpy
+
+.. automethod:: Edge.add_nodes_from

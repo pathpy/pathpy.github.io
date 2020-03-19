@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Node.adjacent\_edges
+===========================
+
+.. currentmodule:: pathpy
+
+.. autoproperty:: Node.adjacent_edges

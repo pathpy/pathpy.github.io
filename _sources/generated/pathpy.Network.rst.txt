@@ -1,0 +1,61 @@
+.. raw:: html
+
+    </div>
+    <div class=col-md-9 content>
+
+pathpy.Network
+==============
+
+.. currentmodule:: pathpy
+
+.. autoclass:: Network
+
+   
+   .. automethod:: __init__
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      ~Network.directed
+      ~Network.edges
+      ~Network.name
+      ~Network.nodes
+      ~Network.paths
+      ~Network.shape
+      ~Network.subpaths
+      ~Network.temporal
+      ~Network.uid
+   
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~Network.add_edge
+      ~Network.add_edges_from
+      ~Network.add_node
+      ~Network.add_nodes_from
+      ~Network.add_path
+      ~Network.add_paths_from
+      ~Network.adjacency_matrix
+      ~Network.copy
+      ~Network.number_of_edges
+      ~Network.number_of_nodes
+      ~Network.number_of_paths
+      ~Network.plot
+      ~Network.remove_edge
+      ~Network.remove_node
+      ~Network.remove_path
+      ~Network.summary
+      ~Network.transition_matrix
+      ~Network.update
+      ~Network.weight
+   
+   

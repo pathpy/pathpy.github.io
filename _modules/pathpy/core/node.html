@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pathpy.core.node &#8212; pathpy 3.0.0a1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../examples/index.html">Gallery</a></li>
+                <li><a href="../../../tutorial.html">Tutorial</a></li>
+                <li><a href="../../../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pathpy.core.node</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python -tt</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># File      : node.py -- Base class for a single node</span>
+<span class="c1"># Author    : Jürgen Hackl &lt;hackl@ifi.uzh.ch&gt;</span>
+<span class="c1"># Time-stamp: &lt;Wed 2020-03-18 11:01 juergen&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2016-2020 Pathpy Developers</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseClass</span>
+
+<span class="c1"># create logger for the Node class</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../../generated/pathpy.Node.html#pathpy.Node">[docs]</a><span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">BaseClass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for a single node.</span>
+
+<span class="sd">    A node (or vertex) is the fundamental unit of which networks are formed. In</span>
+<span class="sd">    general nodes are treated as featureless and indivisible objects, although</span>
+<span class="sd">    they may have additional structure depending on the application from which</span>
+<span class="sd">    the netwokr arises.</span>
+
+<span class="sd">    The two nodes forming an :py:class:`Edge` are said to be the endpoints of</span>
+<span class="sd">    this edge, and the edge is said to be incident to the nodes.</span>
+
+<span class="sd">    In ``pathpy`` the node is referenced by its unique identifier (``uid``) and</span>
+<span class="sd">    can store any arbitrary python objects as attributes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    uid : str</span>
+
+<span class="sd">        The parameter ``uid`` is the unique identifier for the node. Every node</span>
+<span class="sd">        should have an uid. The uid is converted to a string value and is used</span>
+<span class="sd">        as a key value for all dict which saving node objects.</span>
+
+<span class="sd">    kwargs : Any</span>
+
+<span class="sd">        Keyword arguments to store node attributes. Attributes are added to the</span>
+<span class="sd">        node as ``key=value`` pairs.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Load the ``pathpy`` module and create an empty :py:class:`Node` object.</span>
+
+<span class="sd">    &gt;&gt;&gt; from pathpy import Node</span>
+<span class="sd">    &gt;&gt;&gt; u = Node(&#39;u&#39;)</span>
+
+<span class="sd">    Get the id of the node.</span>
+
+<span class="sd">    &gt;&gt;&gt; u.uid</span>
+<span class="sd">    &#39;u&#39;</span>
+
+<span class="sd">    Create a node with attached attribute.</span>
+
+<span class="sd">    &gt;&gt;&gt; u = Node(&#39;u&#39;, color=&#39;red&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; u[&#39;color&#39;]</span>
+<span class="sd">    &#39;red&#39;</span>
+
+<span class="sd">    Add attribute to the node.</span>
+
+<span class="sd">    &gt;&gt;&gt; u[&#39;shape&#39;] = &#39;circle&#39;</span>
+<span class="sd">    &gt;&gt;&gt; u[&#39;shape]</span>
+<span class="sd">    &#39;circle&#39;</span>
+
+<span class="sd">    Change single attribute.</span>
+
+<span class="sd">    &gt;&gt;&gt; u[&#39;color&#39;] = &#39;blue&#39;</span>
+
+<span class="sd">    Update multiple attributes.</span>
+
+<span class="sd">    &gt;&gt;&gt; u.update(color=&#39;green&#39;, shape=&#39;rectangle&#39;)</span>
+
+<span class="sd">    Make a copy of the node.</span>
+
+<span class="sd">    &gt;&gt;&gt; v = u.copy()</span>
+<span class="sd">    &gt;&gt;&gt; v.uid</span>
+<span class="sd">    &#39;u&#39;</span>
+
+<span class="sd">    Make a plot element and plot the node as a png image.</span>
+
+<span class="sd">    .. todo::</span>
+
+<span class="sd">        Make a single plot command for plotting nodes.</span>
+<span class="sd">        The code below is not working yet!</span>
+
+<span class="sd">    &gt;&gt;&gt; plt = u.plot()</span>
+<span class="sd">    &gt;&gt;&gt; plt.show(&#39;png&#39;)</span>
+
+<span class="sd">    .. plot::</span>
+
+<span class="sd">       import pathpy as pp</span>
+<span class="sd">       u = pp.Node(&#39;u&#39;, color=&#39;green&#39;, shape=&#39;rectangle&#39;)</span>
+<span class="sd">       net = pp.Network()</span>
+<span class="sd">       net.add_node(u)</span>
+<span class="sd">       plt = net.plot()</span>
+<span class="sd">       plt.show(&#39;png&#39;)</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    Edge</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Node.__init__"><a class="viewcode-back" href="../../../generated/pathpy.Node.html#pathpy.Node.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the node object.&quot;&quot;&quot;</span>
+
+        <span class="c1"># initialize the base class</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># assign node identifier</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uid</span><span class="p">)</span>
+
+        <span class="c1"># set of incoming and outgoing edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_outgoing</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_incoming</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="c1"># add attributes to the node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">uid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the description of the node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Returns the description of the node with the class and assigned</span>
+<span class="sd">            node uid.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Genarate new node.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node</span>
+<span class="sd">        &gt;&gt;&gt; u = Node(&#39;u&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; print(u)</span>
+<span class="sd">        Node u</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_desc</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_desc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return a string *Node*.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the unique hash of the node.</span>
+
+<span class="sd">        Here the hash value is defined by the unique node id!</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">uid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the unique identifier (uid) of the node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Return the node identifier (uid) as a string.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a single node and print the uid.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node</span>
+<span class="sd">        &gt;&gt;&gt; u = Node(&#39;u&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; u.uid</span>
+<span class="sd">        u</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">outgoing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the outgoing edge uids of the node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+
+<span class="sd">            Return the uids of the outgoing edges of the node.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate two nodes and an (directed) edge.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node, Edge</span>
+<span class="sd">        &gt;&gt;&gt; u = Node(&#39;u&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v = Node(&#39;v&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; e = Edge(&#39;u&#39;,&#39;v&#39;)</span>
+
+<span class="sd">        Print the outgoing edges for the node u.</span>
+
+<span class="sd">        &gt;&gt;&gt; u.outgoing</span>
+<span class="sd">        {&#39;u-v&#39;}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outgoing</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">incoming</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the incoming edge uids of the node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+
+<span class="sd">            Return the uids of the incoming edges of the node.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate two nodes and an (directed) edge.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node, Edge</span>
+<span class="sd">        &gt;&gt;&gt; u = Node(&#39;u&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v = Node(&#39;v&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; e = Edge(&#39;u&#39;,&#39;v&#39;)</span>
+
+<span class="sd">        Print the incoming edges for the node v.</span>
+
+<span class="sd">        &gt;&gt;&gt; v.incoming</span>
+<span class="sd">        {&#39;u-v&#39;}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_incoming</span>
+
+    <span class="c1"># TODO: Maybe rename to adjacent?</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">adjacent_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the set of edge uids adjacent to the node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+
+<span class="sd">            Returns a set of adjacent edge uids as string values.  I.e. all</span>
+<span class="sd">            edges associated with this node.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate some nodes and (directed) edges.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node, Edge</span>
+<span class="sd">        &gt;&gt;&gt; u = Node(&#39;u&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v = Node(&#39;v&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; w = Node(&#39;w&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; e1 = Edge(&#39;u&#39;,&#39;v&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; e2 = Edge(&#39;v&#39;,&#39;w&#39;)</span>
+
+<span class="sd">        Print the adjacent edges for the nodes.</span>
+
+<span class="sd">        &gt;&gt;&gt; print(u.adjacent_edges)</span>
+<span class="sd">        {&#39;u-v&#39;}</span>
+<span class="sd">        &gt;&gt;&gt; print(v.adjacent_edges)</span>
+<span class="sd">        {&#39;v-w&#39;, &#39;u-v&#39;}</span>
+<span class="sd">        &gt;&gt;&gt; print(w.adjacent_edges)</span>
+<span class="sd">        {&#39;v-w&#39;}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">incoming</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outgoing</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Node.update"><a class="viewcode-back" href="../../../generated/pathpy.Node.update.html#pathpy.Node.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Node</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+               <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Update of the node object.</span>
+
+<span class="sd">        Update the node with new kwargs or based on an other given</span>
+<span class="sd">        :py:class:`Node` object. If an other object is given, the other</span>
+<span class="sd">        attributes can be used or not.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : Node, optional (default = None)</span>
+
+<span class="sd">            An other :py:class:`Node` object, which is used to update the node</span>
+<span class="sd">            attributes and properties.</span>
+
+<span class="sd">        attributes : bool, optional (default = True)</span>
+
+<span class="sd">            If ``True`` the attributes from the other node are written to the</span>
+<span class="sd">            initial node. If ``False`` only the incoming and outgoing edges are</span>
+<span class="sd">            updated.</span>
+
+<span class="sd">        kwargs : Any</span>
+
+<span class="sd">            Keyword arguments stored as node attributes. Attributes are added</span>
+<span class="sd">            to the node as ``key=value`` pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create an :py:class:`Node` object with an assigned attribute.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node</span>
+<span class="sd">        &gt;&gt;&gt; u = Node(&#39;u&#39;, color=&#39;red&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; u[&#39;color&#39;]</span>
+<span class="sd">        &#39;red&#39;</span>
+
+<span class="sd">        Update color and shape of the node.</span>
+
+<span class="sd">        &gt;&gt;&gt; u.update(color=&#39;green&#39;, shape=&#39;rectangle&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; u[&#39;shape&#39;]</span>
+<span class="sd">        &#39;rectangle&#39;</span>
+
+<span class="sd">        Create a new node.</span>
+
+<span class="sd">        &gt;&gt;&gt; v = Node(&#39;v&#39;, shape=&#39;circle&#39;, size=30)</span>
+<span class="sd">        &gt;&gt;&gt; u.update(v)</span>
+<span class="sd">        &gt;&gt;&gt; u.attributes</span>
+<span class="sd">        {&#39;color&#39;: &#39;green&#39;, &#39;shape&#39;: &#39;circle&#39;, &#39;size&#39;: 30}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if an other node is given</span>
+        <span class="k">if</span> <span class="n">other</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="c1"># get relations with the associated nodes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_incoming</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">incoming</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">incoming</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_outgoing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outgoing</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">outgoing</span><span class="p">)</span>
+
+            <span class="c1"># get the attributes of the other node</span>
+            <span class="k">if</span> <span class="n">attributes</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="o">**</span><span class="n">other</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">history</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
+        <span class="c1"># update the attributes given new kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># eof</span>
+<span class="c1">#</span>
+<span class="c1"># Local Variables:</span>
+<span class="c1"># mode: python</span>
+<span class="c1"># mode: linum</span>
+<span class="c1"># mode: auto-fill</span>
+<span class="c1"># fill-column: 79</span>
+<span class="c1"># End:</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pathpy.core.path &#8212; pathpy 3.0.0a1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../examples/index.html">Gallery</a></li>
+                <li><a href="../../../tutorial.html">Tutorial</a></li>
+                <li><a href="../../../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pathpy.core.path</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python -tt</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># File      : network.py -- Base class for a path</span>
+<span class="c1"># Author    : Jürgen Hackl &lt;hackl@ifi.uzh.ch&gt;</span>
+<span class="c1"># Time-stamp: &lt;Thu 2020-03-19 15:58 juergen&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2016-2020 Pathpy Developers</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseClass</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">NodeDict</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">EdgeDict</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">PathDict</span>
+<span class="kn">from</span> <span class="nn">.utils.separator</span> <span class="k">import</span> <span class="n">separator</span>
+<span class="kn">from</span> <span class="nn">.utils._check_node</span> <span class="k">import</span> <span class="n">_check_node</span>
+<span class="kn">from</span> <span class="nn">.utils._check_edge</span> <span class="k">import</span> <span class="n">_check_edge</span>
+<span class="kn">from</span> <span class="nn">.utils._check_str</span> <span class="k">import</span> <span class="n">_check_str</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Edge</span>
+
+<span class="c1"># create logger for the Path class</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Path"><a class="viewcode-back" href="../../../generated/pathpy.Path.html#pathpy.Path">[docs]</a><span class="k">class</span> <span class="nc">Path</span><span class="p">(</span><span class="n">BaseClass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for a path.</span>
+
+<span class="sd">    Paths are fundamental parts of networks. A path in a network is a finite or</span>
+<span class="sd">    infinite sequence of edges which joins a sequence of nodes. In a directed</span>
+<span class="sd">    path edges are all directed in the same direction.</span>
+
+<span class="sd">    In ``pathpy`` the path is constructed based on consecutive edges. Per</span>
+<span class="sd">    default the path is directed. A :py:class:`Path` object can store any</span>
+<span class="sd">    arbitrary python objects as attributes. A path is referenced by its unique</span>
+<span class="sd">    identifier (``uid``). A path can have various lengths, i.e. number of</span>
+<span class="sd">    associated edges. Paths with length 0 consists only of one node and no</span>
+<span class="sd">    edges.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">       To generate a path, a sequence of edges is needed. ``pathpy`` will</span>
+<span class="sd">       automatically create a unique identifier (``uid``) for the path based on</span>
+<span class="sd">       the edge uids. In this case, the path ``uid`` is defined as a</span>
+<span class="sd">       combination of the edge uids separated by ``|``. The separation sign can</span>
+<span class="sd">       be changed in the config file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    uid : str, optional (default = None)</span>
+
+<span class="sd">        The parameter ``uid`` is the unique identifier for the edge. Every edge</span>
+<span class="sd">        should have an uid. The uid is converted to a string value and is used</span>
+<span class="sd">        as a key value for all dict which saving edge objects. If no edge uid</span>
+<span class="sd">        is specified the edge ``uid`` will be defined as a combination of the</span>
+<span class="sd">        node uids separated by ``-``. The separation sign can be changed in the</span>
+<span class="sd">        config file.</span>
+
+<span class="sd">    directed : bool, optional (default = True)</span>
+
+<span class="sd">        If ``True`` the edge is directed, i.e. quantities can only transmited</span>
+<span class="sd">        from the source node ``v`` to the traget node ``w``. If ``False`` the</span>
+<span class="sd">        edge is undirected, i.e. quantities can be transmited in both</span>
+<span class="sd">        directions. Per default edges in ``pathpy`` are directed.</span>
+
+<span class="sd">    args : Edge</span>
+
+<span class="sd">        :py:class:`Edge` objects can be used as arguments to build a</span>
+<span class="sd">        path. While the default options is using edges. `pathpy` also supports</span>
+<span class="sd">        :py:class:`Node` objects and ``str`` uid to generate a path.</span>
+
+<span class="sd">    kwargs : Any</span>
+
+<span class="sd">        Keyword arguments to store path attributes. Attributes are added to the</span>
+<span class="sd">        path as ``key=value`` pairs.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    Node, Edge</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    From the ``pathpy`` import the :py:class:`Node`, :py:class:`Edge` and</span>
+<span class="sd">    :py:class:`Path` classes.</span>
+
+<span class="sd">    &gt;&gt;&gt; from pathpy import Node, Edge, Path</span>
+
+<span class="sd">    Create an empty path</span>
+
+<span class="sd">    &gt;&gt;&gt; p = Path()</span>
+<span class="sd">    &gt;&gt;&gt; len(p)</span>
+<span class="sd">    0</span>
+
+<span class="sd">    Create some edges and add them to the path.</span>
+
+<span class="sd">    &gt;&gt;&gt; e1 = Edge(&#39;a&#39;,&#39;b&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; e2 = Edge(&#39;b&#39;,&#39;c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; p.add_edges_from([e1,e2])</span>
+<span class="sd">    &gt;&gt;&gt; len(p)</span>
+<span class="sd">    2</span>
+
+<span class="sd">    Print the uid of the path.</span>
+
+<span class="sd">    &gt;&gt;&gt; p.uid</span>
+<span class="sd">    &#39;a-b|b-c&#39;</span>
+
+<span class="sd">    Get the associated nodes and edges</span>
+
+<span class="sd">    &gt;&gt;&gt; p.nodes</span>
+<span class="sd">    NodeDict(&lt;class &#39;dict&#39;&gt;, {&#39;a&#39;: Node a, &#39;b&#39;: Node b, &#39;c&#39;: Node c})</span>
+<span class="sd">    &gt;&gt;&gt; p.edges</span>
+<span class="sd">    EdgeDict(&lt;class &#39;dict&#39;&gt;, {&#39;a-b&#39;: Edge a-b, &#39;b-c&#39;: Edge b-c})</span>
+
+<span class="sd">    Get the path as a sequence of node and edge uids</span>
+
+<span class="sd">    &gt;&gt;&gt; p.as_nodes</span>
+<span class="sd">    [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; p.as_edges</span>
+<span class="sd">    [&#39;a-b&#39;, &#39;b-c&#39;]</span>
+
+<span class="sd">    Extend path with a new node.</span>
+
+<span class="sd">    &gt;&gt;&gt; p.add_node(&#39;d&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; p.uid</span>
+<span class="sd">    &#39;a-b|b-c|c-d&#39;</span>
+
+<span class="sd">    Plot the path.</span>
+
+<span class="sd">    .. todo::</span>
+
+<span class="sd">        Make a single plot command for plotting paths.</span>
+<span class="sd">        The code below is not working yet!</span>
+
+<span class="sd">    &gt;&gt;&gt; plt = p.plot()</span>
+<span class="sd">    &gt;&gt;&gt; plt.show(&#39;png&#39;)</span>
+
+<span class="sd">    .. plot::</span>
+
+<span class="sd">       import pathpy as pp</span>
+<span class="sd">       p = pp.Path(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;)</span>
+<span class="sd">       net = pp.Network()</span>
+<span class="sd">       net.add_path(p)</span>
+<span class="sd">       plt = net.plot()</span>
+<span class="sd">       plt.show(&#39;png&#39;)</span>
+
+
+<span class="sd">    Create paths from string uids.</span>
+
+<span class="sd">    &gt;&gt;&gt; p1 = Path(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; p2 = Path(&#39;a-b&#39;, &#39;b-c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; p3 = Path(&#39;a,b,c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; p4 = Path(&#39;a-b,b-c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; p5 = Path(&#39;a-b-c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; p6 = Path(&#39;a-b|b-c&#39;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Path.__init__"><a class="viewcode-back" href="../../../generated/pathpy.Path.html#pathpy.Path.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Edge</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the path object.&quot;&quot;&quot;</span>
+
+        <span class="c1"># initialize the base class</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># set unique identifier of the path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">uid</span>
+
+        <span class="c1"># inidcator whether the edge is directed or undirected</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">directed</span>
+
+        <span class="c1"># use separator if given otherwise use config default value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">separator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># get the max display name length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_name_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s1">&#39;max_name_length&#39;</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">][</span><span class="s1">&#39;max_name_length&#39;</span><span class="p">])</span>
+
+        <span class="c1"># a dictionary containing node objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">:</span> <span class="n">NodeDict</span> <span class="o">=</span> <span class="n">NodeDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+        <span class="c1"># a dictionary containing edge objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span><span class="p">:</span> <span class="n">EdgeDict</span> <span class="o">=</span> <span class="n">EdgeDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+        <span class="c1"># TODO : Make a unique path object instead of two lists</span>
+        <span class="c1"># E.g. path = [(e_uid,v_uid,w_uid),(e_uid,v_uid,w_uid),...]</span>
+        <span class="c1"># a list containing the edge uids of the path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_as_edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># a list containing the node uids of the path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_as_nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># add attributes to the edge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add objects from args if given</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the description of the path.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Returns the description of the path with the class, the name (if</span>
+<span class="sd">            deffined) and the assigned path uid.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate new path</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path()</span>
+<span class="sd">        &gt;&gt;&gt; p</span>
+<span class="sd">        Path object  at 0x140458648250512x</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{}</span><span class="s1"> object </span><span class="si">{}</span><span class="s1"> at 0x</span><span class="si">{}</span><span class="s1">x&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_desc</span><span class="p">(),</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                                <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_desc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return a string *Path()*.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the number of edges in the path.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_edges</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the unique hash of the path.</span>
+
+<span class="sd">        Here the hash value is defined by the unique path id!</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">uid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the unique identifier (uid) of the path.</span>
+
+<span class="sd">        If no uid is assigned the path is labled after the assigned</span>
+<span class="sd">        edges. e.g. if the path has edges &#39;a-b&#39; and &#39;c-d&#39;, the uid is</span>
+<span class="sd">        &#39;a-b|b-c&#39;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Returns the uid of the path as a string.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple path</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p.uid</span>
+<span class="sd">        &#39;a-b|b-c&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if uid is defined us this uid</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span>
+        <span class="c1"># if edges are given use a combined edge uid</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_edges</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">directed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return if the path is directed (True) or undirected (False).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+
+<span class="sd">            Retun ``True`` if the path is directed or ``False`` if the path is</span>
+<span class="sd">            undirected.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate an undirected path.</span>
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, directed=False)</span>
+<span class="sd">        &gt;&gt;&gt; p.directed</span>
+<span class="sd">        False</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_directed</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the name of the path.</span>
+
+<span class="sd">        Name of the path. If no name is assigned the network is called after</span>
+<span class="sd">        the assigned edge. e.g. if the path has edges &#39;a-b&#39; and &#39;b-c&#39;, the path</span>
+<span class="sd">        is named &#39;a-b|b-c&#39;. The maximum length of the name is defined in the</span>
+
+<span class="sd">        config file and is per default 5. E.g. if the path has 6 edges</span>
+<span class="sd">        (a-b,b-c,c-d,d-e,e-f,f-g) the name of the path is</span>
+<span class="sd">        &#39;a-b|b-c|c-d|d-e|...|f-g&#39;. Please, note the name of a path is NOT an</span>
+<span class="sd">        unique identifier!</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Returns the name of the path as a string.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Generate simple path:</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p.name</span>
+<span class="sd">        &#39;a-b|b-c&#39;</span>
+
+<span class="sd">        Generate longer path:</span>
+
+<span class="sd">        &gt;&gt;&gt; p = Path(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p.name</span>
+<span class="sd">        &#39;a-b|b-c|c-d|d-e|...|f-g&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># if path is longer then useful, shorten name</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_name_length</span><span class="p">:</span>
+            <span class="n">_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">as_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">max_name_length</span><span class="p">])</span> \
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> \
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_edges</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">_name</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeDict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the associated nodes of the path.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        NodeDict</span>
+
+<span class="sd">            Return a dictionary with the :py:class:`Node` uids as key and the</span>
+<span class="sd">            :py:class:`Node` objects as values, associated with the path.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple path.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;)</span>
+
+<span class="sd">        Get the nodes of the path</span>
+
+<span class="sd">        &gt;&gt;&gt; p.nodes</span>
+<span class="sd">        {&#39;a&#39;: Node a, &#39;b&#39;: Node b, &#39;c&#39;: Node c}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EdgeDict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the associated edges of the path.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EdgeDict</span>
+
+<span class="sd">            Return a dictionary with the :py:class:`Edge` uids as key and the</span>
+<span class="sd">            :py:class:`Edge` objects as values, associated with the path.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple path.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;)</span>
+
+<span class="sd">        Get the edges of the path</span>
+
+<span class="sd">        &gt;&gt;&gt; p.edges</span>
+<span class="sd">        {&#39;a-b&#39;: Edge a-b, &#39;b-c&#39;: Edge b-c}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">as_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return the adjacend node uids in the path.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+
+<span class="sd">            Return a list the :py:class:`Node` uids.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple path.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;a&#39;,&#39;b&#39;,)</span>
+
+<span class="sd">        Get the path as a list of nodes</span>
+
+<span class="sd">        &gt;&gt;&gt; p.as_nodes</span>
+<span class="sd">        [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_nodes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">as_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return the adjacend edge uids in the path.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+
+<span class="sd">            Return a list the :py:class:`Edge` uids.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple path.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;a&#39;,&#39;b&#39;,)</span>
+
+<span class="sd">        Get the edges of the path</span>
+
+<span class="sd">        &gt;&gt;&gt; p.as_edges</span>
+<span class="sd">        [&#39;a-b&#39;, &#39;b-c&#39;, &#39;c-a&#39;, &#39;a-b&#39;]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_edges</span>
+
+<div class="viewcode-block" id="Path.summary"><a class="viewcode-back" href="../../../generated/pathpy.Path.summary.html#pathpy.Path.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a summary of the path.</span>
+
+<span class="sd">        The summary contains the name, the used path class, if it is directed</span>
+<span class="sd">        or not, the number of unique nodes and unique edges, and the number of</span>
+<span class="sd">        nodes in the path.</span>
+
+<span class="sd">        Since a path can multiple times pass the same node and edge objects,</span>
+<span class="sd">        the length of the path (i.e. the consecutive nodes) might be larger</span>
+<span class="sd">        then the number of unique nodes.</span>
+
+<span class="sd">        If logging is enabled (see config), the summary is written to the log</span>
+<span class="sd">        file and showed as information on in the terminal. If logging is not</span>
+<span class="sd">        enabled, the function will return a string with the information, which</span>
+<span class="sd">        can be printed to the console.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Return a summary of the path.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">summary</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;Name:</span><span class="se">\t\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+            <span class="s1">&#39;Type:</span><span class="se">\t\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span>
+            <span class="s1">&#39;Directed:</span><span class="se">\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">)),</span>
+            <span class="s1">&#39;Number of unique nodes:</span><span class="se">\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()),</span>
+            <span class="s1">&#39;Number of unique edges:</span><span class="se">\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()),</span>
+            <span class="s1">&#39;Path length (# edges):</span><span class="se">\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;logging&#39;</span><span class="p">][</span><span class="s1">&#39;enabled&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">summary</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Path.number_of_nodes"><a class="viewcode-back" href="../../../generated/pathpy.Path.number_of_nodes.html#pathpy.Path.number_of_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">number_of_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unique</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the number of nodes in the path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        unique : bool, optional (default = True)</span>
+
+<span class="sd">            If unique is ``True`` only the number of unique nodes in the path</span>
+<span class="sd">            is returnd.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">            Returns the number of nodes in the path.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple path.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;,)</span>
+
+<span class="sd">        Get the number of unique nodes:</span>
+
+<span class="sd">        &gt;&gt;&gt; p.number_of_nodes()</span>
+<span class="sd">        3</span>
+
+<span class="sd">        Get the number of all node visits in the path:</span>
+
+<span class="sd">        &gt;&gt;&gt; p.number_of_nodes(unique=False)</span>
+<span class="sd">        5</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">unique</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_nodes</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Path.number_of_edges"><a class="viewcode-back" href="../../../generated/pathpy.Path.number_of_edges.html#pathpy.Path.number_of_edges">[docs]</a>    <span class="k">def</span> <span class="nf">number_of_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unique</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the number of edges in the path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        unique : bool, optional (default = True)</span>
+
+<span class="sd">            If unique is ``True`` only the number of unique edges in the path</span>
+<span class="sd">            is returnd.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">            Returns the number of edges in the path.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple path.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;)</span>
+
+<span class="sd">        Get the number of unique edges:</span>
+
+<span class="sd">        &gt;&gt;&gt; p.number_of_edges()</span>
+<span class="sd">        3</span>
+
+<span class="sd">        Get the number of all observed edges in the path:</span>
+
+<span class="sd">        &gt;&gt;&gt; p.number_of_nodes(unique=False)</span>
+<span class="sd">        4</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">unique</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_edges</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Path.add_edges_from"><a class="viewcode-back" href="../../../generated/pathpy.Path.add_edges_from.html#pathpy.Path.add_edges_from">[docs]</a>    <span class="k">def</span> <span class="nf">add_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Edge</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add multiple edges from a list to the path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nodes : List[Edge]</span>
+
+<span class="sd">            Edges from a list of :py:class:`Edge` objects are added to the</span>
+<span class="sd">            path.</span>
+
+<span class="sd">        kwargs : Any, optional(default={})</span>
+
+<span class="sd">            Attributes assigned to all edges in the list as ``key=value``</span>
+<span class="sd">            pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate some edges and add them to a path</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Edge, Path</span>
+<span class="sd">        &gt;&gt;&gt; e1 = Edge(&#39;a&#39;, &#39;b&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; e2 = Edge(&#39;b&#39;, &#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p = Path()</span>
+<span class="sd">        &gt;&gt;&gt; p.add_edges_from([e1, e2])</span>
+<span class="sd">        &gt;&gt;&gt; p.uid</span>
+<span class="sd">        &#39;a-b|b-c&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># iterate over a list of nodes</span>
+        <span class="c1"># TODO: parallelize this function</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Path.add_edge"><a class="viewcode-back" href="../../../generated/pathpy.Path.add_edge.html#pathpy.Path.add_edge">[docs]</a>    <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add a single edge to the path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        edge : Edge</span>
+
+<span class="sd">            The :py:class:`Edge` object, which will be added to the path.</span>
+
+<span class="sd">        kwargs : Any, optional(default={})</span>
+
+<span class="sd">            Attributes assigned to the edge as ``key=value`` pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate an edge and add it to a path.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Edge, Path</span>
+<span class="sd">        &gt;&gt;&gt; e = Edge(&#39;a&#39;, &#39;b&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p = Path()</span>
+<span class="sd">        &gt;&gt;&gt; p.add_edge(e)</span>
+<span class="sd">        &gt;&gt;&gt; p.uid</span>
+<span class="sd">        &#39;a-b&#39;</span>
+
+<span class="sd">        Add an other edge.</span>
+
+<span class="sd">        &gt;&gt;&gt; p.add_edge(&#39;b-c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p.uid</span>
+<span class="sd">        &#39;a-b|b-c&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># check if the right object is provided</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">:</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="n">_check_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># check if edge is adjacent</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_nodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">edge</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;The edge </span><span class="si">{}</span><span class="s1"> is not adjacent to the previous&#39;</span>
+                      <span class="s1">&#39; edge </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+        <span class="c1"># add new edge to the path or update modified edge</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="ow">and</span> <span class="n">edge</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">])):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="n">edge</span>
+
+        <span class="c1"># append edge to the path and update counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">as_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">increase_counter</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+
+        <span class="c1"># append nodes to path</span>
+        <span class="c1"># add first node if path is empty</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">as_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">increase_counter</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+
+        <span class="c1"># add node to the path and update counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">as_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">increase_counter</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Path.add_node"><a class="viewcode-back" href="../../../generated/pathpy.Path.add_node.html#pathpy.Path.add_node">[docs]</a>    <span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add a single node to the path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        node : Node</span>
+
+<span class="sd">            The :py:class:`Node` object, which will be added to the path.</span>
+
+<span class="sd">        kwargs : Any, optional(default={})</span>
+
+<span class="sd">            Attributes assigned to the node as key = value pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a node and add it to a path.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Edge, Path</span>
+<span class="sd">        &gt;&gt;&gt; a = Node(&#39;a&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p = Path()</span>
+<span class="sd">        &gt;&gt;&gt; p.add_node(a)</span>
+<span class="sd">        &gt;&gt;&gt; p.uid</span>
+<span class="sd">        &#39;a&#39;</span>
+
+<span class="sd">        Add other nodes.</span>
+
+<span class="sd">        &gt;&gt;&gt; p.add_node(&#39;b&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p.add_node(&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p.uid</span>
+<span class="sd">        &#39;a-b|b-c&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># check if the right object is provided.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">_check_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># get predecessor node</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">v_uid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">v_uid</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="c1"># add new node to the path or update modified node</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="ow">and</span> <span class="n">node</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span><span class="p">])):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span>
+
+        <span class="c1"># append node to path</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">as_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">increase_counter</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+
+        <span class="c1"># assigne edge from the last added node to the new node</span>
+        <span class="k">if</span> <span class="n">v_uid</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="c1"># add edge</span>
+            <span class="n">edge_uid</span> <span class="o">=</span> <span class="n">v_uid</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">[</span><span class="s1">&#39;edge&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span>
+            <span class="k">if</span> <span class="n">edge_uid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span>
+                    <span class="n">Edge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">v_uid</span><span class="p">],</span> <span class="n">node</span><span class="p">,</span>
+                         <span class="n">separator</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">[</span><span class="s1">&#39;edge&#39;</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">edge_uid</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Path.add_nodes_from"><a class="viewcode-back" href="../../../generated/pathpy.Path.add_nodes_from.html#pathpy.Path.add_nodes_from">[docs]</a>    <span class="k">def</span> <span class="nf">add_nodes_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Node</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add multiple nodes from a list to the path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nodes: List[Node]</span>
+
+<span class="sd">            Nodes from a list of :py:class:`Node` objects are added to the</span>
+<span class="sd">            path.</span>
+
+<span class="sd">        kwargs: Any, optional(default={})</span>
+
+<span class="sd">            Attributes assigned to all nodes in the list as key = value pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate some nodes and add them to a path</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node, Path</span>
+<span class="sd">        &gt;&gt;&gt; a = Node(&#39;a&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; b = Node(&#39;b&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; c = Node(&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p = Path()</span>
+<span class="sd">        &gt;&gt;&gt; p.add_nodes_from([a, b, c])</span>
+<span class="sd">        &gt;&gt;&gt; p.uid</span>
+<span class="sd">        &#39;a-b|b-c&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># iterate over a list of nodes</span>
+        <span class="c1"># TODO: parallelize this function</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_add_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add args to the path.&quot;&quot;&quot;</span>
+
+        <span class="c1"># iterate over all given arguments</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+
+            <span class="c1"># if arg is an Edge add the edge</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Edge</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+
+            <span class="c1"># if arg is a Node add the node</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Node</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+
+            <span class="c1"># if arg is a string, check the string and add accordingly</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">:</span>
+
+                <span class="c1"># check the given string</span>
+                <span class="n">objects</span> <span class="o">=</span> <span class="n">_check_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">expected</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">)</span>
+
+                <span class="c1"># iterate over the cleand string and append objects</span>
+                <span class="k">for</span> <span class="n">string</span><span class="p">,</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;edge&#39;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;node&#39;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Invalide argument &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+<div class="viewcode-block" id="Path.subpaths"><a class="viewcode-back" href="../../../generated/pathpy.Path.subpaths.html#pathpy.Path.subpaths">[docs]</a>    <span class="k">def</span> <span class="nf">subpaths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                 <span class="n">max_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">,</span>
+                 <span class="n">include_path</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of subpaths.</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            This function will be removed soon!  Functionality regarding</span>
+<span class="sd">            sub-path statistics will be provide by the submodule subpaths!</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        min_length: int, optional(default=0)</span>
+
+<span class="sd">            Parameter which defines the minimum length of the sub-paths. This</span>
+<span class="sd">            parameter has to be smaller then the maximum length parameter.</span>
+
+<span class="sd">        max_length: int, optional(default=sys.maxsize)</span>
+
+<span class="sd">            Parameter which defines the maximum length of the sub-paths. This</span>
+<span class="sd">            parameter has to be greater then the minimum length parameter. If</span>
+<span class="sd">            the parameter is also greater then the maximum length of the path,</span>
+<span class="sd">            the maximum path length is used instead.</span>
+
+<span class="sd">        include_path: bool, optional(default=Flase)</span>
+
+<span class="sd">            If this option is enabled also the current path is added as a</span>
+<span class="sd">            sub-path of it self.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Paths]</span>
+
+<span class="sd">            Return a dictionary with the: py: class: `Paht` uids as key and the</span>
+<span class="sd">            : py: class: `Path` objects as values.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt; &gt; from pathpy import Path</span>
+<span class="sd">        &gt;&gt; &gt; p = Path(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;)</span>
+<span class="sd">        &gt;&gt; &gt; for k in p.subpaths():</span>
+<span class="sd">        ... print(k)</span>
+<span class="sd">        a</span>
+<span class="sd">        b</span>
+<span class="sd">        c</span>
+<span class="sd">        d</span>
+<span class="sd">        e</span>
+<span class="sd">        a-b</span>
+<span class="sd">        b-c</span>
+<span class="sd">        c-d</span>
+<span class="sd">        d-e</span>
+<span class="sd">        a-b | b-c</span>
+<span class="sd">        b-c | c-d</span>
+<span class="sd">        c-d | d-e</span>
+<span class="sd">        a-b | b-c | c-d</span>
+<span class="sd">        b-c | c-d | d-e</span>
+
+<span class="sd">        &gt;&gt; &gt; for k in p.subpaths(min_length=2, max_length=2)</span>
+<span class="sd">        ... print(k)</span>
+<span class="sd">        a-b | b-c</span>
+<span class="sd">        b-c | c-d</span>
+<span class="sd">        c-d | d-e</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># initializing the subpaths dictionary</span>
+        <span class="n">subpaths</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">PathDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+        <span class="c1"># get the default max and min path lengths</span>
+        <span class="n">_min_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">min_length</span>
+        <span class="n">_max_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">max_length</span>
+
+        <span class="c1"># TODO: FIX DICT -&gt; LIST</span>
+        <span class="c1"># if min_length is zero, account also for nodes</span>
+        <span class="k">if</span> <span class="n">_min_length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_nodes</span><span class="p">:</span>
+                <span class="c1"># generate empty path with one node</span>
+                <span class="n">subpaths</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">from_nodes</span><span class="p">(</span>
+                    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]],</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+
+        <span class="c1"># find the right path lengths</span>
+        <span class="n">min_length</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">_min_length</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">max_length</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">_max_length</span><span class="p">)</span>
+
+        <span class="c1"># get subpaths</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">min_length</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_length</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-</span><span class="n">i</span><span class="p">):</span>
+                <span class="c1"># get the edge uids</span>
+                <span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">edge</span><span class="p">]</span> <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_edges</span><span class="p">[</span><span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="c1"># assign a new path based  on the given edges</span>
+                <span class="n">subpaths</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">as_edges</span><span class="p">[</span><span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])]</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span>
+                        <span class="o">*</span><span class="n">edges</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+
+        <span class="c1"># include the path</span>
+        <span class="k">if</span> <span class="n">include_path</span> <span class="ow">and</span> <span class="n">_min_length</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">_max_length</span><span class="p">:</span>
+            <span class="n">subpaths</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
+
+        <span class="c1"># return the dict of subpaths</span>
+        <span class="k">return</span> <span class="n">subpaths</span></div>
+
+    <span class="c1"># def has_subpath(self, subpath: Path) -&gt; bool:</span>
+    <span class="c1">#     &quot;&quot;&quot;Return True if the path has a sub-path.&quot;&quot;&quot;</span>
+    <span class="c1">#     raise NotImplementedError</span>
+
+    <span class="c1"># def subpath(self, *args: str) -&gt; Path:</span>
+    <span class="c1">#     &quot;&quot;&quot;Returns a sup-path of the path.&quot;&quot;&quot;</span>
+    <span class="c1">#     raise NotImplementedError</span>
+
+<div class="viewcode-block" id="Path.update"><a class="viewcode-back" href="../../../generated/pathpy.Path.update.html#pathpy.Path.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+               <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Update of the path object.</span>
+
+<span class="sd">        Update the path with new kwargs or based on an other given</span>
+<span class="sd">        :py:class:`Path` object. If an other object is given, the other</span>
+<span class="sd">        attributes can be used or not.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : Path, optional (default = None)</span>
+
+<span class="sd">            An other :py:class:`Path` object, which is used to update the edge</span>
+<span class="sd">            attributes and properties.</span>
+
+<span class="sd">        attributes : bool, optional (default = True)</span>
+
+<span class="sd">            If ``True`` the attributes from the other path are written to the</span>
+<span class="sd">            initial path. If ``False`` only the information about the</span>
+<span class="sd">            associated edges and nodes is updated.</span>
+
+<span class="sd">        kwargs : Any</span>
+
+<span class="sd">            Keyword arguments stored as path attributes. Attributes are added</span>
+<span class="sd">            to the path as ``key=value`` pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create an :py:class:`Path` object with an assigned attribute.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = path(&#39;a&#39;,&#39;b&#39;, &#39;c&#39;, length=10)</span>
+<span class="sd">        &gt;&gt;&gt; p[&#39;length&#39;]</span>
+<span class="sd">        10</span>
+
+<span class="sd">        Update attributes (and add new).</span>
+
+<span class="sd">        &gt;&gt;&gt; p.update(length = 2, capacity = 3, speed = 10)</span>
+<span class="sd">        &gt;&gt;&gt; p.attributes</span>
+<span class="sd">        {&#39;length&#39;: 2, &#39;capacity&#39;: 3, &#39;speed&#39;: 10}</span>
+
+<span class="sd">        Create a new path.</span>
+
+<span class="sd">        &gt;&gt;&gt; q = Path(&#39;v&#39;, &#39;w&#39;, length=4, speed=30)</span>
+<span class="sd">        &gt;&gt;&gt; p.update(q)</span>
+<span class="sd">        &gt;&gt;&gt; p.attributes</span>
+<span class="sd">        {&#39;length&#39;: 4, &#39;capacity&#39;: 3, &#39;speed&#39;: 30}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">other</span><span class="p">:</span>
+            <span class="c1"># get relations with the associated nodes</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">],</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># get the attributes</span>
+            <span class="k">if</span> <span class="n">attributes</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="o">**</span><span class="n">other</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">history</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Path.from_nodes"><a class="viewcode-back" href="../../../generated/pathpy.Path.from_nodes.html#pathpy.Path.from_nodes">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_nodes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">nodes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Node</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generate a Path object from a list of nodes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nodes : List[Node]</span>
+
+<span class="sd">            Nodes from a list of :py:class:`Node` objects are added to the</span>
+<span class="sd">            path.</span>
+
+<span class="sd">        kwargs : Any, optional(default={})</span>
+
+<span class="sd">            Attributes assigned to the path as key = value pairs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :py:class:`Path`</span>
+
+<span class="sd">            Returns a :py:class:`Path` object with nodes and edges according to</span>
+<span class="sd">            the given list of :py:class:`Node` objects.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple path.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path.from_nodes([&#39;a&#39;, &#39;b&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; p.nodes</span>
+<span class="sd">        {&#39;a&#39;: Node a, &#39;b&#39;: Node b}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">path</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">path</span></div>
+
+<div class="viewcode-block" id="Path.from_edges"><a class="viewcode-back" href="../../../generated/pathpy.Path.from_edges.html#pathpy.Path.from_edges">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_edges</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Edge</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generate a Path object from a list of edges.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        edges : List[Edge]</span>
+
+<span class="sd">            Edges from a list of :py:class:`Edge` objects are added to the</span>
+<span class="sd">            path.</span>
+
+<span class="sd">        kwargs : Any, optional(default={})</span>
+
+<span class="sd">            Attributes assigned to the path as key = value pairs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :py:class:`Path`</span>
+
+<span class="sd">            Returns a :py:class:`Path` object with nodes and edges according to</span>
+<span class="sd">            the given list of :py:class:`Edge` objects.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple path.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path.from_edges([&#39;a-b&#39;, &#39;b-c&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; p.nodes</span>
+<span class="sd">        {&#39;a&#39;: Node a, &#39;b&#39;: Node b, &#39;c&#39;: Node c}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">path</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">path</span></div></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># eof</span>
+<span class="c1">#</span>
+<span class="c1"># Local Variables:</span>
+<span class="c1"># mode: python</span>
+<span class="c1"># mode: linum</span>
+<span class="c1"># mode: auto-fill</span>
+<span class="c1"># fill-column: 79</span>
+<span class="c1"># End:</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

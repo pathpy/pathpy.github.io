@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pathpy.core.network &#8212; pathpy 3.0.0a1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../examples/index.html">Gallery</a></li>
+                <li><a href="../../../tutorial.html">Tutorial</a></li>
+                <li><a href="../../../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pathpy.core.network</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python -tt</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># File      : network.py -- Base class for a network</span>
+<span class="c1"># Author    : Jürgen Hackl &lt;hackl@ifi.uzh.ch&gt;</span>
+<span class="c1"># Time-stamp: &lt;Thu 2020-03-19 15:55 juergen&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2016-2019 Pathpy Developers</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseNetwork</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseDirectedNetwork</span><span class="p">,</span> <span class="n">BaseUndirectedNetwork</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseDirectedTemporalNetwork</span><span class="p">,</span> <span class="n">BaseUndirectedTemporalNetwork</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">NodeDict</span><span class="p">,</span> <span class="n">EdgeDict</span><span class="p">,</span> <span class="n">PathDict</span>
+<span class="kn">from</span> <span class="nn">.utils.separator</span> <span class="k">import</span> <span class="n">separator</span>
+<span class="kn">from</span> <span class="nn">.utils._check_node</span> <span class="k">import</span> <span class="n">_check_node</span>
+<span class="kn">from</span> <span class="nn">.utils._check_edge</span> <span class="k">import</span> <span class="n">_check_edge</span>
+<span class="kn">from</span> <span class="nn">.utils._check_path</span> <span class="k">import</span> <span class="n">_check_path</span>
+<span class="kn">from</span> <span class="nn">.utils._check_str</span> <span class="k">import</span> <span class="n">_check_str</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Edge</span><span class="p">,</span> <span class="n">Path</span>
+
+<span class="c1"># create logger for the Network class</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../../generated/pathpy.Network.html#pathpy.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">BaseNetwork</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for a network.</span>
+
+<span class="sd">    A network is a structure amounting to a set of objects in which some of the</span>
+<span class="sd">    objects are related to each other. The objects correspond to mathematical</span>
+<span class="sd">    abstractions called nodes (or vertices) and each of the related pairs of</span>
+<span class="sd">    nodes is called an edge (or link). Furthermore, related edges form</span>
+<span class="sd">    paths. Thereby, the edges and paths may be directed or undirected.</span>
+
+<span class="sd">    In ``pathpy`` a :py:class:`Network` stores :py:class:`Node`,</span>
+<span class="sd">    :py:class:`Edge` and :py:class:`Path` objects with optional data or</span>
+<span class="sd">    attributes. Instances of this class capture a network that can be directed,</span>
+<span class="sd">    undirected, unweighted or weighted as well as static or temporal. Self</span>
+<span class="sd">    loops and multiple (parallel) edges are allowed.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    uid : str, optional (default = None)</span>
+
+<span class="sd">        The parameter ``uid`` is the unique identifier for the network. This</span>
+<span class="sd">        option can late be used for multi-layer networks. Currently the ``uid``</span>
+<span class="sd">        of the network is not in use.</span>
+
+<span class="sd">    directed : bool, optional  (default = True)</span>
+
+<span class="sd">        Specifies if a network contains directed edges and paths, i.e u-&gt;v-&gt;w</span>
+<span class="sd">        or undirected edges and paths i.d. u-v-w.  If ``True`` the all</span>
+<span class="sd">        subsequent objects are directed, i.e. quantities can only transmited</span>
+<span class="sd">        from the source node ``v`` to the traget node ``w``. If ``False`` the</span>
+<span class="sd">        al subsequent obects are undirected, i.e. quantities can be transmited</span>
+<span class="sd">        in both directions. Per default networks in ``pathpy`` are directed.</span>
+
+<span class="sd">    temporal : bool, optional (default = False)</span>
+
+<span class="sd">        A :py:class:`Network` can be static or temporal. If ``True`` the</span>
+<span class="sd">        network is temporal; i.e. properties of nodes, edges or paths can</span>
+<span class="sd">        change over time. If ``False`` the network is static, i.e. no changes</span>
+<span class="sd">        over time. Per default the network is assumed to be static.</span>
+
+<span class="sd">    args : Path</span>
+
+<span class="sd">        :py:class:`Path` objects can be used as arguments to build a</span>
+<span class="sd">        network. While the default options is using paths, `pathpy` also</span>
+<span class="sd">        supports :py:class:`Node`, :py:class:`Edge` objects and ``str`` uids to</span>
+<span class="sd">        generate networks.</span>
+
+<span class="sd">    kwargs : Any</span>
+
+<span class="sd">        Keyword arguments to store network attributes. Attributes are added to</span>
+<span class="sd">        the network as ``key=value`` pairs.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    Node, Edge, Path</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create an empty network structure with no nodes, edges or paths.</span>
+
+<span class="sd">    &gt;&gt;&gt; form pathpy import Node, Edge, Path, Network</span>
+<span class="sd">    &gt;&gt;&gt; net = Network()</span>
+
+<span class="sd">    Some properties of the network are: the name, if directed or if temporal</span>
+
+<span class="sd">    &gt;&gt;&gt; net.name = &#39;my test network&#39;</span>
+<span class="sd">    &gt;&gt;&gt; net.name</span>
+<span class="sd">    my test network</span>
+
+<span class="sd">    Per default the network is directed and static</span>
+
+<span class="sd">    &gt;&gt;&gt; net.directed</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; net.temporal</span>
+<span class="sd">    False</span>
+
+<span class="sd">    The network can be grown in several ways.</span>
+
+<span class="sd">    **Nodes:**</span>
+
+<span class="sd">    Add single node to the network.</span>
+
+<span class="sd">    &gt;&gt;&gt; net.add_node(&#39;a&#39;)</span>
+
+<span class="sd">    Also a node object can be added to the network.</span>
+
+<span class="sd">    &gt;&gt;&gt; b = Node(&#39;b&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; net.add_node(b)</span>
+
+<span class="sd">    In addition to single nodes, also nodes from a list can added to the</span>
+<span class="sd">    network at once. Attributes are assigned to all nodes.</span>
+
+<span class="sd">    &gt;&gt;&gt; net.add_nodes_from([&#39;c&#39;,&#39;d&#39;,&#39;e&#39;], color=&#39;green&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; net.nodes[&#39;c&#39;][&#39;color&#39;]</span>
+<span class="sd">    &#39;green&#39;</span>
+
+<span class="sd">    Single nodes can be removed.</span>
+
+<span class="sd">    &gt;&gt;&gt; net.remove_node(&#39;c&#39;)</span>
+
+<span class="sd">    While multiple nodes can be removed from a list of nodes.</span>
+
+<span class="sd">    &gt;&gt;&gt; net.remove_nodes_from([&#39;a&#39;,&#39;b&#39;])</span>
+
+<span class="sd">    **Edges**</span>
+
+<span class="sd">    Adding a singe new edge to the network.</span>
+
+<span class="sd">    &gt;&gt;&gt; net = Network()</span>
+<span class="sd">    &gt;&gt;&gt; net.add_edge(&#39;a-b&#39;, length = 10)</span>
+
+<span class="sd">    Adding an existing edge object to the network.</span>
+
+<span class="sd">    &gt;&gt;&gt; e = Edge(&#39;b&#39;, &#39;c&#39;, length = 5)</span>
+<span class="sd">    &gt;&gt;&gt; net.add_edge(e)</span>
+<span class="sd">    &gt;&gt;&gt; net.number_of_edges()</span>
+<span class="sd">    2</span>
+
+<span class="sd">    **Path**</span>
+
+<span class="sd">    Adding a single path to the network.</span>
+
+<span class="sd">    &gt;&gt;&gt; net = Network()</span>
+<span class="sd">    &gt;&gt;&gt; p = Path(&#39;a-b-c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; net.add_path(p)</span>
+<span class="sd">    &gt;&gt;&gt; net.number_of_nodes()</span>
+<span class="sd">    3</span>
+<span class="sd">    &gt;&gt;&gt; net.number_of_edges()</span>
+<span class="sd">    2</span>
+<span class="sd">    &gt;&gt;&gt; net.number_of_paths()</span>
+<span class="sd">    1</span>
+
+<span class="sd">    **str uids**</span>
+
+<span class="sd">    String uids can be used to add objects to the network.</span>
+
+<span class="sd">    &gt;&gt;&gt; net = Network(&#39;a&#39;,&#39;b-c&#39;,&#39;c-d-e&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; net.number_of_nodes()</span>
+<span class="sd">    5</span>
+<span class="sd">    &gt;&gt;&gt; net.number_of_edges()</span>
+<span class="sd">    3</span>
+<span class="sd">    &gt;&gt;&gt; net.number_of_paths()</span>
+<span class="sd">    1</span>
+
+<span class="sd">    Plot a network.</span>
+
+<span class="sd">    &gt;&gt;&gt; net = Network(&#39;a-b-c-d&#39;,&#39;b-e-f-c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; plt = net.plot()</span>
+<span class="sd">    &gt;&gt;&gt; plt.show(&#39;png&#39;)</span>
+
+<span class="sd">    .. plot::</span>
+
+<span class="sd">       import pathpy as pp</span>
+<span class="sd">       net = pp.Network(&#39;a-b-c-d&#39;,&#39;b-e-f-c&#39;)</span>
+<span class="sd">       plt = net.plot()</span>
+<span class="sd">       plt.show(&#39;png&#39;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Network.__init__"><a class="viewcode-back" href="../../../generated/pathpy.Network.html#pathpy.Network.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">temporal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the network object.&quot;&quot;&quot;</span>
+
+        <span class="c1"># initialize the base class</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># set unique identifier of the network</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">uid</span>
+
+        <span class="c1"># inidcator whether the network is directed or undirected</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">directed</span>
+
+        <span class="c1"># indicator whether the network is temporal or static</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_temporal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">temporal</span>
+
+        <span class="c1"># a dictionary containing node objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">:</span> <span class="n">NodeDict</span> <span class="o">=</span> <span class="n">NodeDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+        <span class="c1"># a dictionary containing edge objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span><span class="p">:</span> <span class="n">EdgeDict</span> <span class="o">=</span> <span class="n">EdgeDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+        <span class="c1"># a dictionary containing path objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_paths</span><span class="p">:</span> <span class="n">PathDict</span> <span class="o">=</span> <span class="n">PathDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+        <span class="c1"># use separator if given otherwise use config default value</span>
+        <span class="c1"># TODO: Add a network mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">separator</span><span class="p">()</span>
+
+        <span class="c1"># add attributes to the network</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add objects from args if given</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="c1"># self.add_paths_from(list(args))</span>
+
+        <span class="c1"># check the network class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_class</span><span class="p">()</span></div>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># import sub paths object</span>
+        <span class="kn">from</span> <span class="nn">..algorithms.statistics.subpaths</span> <span class="k">import</span> <span class="n">SubPaths</span> <span class="k">as</span> <span class="n">_SubPathsConstructor</span>
+
+        <span class="c1"># initialize a local variable to store sub paths</span>
+        <span class="c1"># NOTE: this will be only created if the module is loaded</span>
+        <span class="n">_subpaths</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># add property to the network</span>
+        <span class="nd">@property</span>
+        <span class="k">def</span> <span class="nf">subpaths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Returns a SubPath object.&quot;&quot;&quot;</span>
+
+            <span class="c1"># check if alread a sub path object is initialzed</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subpaths</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+                <span class="c1"># if not generate initialize new object</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_subpaths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SubPathsConstructor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+            <span class="c1"># return sub path object</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subpaths</span>
+
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="c1"># if library could not be loaded raise a warning</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;pathpy.subpaths failed to be imported&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">..algorithms.matrices</span> <span class="k">import</span> <span class="n">adjacency_matrix</span><span class="p">,</span> <span class="n">transition_matrix</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;pathpy.matrices failed to be imported&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">..visualizations.plot</span> <span class="k">import</span> <span class="n">plot</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;pathpy.plot failed to be imported&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the description of the network.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Returns the description of the network with the class, the name (if</span>
+<span class="sd">            deffined) and the assigned system id.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Genarate new network</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network()</span>
+<span class="sd">        &gt;&gt;&gt; print(net)</span>
+<span class="sd">        &lt;DirectedNetwork object  at 0x139942320561264x&gt;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{}</span><span class="s1"> object </span><span class="si">{}</span><span class="s1"> at 0x</span><span class="si">{}</span><span class="s1">x&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_desc</span><span class="p">(),</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_desc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return a string *Network*.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add two networks together.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">uid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the unique id of the network.</span>
+
+<span class="sd">        Uid of the network. If no uid is assigned the network is called after the</span>
+<span class="sd">        system id.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Returns the uid of the network as a string.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple network</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Network</span>
+<span class="sd">        &gt;&gt;&gt; p = Network(uid=&#39;testnet&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p.uid</span>
+<span class="sd">        testnet</span>
+
+<span class="sd">        Generate a simple network without uid.</span>
+
+<span class="sd">        &gt;&gt;&gt; p = Network()</span>
+<span class="sd">        &gt;&gt;&gt; p.uid</span>
+<span class="sd">        139862868063504</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the name of the network if defined, else an empty string.</span>
+
+<span class="sd">        The name of the network is an attribute of the network, in order to</span>
+<span class="sd">        make the classification and identification easier. However the name of</span>
+<span class="sd">        the network do not have to be unique like an uid. Therefore, the name of</span>
+<span class="sd">        the network can be changed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Returns the name of the network (if defined), otherwise an empty</span>
+<span class="sd">            string is returnd.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create an empty network structure with no nodes and no edges.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network()</span>
+
+<span class="sd">        Add a name of the network</span>
+
+<span class="sd">        &gt;&gt;&gt; net.name = &#39;my test network&#39;</span>
+<span class="sd">        &gt;&gt;&gt; net.name</span>
+<span class="sd">        &#39;my test network&#39;</span>
+
+<span class="sd">        Create a new network with a name.</span>
+
+<span class="sd">        &gt;&gt;&gt; net = Network(name=&#39;an other network&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net.name</span>
+<span class="sd">        &#39;an other network&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="nd">@name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Set the name of the network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+
+<span class="sd">            New name of the network.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return the size of the Network as tuple of number of nodes, edges and paths.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[int, int, int]</span>
+
+<span class="sd">            Size of the network as tuple: (number of nodes, number of edges,</span>
+<span class="sd">            number of paths)</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Genarate a simple network</span>
+
+<span class="sd">        &gt;&gt;&gt; form pathpy import Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network(&#39;a-b-c-d&#39;,&#39;b-e-f-c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net.shape</span>
+<span class="sd">        (6, 6, 2)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_paths</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">directed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return if the network is directed (True) or undirected (False).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+
+<span class="sd">            Retun ``True`` if the network is directed or ``False`` if the</span>
+<span class="sd">            network is undirected.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate an undirected network.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network(&#39;a-b&#39;, directed=False)</span>
+<span class="sd">        &gt;&gt;&gt; net.directed</span>
+<span class="sd">        False</span>
+<span class="sd">        &gt;&gt;&gt; net.edges[&#39;a-b&#39;].directed</span>
+<span class="sd">        False</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_directed</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">temporal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return if the network is temproal (True) or static (False).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+
+<span class="sd">            Retun ``True`` if the network is temporal or ``False`` if the</span>
+<span class="sd">            network is static.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temporal</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeDict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the associated nodes of the network.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        NodeDict</span>
+
+<span class="sd">            Return a dictionary with the :py:class:`Node` uids as key and the</span>
+<span class="sd">            :py:class:`Node` objects as values, associated with the network.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple network.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network(&#39;a-b-c&#39;)</span>
+
+<span class="sd">        Get the nodes of the network</span>
+
+<span class="sd">        &gt;&gt;&gt; net.nodes</span>
+<span class="sd">        {&#39;a&#39;: Node a, &#39;b&#39;: Node b, &#39;c&#39;: Node c}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EdgeDict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the associated edges of the network.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EdgeDict</span>
+
+<span class="sd">            Return a dictionary with the :py:class:`Edge` uids as key and the</span>
+<span class="sd">            :py:class:`Edge` objects as values, associated with the network.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple network.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network(&#39;a-b-c&#39;)</span>
+
+<span class="sd">        Get the edges of the network</span>
+
+<span class="sd">        &gt;&gt;&gt; net.edges</span>
+<span class="sd">        {&#39;a-b&#39;: Edge a-b, &#39;b-c&#39;: Edge b-c}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">paths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PathDict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the associated paths of the network.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PathDict</span>
+
+<span class="sd">            Return a dictionary with the :py:class:`Path` uids as key and the</span>
+<span class="sd">            :py:class:`Path` objects as values, associated with the network.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple network.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path, Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network(&#39;a-b-c&#39;)</span>
+
+<span class="sd">        Get the paths of the network</span>
+
+<span class="sd">        &gt;&gt;&gt; net.paths</span>
+<span class="sd">        {&#39;a-b|b-c&#39;: Path a-b|b-c}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paths</span>
+
+<div class="viewcode-block" id="Network.summary"><a class="viewcode-back" href="../../../generated/pathpy.Network.summary.html#pathpy.Network.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a summary of the network.</span>
+
+<span class="sd">        The summary contains the name, the used network class, if it is</span>
+<span class="sd">        directed or not, the number of nodes and edges.</span>
+
+<span class="sd">        If logging is enabled (see config), the summary is written to the log</span>
+<span class="sd">        file and showed as information on in the terminal. If logging is not</span>
+<span class="sd">        enabled, the function will return a string with the information, which</span>
+<span class="sd">        can be printed to the console.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Retruns a summary of important network properties.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">summary</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;Name:</span><span class="se">\t\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+            <span class="s1">&#39;Type:</span><span class="se">\t\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span>
+            <span class="c1"># &#39;Directed:\t\t{}\n&#39;.format(str(self.directed)),</span>
+            <span class="s1">&#39;Number of unique nodes:</span><span class="se">\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()),</span>
+            <span class="s1">&#39;Number of unique edges:</span><span class="se">\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()),</span>
+            <span class="s1">&#39;Number of unique paths:</span><span class="se">\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_paths</span><span class="p">()),</span>
+            <span class="s1">&#39;Number of total paths:</span><span class="se">\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">number_of_paths</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;logging&#39;</span><span class="p">][</span><span class="s1">&#39;enabled&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">summary</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Network.number_of_nodes"><a class="viewcode-back" href="../../../generated/pathpy.Network.number_of_nodes.html#pathpy.Network.number_of_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">number_of_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unique</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the number of nodes in the network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        unique : bool, optional (default = True)</span>
+
+<span class="sd">            If unique is ``True`` only the number of unique nodes in the</span>
+<span class="sd">            network is returnd.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">            Returns the number of nodes in the network.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple network.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathy import Path, Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network(&#39;a-b-c-a-b&#39;)</span>
+
+<span class="sd">        Get the number of unique nodes:</span>
+
+<span class="sd">        &gt;&gt;&gt; net.number_of_nodes()</span>
+<span class="sd">        3</span>
+
+<span class="sd">        Get the number of all observed node visits in the network:</span>
+
+<span class="sd">        &gt;&gt;&gt; net.number_of_nodes(unique=False)</span>
+<span class="sd">        5</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">unique</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">counter</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Network.number_of_edges"><a class="viewcode-back" href="../../../generated/pathpy.Network.number_of_edges.html#pathpy.Network.number_of_edges">[docs]</a>    <span class="k">def</span> <span class="nf">number_of_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unique</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the number of edges in the network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        unique : bool, optional (default = True)</span>
+
+<span class="sd">            If unique is ``True`` only the number of unique edges in the</span>
+<span class="sd">            network is returnd.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">            Returns the number of edges in the network.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple network.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathy import Path, Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network(&#39;a-b-c-a-b&#39;)</span>
+
+<span class="sd">        Get the number of unique edges:</span>
+
+<span class="sd">        &gt;&gt;&gt; net.number_of_edges()</span>
+<span class="sd">        3</span>
+
+<span class="sd">        Get the number of all observed edges in the path:</span>
+
+<span class="sd">        &gt;&gt;&gt; net.number_of_edges(unique=False)</span>
+<span class="sd">        4</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">unique</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">counter</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Network.number_of_paths"><a class="viewcode-back" href="../../../generated/pathpy.Network.number_of_paths.html#pathpy.Network.number_of_paths">[docs]</a>    <span class="k">def</span> <span class="nf">number_of_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unique</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the number of paths in the network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        unique : bool, optional (default = True)</span>
+
+<span class="sd">            If unique is ``True`` only the number of unique paths in the</span>
+<span class="sd">            network is returnd.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">            Returns the number of paths in the network.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple network.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathy import Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network(&#39;a-b-c&#39;, &#39;d-b-e&#39;, &#39;a-b-c&#39;)</span>
+
+<span class="sd">        Get the number of unique paths:</span>
+
+<span class="sd">        &gt;&gt;&gt; net.number_of_paths()</span>
+<span class="sd">        2</span>
+
+<span class="sd">        Get the number of all observed paths in the path:</span>
+
+<span class="sd">        &gt;&gt;&gt; net.number_of_paths(unique=False)</span>
+<span class="sd">        3</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">unique</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">counter</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Network.add_nodes_from"><a class="viewcode-back" href="../../../generated/pathpy.Network.add_nodes_from.html#pathpy.Network.add_nodes_from">[docs]</a>    <span class="k">def</span> <span class="nf">add_nodes_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Node</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add multiple nodes from a list to the network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nodes : List[Node]</span>
+
+<span class="sd">            Nodes from a list of :py:class:`Node` objects are added to the</span>
+<span class="sd">            networ.</span>
+
+<span class="sd">        kwargs: Any, optional(default={})</span>
+
+<span class="sd">            Attributes assigned to all nodes in the list as ``key=value`` pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate some nodes and add them to the network</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node, Network</span>
+<span class="sd">        &gt;&gt;&gt; a = Node(&#39;a&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; b = Node(&#39;b&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; c = Node(&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net = Network()</span>
+<span class="sd">        &gt;&gt;&gt; net.add_nodes_from([a, b, c])</span>
+<span class="sd">        &gt;&gt;&gt; net.number_of_nodes()</span>
+<span class="sd">        3</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># iterate over a list of nodes</span>
+        <span class="c1"># TODO: parallelize this function</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Network.add_edges_from"><a class="viewcode-back" href="../../../generated/pathpy.Network.add_edges_from.html#pathpy.Network.add_edges_from">[docs]</a>    <span class="k">def</span> <span class="nf">add_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Edge</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add multiple edges from a list to the network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nodes : List[Edge]</span>
+
+<span class="sd">            Edges from a list of :py:class:`Edge` objects are added to the</span>
+<span class="sd">            network.</span>
+
+<span class="sd">        kwargs : Any, optional(default={})</span>
+
+<span class="sd">            Attributes assigned to all edges in the list as ``key=value``</span>
+<span class="sd">            pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate some edges and add them to the network.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Edge, Network</span>
+<span class="sd">        &gt;&gt;&gt; e1 = Edge(&#39;a&#39;, &#39;b&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; e2 = Edge(&#39;b&#39;, &#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net = Network()</span>
+<span class="sd">        &gt;&gt;&gt; net.add_edges_from([e1, e2])</span>
+<span class="sd">        &gt;&gt;&gt; net.number_of_edges()</span>
+<span class="sd">        2</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># iterate over a list of nodes</span>
+        <span class="c1"># TODO: parallelize this function</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Network.add_paths_from"><a class="viewcode-back" href="../../../generated/pathpy.Network.add_paths_from.html#pathpy.Network.add_paths_from">[docs]</a>    <span class="k">def</span> <span class="nf">add_paths_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paths</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add multiple paths from a list to the network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        paths: List[Path]</span>
+
+<span class="sd">            Paths from a list of :py:class:`Path` objects are added to the</span>
+<span class="sd">            network.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate some paths and add them to the network,</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path,Network</span>
+<span class="sd">        &gt;&gt;&gt; p1 = Path(&#39;a&#39;, &#39;c&#39;, &#39;d&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p2 = Path(&#39;b&#39;, &#39;c&#39;, &#39;e&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net = Network()</span>
+<span class="sd">        &gt;&gt;&gt; net.add_paths_from([p1, p2])</span>
+<span class="sd">        net.number_of_paths()</span>
+<span class="sd">        2</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Network.add_node"><a class="viewcode-back" href="../../../generated/pathpy.Network.add_node.html#pathpy.Network.add_node">[docs]</a>    <span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add a single node to the network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node : Node</span>
+
+<span class="sd">            The :py:class:`Node` object, which will be added to the network.</span>
+
+<span class="sd">        kwargs : Any, optional (default = {})</span>
+
+<span class="sd">            Attributes assigned to the node as key=value pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate an empty network and add single nodes.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node, Network</span>
+<span class="sd">        &gt;&gt;&gt; a = Node(&#39;a&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net = Network()</span>
+<span class="sd">        &gt;&gt;&gt; net.add_node(a, color=&#39;azur&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net.nodes</span>
+<span class="sd">        {&#39;a&#39;: Node a}</span>
+
+<span class="sd">        Generate new node from string uid.</span>
+
+<span class="sd">        &gt;&gt;&gt; net.add_node(&#39;b&#39;, color=&#39;blue&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net.nodes</span>
+<span class="sd">        {&#39;a&#39;: Node a, &#39;b&#39;: Node b}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># check if the right object is provided.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">_check_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add new node to the network or update modified node</span>
+        <span class="c1"># TODO: Test the speed of the if statement</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="ow">and</span> <span class="n">node</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span><span class="p">])):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span>
+
+        <span class="c1"># update node counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">increase_counter</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+
+        <span class="c1"># check the network class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_class</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Network.add_edge"><a class="viewcode-back" href="../../../generated/pathpy.Network.add_edge.html#pathpy.Network.add_edge">[docs]</a>    <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add a single edge to the network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        edge : Edge</span>
+
+<span class="sd">            The :py:class:`Edge` object, which will be added to the network.</span>
+
+<span class="sd">        kwargs : Any, optional(default={})</span>
+
+<span class="sd">            Attributes assigned to the edge as ``key=value`` pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate an edge and add it to the network.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Edge, Network</span>
+<span class="sd">        &gt;&gt;&gt; e = Edge(&#39;a&#39;, &#39;b&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net = Network()</span>
+<span class="sd">        &gt;&gt;&gt; net.add_edge(e)</span>
+<span class="sd">        &gt;&gt;&gt; net.number_of_edges()</span>
+<span class="sd">        1</span>
+
+<span class="sd">        Add an other edge.</span>
+
+<span class="sd">        &gt;&gt;&gt; net.add_edge(&#39;b-c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net.number_of_edges()</span>
+<span class="sd">        2</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># check if the right object is provided</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">:</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="n">_check_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                               <span class="n">directed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add new edge to the network or update modified edge</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="ow">and</span> <span class="n">edge</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">])):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="n">edge</span>
+
+        <span class="c1"># update counters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">increase_counter</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">increase_counter</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+
+        <span class="c1"># check the network class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_class</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Network.add_path"><a class="viewcode-back" href="../../../generated/pathpy.Network.add_path.html#pathpy.Network.add_path">[docs]</a>    <span class="k">def</span> <span class="nf">add_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add a single path to the network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : Path</span>
+
+<span class="sd">            The :py:class:`Path` object, which will be added to the network.</span>
+
+<span class="sd">        kwargs : Any, optional(default={})</span>
+
+<span class="sd">            Attributes assigned to the path as ``key=value`` pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a path and add it to the network.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Path, Network</span>
+<span class="sd">        &gt;&gt;&gt; p = Path(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net = Network()</span>
+<span class="sd">        &gt;&gt;&gt; net.add_path(p)</span>
+<span class="sd">        &gt;&gt;&gt; net.number_of_paths()</span>
+<span class="sd">        1</span>
+
+<span class="sd">        Add an other edge.</span>
+
+<span class="sd">        &gt;&gt;&gt; net.add_path(&#39;e-f-g&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net.number_of_paths()</span>
+<span class="sd">        2</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check if the right object is provided</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">_check_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add new path to the network or update modified path</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">uid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">paths</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">uid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">paths</span> <span class="ow">and</span> <span class="n">path</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">[</span><span class="n">path</span><span class="o">.</span><span class="n">uid</span><span class="p">])):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">[</span><span class="n">path</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
+
+        <span class="c1"># increas the counters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">increase_counter</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">as_nodes</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">increase_counter</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">as_edges</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">increase_counter</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+
+        <span class="c1"># check the network class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_class</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_add_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add args to the network.&quot;&quot;&quot;</span>
+
+        <span class="c1"># iterate over all given arguments</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+
+            <span class="c1"># if arg is a Path add the path</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_path</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+
+            <span class="c1"># if arg is an Edge add the edge</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Edge</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+
+            <span class="c1"># if arg is a Node add the node</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Node</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+
+            <span class="c1"># if arg is a string, check the string and add accordingly</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">:</span>
+
+                <span class="c1"># check the given string</span>
+                <span class="n">objects</span> <span class="o">=</span> <span class="n">_check_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">expected</span><span class="o">=</span><span class="s1">&#39;path&#39;</span><span class="p">)</span>
+
+                <span class="c1"># iterate over the cleand string and append objects</span>
+                <span class="k">for</span> <span class="n">string</span><span class="p">,</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;path&#39;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add_paths_from</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;edge&#39;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;node&#39;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Invalide argument &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+<div class="viewcode-block" id="Network.remove_node"><a class="viewcode-back" href="../../../generated/pathpy.Network.remove_node.html#pathpy.Network.remove_node">[docs]</a>    <span class="k">def</span> <span class="nf">remove_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Remove a single node from the network.</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            Implement this function!</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="Network.remove_edge"><a class="viewcode-back" href="../../../generated/pathpy.Network.remove_edge.html#pathpy.Network.remove_edge">[docs]</a>    <span class="k">def</span> <span class="nf">remove_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Remove a single edge from the network.</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            Implement this function!</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="Network.remove_path"><a class="viewcode-back" href="../../../generated/pathpy.Network.remove_path.html#pathpy.Network.remove_path">[docs]</a>    <span class="k">def</span> <span class="nf">remove_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Remove a single path from the network.</span>
+
+<span class="sd">        .. todo::</span>
+
+<span class="sd">            Implement this function!</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+    <span class="k">def</span> <span class="nf">_check_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check which is the appropriated network class.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+            <span class="n">_directed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_directed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">directed</span>
+
+        <span class="k">if</span> <span class="n">_directed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Edges must either be directed or undirected!&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+        <span class="c1"># TODO: Consider also temporal paths</span>
+        <span class="n">_temporal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">temporal</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">temporal</span>
+
+        <span class="k">if</span> <span class="n">_directed</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_temporal</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">=</span> <span class="n">DirectedNetwork</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">_directed</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_temporal</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">=</span> <span class="n">UndirectedNetwork</span>
+        <span class="k">elif</span> <span class="n">_directed</span> <span class="ow">and</span> <span class="n">_temporal</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">=</span> <span class="n">DirectedTemporalNetwork</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">_directed</span> <span class="ow">and</span> <span class="n">_temporal</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">=</span> <span class="n">UndirectedTemporalNetwork</span></div>
+
+
+<span class="k">class</span> <span class="nc">DirectedNetwork</span><span class="p">(</span><span class="n">BaseDirectedNetwork</span><span class="p">,</span> <span class="n">Network</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">temporal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the network object.&quot;&quot;&quot;</span>
+        <span class="c1"># initialize the base class</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">temporal</span><span class="o">=</span><span class="n">temporal</span> <span class="o">**</span> <span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">UndirectedNetwork</span><span class="p">(</span><span class="n">BaseUndirectedNetwork</span><span class="p">,</span> <span class="n">Network</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">temporal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the network object.&quot;&quot;&quot;</span>
+        <span class="c1"># initialize the base class</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">temporal</span><span class="o">=</span><span class="n">temporal</span> <span class="o">**</span> <span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">DirectedTemporalNetwork</span><span class="p">(</span><span class="n">BaseDirectedTemporalNetwork</span><span class="p">,</span> <span class="n">Network</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">temporal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the network object.&quot;&quot;&quot;</span>
+        <span class="c1"># initialize the base class</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">temporal</span><span class="o">=</span><span class="n">temporal</span> <span class="o">**</span> <span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">UndirectedTemporalNetwork</span><span class="p">(</span><span class="n">BaseUndirectedTemporalNetwork</span><span class="p">,</span> <span class="n">Network</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">temporal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the network object.&quot;&quot;&quot;</span>
+        <span class="c1"># initialize the base class</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">temporal</span><span class="o">=</span><span class="n">temporal</span> <span class="o">**</span> <span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">DirectedAcyclicGraph</span><span class="p">(</span><span class="n">Network</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># eof</span>
+<span class="c1">#</span>
+<span class="c1"># Local Variables:</span>
+<span class="c1"># mode: python</span>
+<span class="c1"># mode: linum</span>
+<span class="c1"># mode: auto-fill</span>
+<span class="c1"># fill-column: 79</span>
+<span class="c1"># End:</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

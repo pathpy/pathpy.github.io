@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pathpy.Network &#8212; pathpy 3.0.0a1 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pathpy.Network.directed" href="pathpy.Network.directed.html" />
+    <link rel="prev" title="pathpy.Path.weight" href="pathpy.Path.weight.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../examples/index.html">Gallery</a></li>
+                <li><a href="../tutorial.html">Tutorial</a></li>
+                <li><a href="../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">pathpy.Network</a><ul>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  </div>
+<div class=col-md-9 content><div class="section" id="pathpy-network">
+<h1>pathpy.Network<a class="headerlink" href="#pathpy-network" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pathpy.Network">
+<em class="property">class </em><code class="sig-prename descclassname">pathpy.</code><code class="sig-name descname">Network</code><span class="sig-paren">(</span><em class="sig-param">*args: pathpy.core.path.Path</em>, <em class="sig-param">uid: str = ''</em>, <em class="sig-param">directed: bool = True</em>, <em class="sig-param">temporal: bool = False</em>, <em class="sig-param">**kwargs: Any</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/core/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for a network.</p>
+<p>A network is a structure amounting to a set of objects in which some of the
+objects are related to each other. The objects correspond to mathematical
+abstractions called nodes (or vertices) and each of the related pairs of
+nodes is called an edge (or link). Furthermore, related edges form
+paths. Thereby, the edges and paths may be directed or undirected.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> a <a class="reference internal" href="#pathpy.Network" title="pathpy.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a> stores <a class="reference internal" href="pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a>,
+<a class="reference internal" href="pathpy.Edge.html#pathpy.Edge" title="pathpy.Edge"><code class="xref py py-class docutils literal notranslate"><span class="pre">Edge</span></code></a> and <a class="reference internal" href="pathpy.Path.html#pathpy.Path" title="pathpy.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> objects with optional data or
+attributes. Instances of this class capture a network that can be directed,
+undirected, unweighted or weighted as well as static or temporal. Self
+loops and multiple (parallel) edges are allowed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>uid</strong><span class="classifier">str, optional (default = None)</span></dt><dd><p>The parameter <code class="docutils literal notranslate"><span class="pre">uid</span></code> is the unique identifier for the network. This
+option can late be used for multi-layer networks. Currently the <code class="docutils literal notranslate"><span class="pre">uid</span></code>
+of the network is not in use.</p>
+</dd>
+<dt><strong>directed</strong><span class="classifier">bool, optional  (default = True)</span></dt><dd><p>Specifies if a network contains directed edges and paths, i.e u-&gt;v-&gt;w
+or undirected edges and paths i.d. u-v-w.  If <code class="docutils literal notranslate"><span class="pre">True</span></code> the all
+subsequent objects are directed, i.e. quantities can only transmited
+from the source node <code class="docutils literal notranslate"><span class="pre">v</span></code> to the traget node <code class="docutils literal notranslate"><span class="pre">w</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code> the
+al subsequent obects are undirected, i.e. quantities can be transmited
+in both directions. Per default networks in <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> are directed.</p>
+</dd>
+<dt><strong>temporal</strong><span class="classifier">bool, optional (default = False)</span></dt><dd><p>A <a class="reference internal" href="#pathpy.Network" title="pathpy.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a> can be static or temporal. If <code class="docutils literal notranslate"><span class="pre">True</span></code> the
+network is temporal; i.e. properties of nodes, edges or paths can
+change over time. If <code class="docutils literal notranslate"><span class="pre">False</span></code> the network is static, i.e. no changes
+over time. Per default the network is assumed to be static.</p>
+</dd>
+<dt><strong>args</strong><span class="classifier">Path</span></dt><dd><p><a class="reference internal" href="pathpy.Path.html#pathpy.Path" title="pathpy.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> objects can be used as arguments to build a
+network. While the default options is using paths, <cite>pathpy</cite> also
+supports <a class="reference internal" href="pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a>, <a class="reference internal" href="pathpy.Edge.html#pathpy.Edge" title="pathpy.Edge"><code class="xref py py-class docutils literal notranslate"><span class="pre">Edge</span></code></a> objects and <code class="docutils literal notranslate"><span class="pre">str</span></code> uids to
+generate networks.</p>
+</dd>
+<dt><strong>kwargs</strong><span class="classifier">Any</span></dt><dd><p>Keyword arguments to store network attributes. Attributes are added to
+the network as <code class="docutils literal notranslate"><span class="pre">key=value</span></code> pairs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>, <a class="reference internal" href="pathpy.Edge.html#pathpy.Edge" title="pathpy.Edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code></a>, <a class="reference internal" href="pathpy.Path.html#pathpy.Path" title="pathpy.Path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Path</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<p>Create an empty network structure with no nodes, edges or paths.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">form</span> <span class="n">pathpy</span> <span class="kn">import</span> <span class="nn">Node</span><span class="o">,</span> <span class="nn">Edge</span><span class="o">,</span> <span class="nn">Path</span><span class="o">,</span> <span class="nn">Network</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Some properties of the network are: the name, if directed or if temporal</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;my test network&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">name</span>
+<span class="go">my test network</span>
+</pre></div>
+</div>
+<p>Per default the network is directed and static</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">directed</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">temporal</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>The network can be grown in several ways.</p>
+<p><strong>Nodes:</strong></p>
+<p>Add single node to the network.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Also a node object can be added to the network.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In addition to single nodes, also nodes from a list can added to the
+network at once. Attributes are assigned to all nodes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">,</span><span class="s1">&#39;e&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">][</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
+<span class="go">&#39;green&#39;</span>
+</pre></div>
+</div>
+<p>Single nodes can be removed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>While multiple nodes can be removed from a list of nodes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">remove_nodes_from</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Edges</strong></p>
+<p>Adding a singe new edge to the network.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;a-b&#39;</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Adding an existing edge object to the network.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p><strong>Path</strong></p>
+<p>Adding a single path to the network.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;a-b-c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_path</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_paths</span><span class="p">()</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p><strong>str uids</strong></p>
+<p>String uids can be used to add objects to the network.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b-c&#39;</span><span class="p">,</span><span class="s1">&#39;c-d-e&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_paths</span><span class="p">()</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p>Plot a network.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s1">&#39;a-b-c-d&#39;</span><span class="p">,</span><span class="s1">&#39;b-e-f-c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../_images/pathpy-Network-1.png" src="../_images/pathpy-Network-1.png" />
+</div>
+<dl class="method">
+<dt id="pathpy.Network.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">*args: 'Path'</em>, <em class="sig-param">uid: 'str' = ''</em>, <em class="sig-param">directed: 'bool' = True</em>, <em class="sig-param">temporal: 'bool' = False</em>, <em class="sig-param">**kwargs: 'Any'</em><span class="sig-paren">)</span> &#x2192; 'None'<a class="reference internal" href="../_modules/pathpy/core/network.html#Network.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Network.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the network object.</p>
+</dd></dl>
+
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.directed.html#pathpy.Network.directed" title="pathpy.Network.directed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">directed</span></code></a></p></td>
+<td><p>Return if the network is directed (True) or undirected (False).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.edges.html#pathpy.Network.edges" title="pathpy.Network.edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges</span></code></a></p></td>
+<td><p>Return the associated edges of the network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.name.html#pathpy.Network.name" title="pathpy.Network.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
+<td><p>Return the name of the network if defined, else an empty string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.nodes.html#pathpy.Network.nodes" title="pathpy.Network.nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes</span></code></a></p></td>
+<td><p>Return the associated nodes of the network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.paths.html#pathpy.Network.paths" title="pathpy.Network.paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paths</span></code></a></p></td>
+<td><p>Return the associated paths of the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.shape.html#pathpy.Network.shape" title="pathpy.Network.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></a></p></td>
+<td><p>Return the size of the Network as tuple of number of nodes, edges and paths.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.subpaths.html#pathpy.Network.subpaths" title="pathpy.Network.subpaths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subpaths</span></code></a></p></td>
+<td><p>Returns a SubPath object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.temporal.html#pathpy.Network.temporal" title="pathpy.Network.temporal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal</span></code></a></p></td>
+<td><p>Return if the network is temproal (True) or static (False).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.uid.html#pathpy.Network.uid" title="pathpy.Network.uid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uid</span></code></a></p></td>
+<td><p>Returns the unique id of the network.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.add_edge.html#pathpy.Network.add_edge" title="pathpy.Network.add_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edge</span></code></a>(self, edge, \*args, \*\*kwargs)</p></td>
+<td><p>Add a single edge to the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.add_edges_from.html#pathpy.Network.add_edges_from" title="pathpy.Network.add_edges_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edges_from</span></code></a>(self, edges, \*\*kwargs)</p></td>
+<td><p>Add multiple edges from a list to the network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.add_node.html#pathpy.Network.add_node" title="pathpy.Network.add_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_node</span></code></a>(self, node, \*\*kwargs)</p></td>
+<td><p>Add a single node to the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.add_nodes_from.html#pathpy.Network.add_nodes_from" title="pathpy.Network.add_nodes_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_nodes_from</span></code></a>(self, nodes, \*\*kwargs)</p></td>
+<td><p>Add multiple nodes from a list to the network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.add_path.html#pathpy.Network.add_path" title="pathpy.Network.add_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_path</span></code></a>(self, path, \*args, \*\*kwargs)</p></td>
+<td><p>Add a single path to the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.add_paths_from.html#pathpy.Network.add_paths_from" title="pathpy.Network.add_paths_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_paths_from</span></code></a>(self, paths, \*\*kwargs)</p></td>
+<td><p>Add multiple paths from a list to the network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.adjacency_matrix.html#pathpy.Network.adjacency_matrix" title="pathpy.Network.adjacency_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adjacency_matrix</span></code></a>(self, weight, transposed, …)</p></td>
+<td><p>Returns a sparse adjacency matrix of the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.copy.html#pathpy.Network.copy" title="pathpy.Network.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>(self)</p></td>
+<td><p>Return a copy of the node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.number_of_edges.html#pathpy.Network.number_of_edges" title="pathpy.Network.number_of_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_edges</span></code></a>(self, unique)</p></td>
+<td><p>Return the number of edges in the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.number_of_nodes.html#pathpy.Network.number_of_nodes" title="pathpy.Network.number_of_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_nodes</span></code></a>(self, unique)</p></td>
+<td><p>Return the number of nodes in the network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.number_of_paths.html#pathpy.Network.number_of_paths" title="pathpy.Network.number_of_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_paths</span></code></a>(self, unique)</p></td>
+<td><p>Return the number of paths in the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.plot.html#pathpy.Network.plot" title="pathpy.Network.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(self[, filename, fileformat])</p></td>
+<td><p>Plot a network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.remove_edge.html#pathpy.Network.remove_edge" title="pathpy.Network.remove_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_edge</span></code></a>(self, path)</p></td>
+<td><p>Remove a single edge from the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.remove_node.html#pathpy.Network.remove_node" title="pathpy.Network.remove_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_node</span></code></a>(self, node)</p></td>
+<td><p>Remove a single node from the network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.remove_path.html#pathpy.Network.remove_path" title="pathpy.Network.remove_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_path</span></code></a>(self, path)</p></td>
+<td><p>Remove a single path from the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.summary.html#pathpy.Network.summary" title="pathpy.Network.summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summary</span></code></a>(self)</p></td>
+<td><p>Returns a summary of the network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.transition_matrix.html#pathpy.Network.transition_matrix" title="pathpy.Network.transition_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix</span></code></a>(self, weight, transposed, …)</p></td>
+<td><p>Returns a transition matrix of the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.update.html#pathpy.Network.update" title="pathpy.Network.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(self, \*\*kwargs)</p></td>
+<td><p>Update the attributes of the object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.weight.html#pathpy.Network.weight" title="pathpy.Network.weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">weight</span></code></a>(self, weight, default)</p></td>
+<td><p>Returns the weight of the object.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

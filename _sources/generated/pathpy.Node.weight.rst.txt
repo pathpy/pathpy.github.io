@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Node.weight
+==================
+
+.. currentmodule:: pathpy
+
+.. automethod:: Node.weight

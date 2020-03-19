@@ -1,0 +1,53 @@
+.. raw:: html
+
+    </div>
+    <div class=col-md-9 content>
+
+pathpy.Path
+===========
+
+.. currentmodule:: pathpy
+
+.. autoclass:: Path
+
+   
+   .. automethod:: __init__
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      ~Path.as_edges
+      ~Path.as_nodes
+      ~Path.directed
+      ~Path.edges
+      ~Path.name
+      ~Path.nodes
+      ~Path.uid
+   
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~Path.add_edge
+      ~Path.add_edges_from
+      ~Path.add_node
+      ~Path.add_nodes_from
+      ~Path.copy
+      ~Path.from_edges
+      ~Path.from_nodes
+      ~Path.number_of_edges
+      ~Path.number_of_nodes
+      ~Path.subpaths
+      ~Path.summary
+      ~Path.update
+      ~Path.weight
+   
+   

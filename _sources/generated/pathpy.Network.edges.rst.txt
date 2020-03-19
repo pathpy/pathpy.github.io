@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Network.edges
+====================
+
+.. currentmodule:: pathpy
+
+.. autoproperty:: Network.edges

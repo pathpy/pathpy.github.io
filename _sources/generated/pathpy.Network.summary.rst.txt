@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Network.summary
+======================
+
+.. currentmodule:: pathpy
+
+.. automethod:: Network.summary

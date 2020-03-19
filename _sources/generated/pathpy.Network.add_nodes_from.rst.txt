@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Network.add\_nodes\_from
+===============================
+
+.. currentmodule:: pathpy
+
+.. automethod:: Network.add_nodes_from

@@ -1,0 +1,40 @@
+.. raw:: html
+
+    </div>
+    <div class=col-md-9 content>
+
+pathpy.Node
+===========
+
+.. currentmodule:: pathpy
+
+.. autoclass:: Node
+
+   
+   .. automethod:: __init__
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      ~Node.adjacent_edges
+      ~Node.incoming
+      ~Node.outgoing
+      ~Node.uid
+   
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~Node.copy
+      ~Node.update
+      ~Node.weight
+   
+   

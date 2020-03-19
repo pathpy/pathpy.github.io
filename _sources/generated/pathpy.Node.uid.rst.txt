@@ -1,0 +1,11 @@
+.. raw:: html
+
+    </div>
+    <div class="col-md-9">
+
+pathpy.Node.uid
+===============
+
+.. currentmodule:: pathpy
+
+.. autoproperty:: Node.uid

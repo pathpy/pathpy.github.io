@@ -1,0 +1,25 @@
+
+
+.. _simple_plot:
+
+
+Simple Plot
+===========
+
+
+
+.. image:: _images/simple_plot.png
+
+**Python source code:** :download:`[download source: simple_plot.py]<simple_plot.py>`
+
+.. raw:: html
+
+    <div class="col-md-9">
+
+.. literalinclude:: simple_plot.py
+    :lines: 6-
+
+.. raw:: html
+
+    </div>
+
