@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>pathpy.Node.copy &#8212; pathpy 3.0.0a1 documentation</title>
+    <title>pathpy.Node.summary &#8212; pathpy 3.0.0a1 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
@@ -17,8 +17,8 @@
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pathpy.Node.summary" href="pathpy.Node.summary.html" />
-    <link rel="prev" title="pathpy.Node.uid" href="pathpy.Node.uid.html" />
+    <link rel="next" title="pathpy.Node.update" href="pathpy.Node.update.html" />
+    <link rel="prev" title="pathpy.Node.copy" href="pathpy.Node.copy.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -81,7 +81,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">pathpy.Node.copy</a></li>
+<li><a class="reference internal" href="#">pathpy.Node.summary</a></li>
 </ul>
 </ul>
 </li>
@@ -112,28 +112,25 @@
     <div class="body col-md-12 content" role="main">
       
   </div>
-<div class="col-md-9"><div class="section" id="pathpy-node-copy">
-<h1>pathpy.Node.copy<a class="headerlink" href="#pathpy-node-copy" title="Permalink to this headline">¶</a></h1>
+<div class="col-md-9"><div class="section" id="pathpy-node-summary">
+<h1>pathpy.Node.summary<a class="headerlink" href="#pathpy-node-summary" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="pathpy.Node.copy">
-<code class="sig-prename descclassname">Node.</code><code class="sig-name descname">copy</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#pathpy.Node.copy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a copy of the node.</p>
+<dt id="pathpy.Node.summary">
+<code class="sig-prename descclassname">Node.</code><code class="sig-name descname">summary</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span> &#x2192; 'Optional[str]'<a class="reference internal" href="../_modules/pathpy/core/node.html#Node.summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Node.summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a summary of the node.</p>
+<p>The summary contains the uid, the type, the in- and outdegree.</p>
+<p>If logging is enabled (see config), the summary is written to the log
+file and showed as information on in the terminal. If logging is not
+enabled, the function will return a string with the information, which
+can be printed to the console.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><a class="reference internal" href="pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></dt><dd><p>A copy of the node.</p>
+<dt>str</dt><dd><p>Return a summary of the edge.</p>
 </dd>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="k">import</span> <span class="n">Node</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="o">.</span><span class="n">uid</span>
-<span class="go">u</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </div>

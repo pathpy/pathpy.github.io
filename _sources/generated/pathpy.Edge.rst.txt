@@ -37,6 +37,8 @@ pathpy.Edge
       ~Edge.add_node
       ~Edge.add_nodes_from
       ~Edge.copy
+      ~Edge.delete
+      ~Edge.summary
       ~Edge.update
       ~Edge.weight
    

@@ -112,12 +112,12 @@
 <span class="c1"># =============================================================================</span>
 <span class="c1"># File      : network.py -- Base class for a network</span>
 <span class="c1"># Author    : Jürgen Hackl &lt;hackl@ifi.uzh.ch&gt;</span>
-<span class="c1"># Time-stamp: &lt;Thu 2020-03-19 15:55 juergen&gt;</span>
+<span class="c1"># Time-stamp: &lt;Fri 2020-03-20 14:04 juergen&gt;</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (c) 2016-2019 Pathpy Developers</span>
 <span class="c1"># =============================================================================</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">annotations</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Set</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">config</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseNetwork</span>
@@ -1057,35 +1057,196 @@
                 <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Invalide argument &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span>
                 <span class="k">raise</span> <span class="ne">AttributeError</span>
 
-<div class="viewcode-block" id="Network.remove_node"><a class="viewcode-back" href="../../../generated/pathpy.Network.remove_node.html#pathpy.Network.remove_node">[docs]</a>    <span class="k">def</span> <span class="nf">remove_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Network.remove_node"><a class="viewcode-back" href="../../../generated/pathpy.Network.remove_node.html#pathpy.Network.remove_node">[docs]</a>    <span class="k">def</span> <span class="nf">remove_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Remove a single node from the network.</span>
 
-<span class="sd">        .. todo::</span>
+<span class="sd">        .. note::</span>
 
-<span class="sd">            Implement this function!</span>
+<span class="sd">            If an node is removed from the network, all associated edges and</span>
+<span class="sd">            paths are deleted.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        uid : str</span>
+
+<span class="sd">            The parameter ``uid`` is the unique identifier for the node which</span>
+<span class="sd">            should be removed.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a simple network.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network(&#39;a-b&#39;, &#39;b-c&#39;, &#39;c-d&#39;, &#39;a-b-c-d&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net.shape</span>
+<span class="sd">        (4, 3, 1)</span>
+
+<span class="sd">        Remove a node.</span>
+
+<span class="sd">        &gt;&gt;&gt; net.remove_node(&#39;b&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net.shape</span>
+<span class="sd">        (3, 1, 0)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="c1"># initializing varialbes</span>
+        <span class="n">node</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">uid</span>
 
-<div class="viewcode-block" id="Network.remove_edge"><a class="viewcode-back" href="../../../generated/pathpy.Network.remove_edge.html#pathpy.Network.remove_edge">[docs]</a>    <span class="k">def</span> <span class="nf">remove_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># check if the node node exists in the network</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+
+            <span class="c1"># get set of adjacent edges</span>
+            <span class="n">_edges</span><span class="p">:</span> <span class="n">Set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">adjacent_edges</span>
+
+            <span class="c1"># remove edges</span>
+            <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">_edges</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+            <span class="c1"># remove node</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Network.remove_edge"><a class="viewcode-back" href="../../../generated/pathpy.Network.remove_edge.html#pathpy.Network.remove_edge">[docs]</a>    <span class="k">def</span> <span class="nf">remove_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Remove a single edge from the network.</span>
 
-<span class="sd">        .. todo::</span>
+<span class="sd">        .. note::</span>
 
-<span class="sd">            Implement this function!</span>
+<span class="sd">            If an edge is removed from the network, all associated paths are</span>
+<span class="sd">            deleted. Nodes are not removed from the network. Edge and Node</span>
+<span class="sd">            counter are adjusted accordingly.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        uid : str</span>
+
+<span class="sd">            The parameter ``uid`` is the unique identifier for the edge which</span>
+<span class="sd">            should be removed.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a network with some edges.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network(&#39;a-b&#39;, &#39;b-c&#39;, &#39;c-d&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net.number_of_edges()</span>
+<span class="sd">        3</span>
+
+<span class="sd">        Remove an edge.</span>
+
+<span class="sd">        &gt;&gt;&gt; net.remove_edge(&#39;b-c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net.number_of_edges()</span>
+<span class="sd">        2</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="c1"># initializing varialbes</span>
+        <span class="n">edge</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">uid</span>
 
-<div class="viewcode-block" id="Network.remove_path"><a class="viewcode-back" href="../../../generated/pathpy.Network.remove_path.html#pathpy.Network.remove_path">[docs]</a>    <span class="k">def</span> <span class="nf">remove_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># check if the right object is provided</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">:</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="n">_check_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">uid</span>
+
+        <span class="c1"># check if the edge is in the network</span>
+        <span class="k">if</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+
+            <span class="c1"># TODO: Find a better solution for this.</span>
+            <span class="c1">#       Now all paths have to be checked.</span>
+            <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+                <span class="c1"># check if edge is part of a path</span>
+                <span class="k">if</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">as_edges</span><span class="p">:</span>
+                    <span class="c1"># remove path if edge is removed</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">remove_path</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+
+            <span class="c1"># update counters</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">decrease_counter</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">edge</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">counter</span><span class="p">()[</span><span class="n">edge</span><span class="p">])</span>
+
+            <span class="c1"># remove associated nodes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">edge</span><span class="p">]</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+            <span class="c1"># remove the edge from the network</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">edge</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Network.remove_path"><a class="viewcode-back" href="../../../generated/pathpy.Network.remove_path.html#pathpy.Network.remove_path">[docs]</a>    <span class="k">def</span> <span class="nf">remove_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Remove a single path from the network.</span>
 
-<span class="sd">        .. todo::</span>
+<span class="sd">        .. note::</span>
 
-<span class="sd">            Implement this function!</span>
+<span class="sd">            If a path is removed from the network, the underlying nodes and</span>
+<span class="sd">            edges remain in the network. I.e. only the :py:class:`Path` object</span>
+<span class="sd">            is removed. Edge and Node counter are adjusted accordingly.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        uid : str</span>
+
+<span class="sd">            The parameter ``uid`` is the unique identifier for the path which</span>
+<span class="sd">            should be removed.</span>
+
+<span class="sd">        frequency : int, optional (default = None)</span>
+
+<span class="sd">            Number of path observations which should be removed from the</span>
+<span class="sd">            network. Per default all path observation are removed.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a network and add paths with a frequency.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Network</span>
+<span class="sd">        &gt;&gt;&gt; net = Network()</span>
+<span class="sd">        &gt;&gt;&gt; net.add_paths_from([&#39;a-b-c-d&#39;, &#39;b-c-d&#39;], frequency=10)</span>
+<span class="sd">        &gt;&gt;&gt; net.paths.counter()</span>
+<span class="sd">        Counter({&#39;a-b|b-c|c-d&#39;: 10, &#39;b-c|c-d&#39;: 10})</span>
+
+<span class="sd">        Remove some path observations.</span>
+
+<span class="sd">        &gt;&gt;&gt; net.remove_path(&#39;b-c-d&#39;, frequency=3)</span>
+<span class="sd">        &gt;&gt;&gt; net.paths.counter()</span>
+<span class="sd">        Counter({&#39;a-b|b-c|c-d&#39;: 10, &#39;b-c|c-d&#39;: 7})</span>
+
+<span class="sd">        Remove the path.</span>
+
+<span class="sd">        &gt;&gt;&gt; net.remove_path(&#39;b-c|c-d&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; net.paths.counter()</span>
+<span class="sd">        Counter({&#39;a-b|b-c|c-d&#39;: 10})</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="c1"># initializing varialbes</span>
+        <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">uid</span>
+
+        <span class="c1"># check if the right object is provided</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">:</span>
+            <span class="c1"># check the given string</span>
+            <span class="n">string</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">_check_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">expected</span><span class="o">=</span><span class="s1">&#39;path&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># if string represents a path</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;path&#39;</span><span class="p">:</span>
+                <span class="c1"># get the path uid</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">_check_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">uid</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Invalide path uid &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">string</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="c1"># check if the path is in the network</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">:</span>
+            <span class="c1"># get the path object and the frequency</span>
+            <span class="n">_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">[</span><span class="n">path</span><span class="p">]</span>
+            <span class="n">_frequency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">counter</span><span class="p">()[</span><span class="n">path</span><span class="p">]</span>
+
+            <span class="c1"># check if frequency is given and smaller than observed</span>
+            <span class="k">if</span> <span class="n">frequency</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">frequency</span> <span class="o">&lt;</span> <span class="n">_frequency</span><span class="p">:</span>
+                <span class="n">_frequency</span> <span class="o">=</span> <span class="n">frequency</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">frequency</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="c1"># decrease the counters</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">decrease_counter</span><span class="p">(</span><span class="n">_path</span><span class="o">.</span><span class="n">as_nodes</span><span class="p">,</span> <span class="n">_frequency</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">decrease_counter</span><span class="p">(</span><span class="n">_path</span><span class="o">.</span><span class="n">as_edges</span><span class="p">,</span> <span class="n">_frequency</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">decrease_counter</span><span class="p">(</span><span class="n">_path</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">_frequency</span><span class="p">)</span>
+
+            <span class="c1"># remove path from the network</span>
+            <span class="c1"># if frequency is equal to the observations</span>
+            <span class="k">if</span> <span class="n">frequency</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">[</span><span class="n">path</span><span class="p">]</span></div>
 
     <span class="k">def</span> <span class="nf">_check_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check which is the appropriated network class.&quot;&quot;&quot;</span>

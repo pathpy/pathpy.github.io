@@ -116,11 +116,46 @@
 <h1>pathpy.Network.remove_path<a class="headerlink" href="#pathpy-network-remove-path" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pathpy.Network.remove_path">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">remove_path</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">path: 'str'</em><span class="sig-paren">)</span> &#x2192; 'None'<a class="reference internal" href="../_modules/pathpy/core/network.html#Network.remove_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Network.remove_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">remove_path</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">uid: 'str'</em>, <em class="sig-param">frequency: 'int' = None</em><span class="sig-paren">)</span> &#x2192; 'None'<a class="reference internal" href="../_modules/pathpy/core/network.html#Network.remove_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Network.remove_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove a single path from the network.</p>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Implement this function!</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a path is removed from the network, the underlying nodes and
+edges remain in the network. I.e. only the <a class="reference internal" href="pathpy.Path.html#pathpy.Path" title="pathpy.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> object
+is removed. Edge and Node counter are adjusted accordingly.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>uid</strong><span class="classifier">str</span></dt><dd><p>The parameter <code class="docutils literal notranslate"><span class="pre">uid</span></code> is the unique identifier for the path which
+should be removed.</p>
+</dd>
+<dt><strong>frequency</strong><span class="classifier">int, optional (default = None)</span></dt><dd><p>Number of path observations which should be removed from the
+network. Per default all path observation are removed.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Generate a network and add paths with a frequency.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="k">import</span> <span class="n">Network</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_paths_from</span><span class="p">([</span><span class="s1">&#39;a-b-c-d&#39;</span><span class="p">,</span> <span class="s1">&#39;b-c-d&#39;</span><span class="p">],</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">counter</span><span class="p">()</span>
+<span class="go">Counter({&#39;a-b|b-c|c-d&#39;: 10, &#39;b-c|c-d&#39;: 10})</span>
+</pre></div>
+</div>
+<p>Remove some path observations.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">remove_path</span><span class="p">(</span><span class="s1">&#39;b-c-d&#39;</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">counter</span><span class="p">()</span>
+<span class="go">Counter({&#39;a-b|b-c|c-d&#39;: 10, &#39;b-c|c-d&#39;: 7})</span>
+</pre></div>
+</div>
+<p>Remove the path.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">remove_path</span><span class="p">(</span><span class="s1">&#39;b-c|c-d&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">counter</span><span class="p">()</span>
+<span class="go">Counter({&#39;a-b|b-c|c-d&#39;: 10})</span>
+</pre></div>
 </div>
 </dd></dl>
 

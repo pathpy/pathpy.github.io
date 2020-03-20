@@ -116,11 +116,35 @@
 <h1>pathpy.Network.remove_node<a class="headerlink" href="#pathpy-network-remove-node" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pathpy.Network.remove_node">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">remove_node</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">node: 'str'</em><span class="sig-paren">)</span> &#x2192; 'None'<a class="reference internal" href="../_modules/pathpy/core/network.html#Network.remove_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Network.remove_node" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">remove_node</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">uid: 'str'</em><span class="sig-paren">)</span> &#x2192; 'None'<a class="reference internal" href="../_modules/pathpy/core/network.html#Network.remove_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Network.remove_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove a single node from the network.</p>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Implement this function!</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If an node is removed from the network, all associated edges and
+paths are deleted.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>uid</strong><span class="classifier">str</span></dt><dd><p>The parameter <code class="docutils literal notranslate"><span class="pre">uid</span></code> is the unique identifier for the node which
+should be removed.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Generate a simple network.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="k">import</span> <span class="n">Network</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s1">&#39;a-b&#39;</span><span class="p">,</span> <span class="s1">&#39;b-c&#39;</span><span class="p">,</span> <span class="s1">&#39;c-d&#39;</span><span class="p">,</span> <span class="s1">&#39;a-b-c-d&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(4, 3, 1)</span>
+</pre></div>
+</div>
+<p>Remove a node.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(3, 1, 0)</span>
+</pre></div>
 </div>
 </dd></dl>
 

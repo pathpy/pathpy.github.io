@@ -112,7 +112,7 @@
 <span class="c1"># =============================================================================</span>
 <span class="c1"># File      : network.py -- Base class for a path</span>
 <span class="c1"># Author    : Jürgen Hackl &lt;hackl@ifi.uzh.ch&gt;</span>
-<span class="c1"># Time-stamp: &lt;Thu 2020-03-19 15:58 juergen&gt;</span>
+<span class="c1"># Time-stamp: &lt;Fri 2020-03-20 14:09 juergen&gt;</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (c) 2016-2020 Pathpy Developers</span>
 <span class="c1"># =============================================================================</span>
@@ -162,11 +162,11 @@
 
 <span class="sd">    uid : str, optional (default = None)</span>
 
-<span class="sd">        The parameter ``uid`` is the unique identifier for the edge. Every edge</span>
+<span class="sd">        The parameter ``uid`` is the unique identifier for the path. Every path</span>
 <span class="sd">        should have an uid. The uid is converted to a string value and is used</span>
-<span class="sd">        as a key value for all dict which saving edge objects. If no edge uid</span>
-<span class="sd">        is specified the edge ``uid`` will be defined as a combination of the</span>
-<span class="sd">        node uids separated by ``-``. The separation sign can be changed in the</span>
+<span class="sd">        as a key value for all dict which saving edge objects. If no path uid</span>
+<span class="sd">        is specified the path ``uid`` will be defined as a combination of the</span>
+<span class="sd">        edge uids separated by ``|``. The separation sign can be changed in the</span>
 <span class="sd">        config file.</span>
 
 <span class="sd">    directed : bool, optional (default = True)</span>

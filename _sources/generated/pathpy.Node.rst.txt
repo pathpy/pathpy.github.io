@@ -34,6 +34,7 @@ pathpy.Node
       :toctree:
    
       ~Node.copy
+      ~Node.summary
       ~Node.update
       ~Node.weight
    

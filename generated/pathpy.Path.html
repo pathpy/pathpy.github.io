@@ -140,11 +140,11 @@ be changed in the config file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>uid</strong><span class="classifier">str, optional (default = None)</span></dt><dd><p>The parameter <code class="docutils literal notranslate"><span class="pre">uid</span></code> is the unique identifier for the edge. Every edge
+<dt><strong>uid</strong><span class="classifier">str, optional (default = None)</span></dt><dd><p>The parameter <code class="docutils literal notranslate"><span class="pre">uid</span></code> is the unique identifier for the path. Every path
 should have an uid. The uid is converted to a string value and is used
-as a key value for all dict which saving edge objects. If no edge uid
-is specified the edge <code class="docutils literal notranslate"><span class="pre">uid</span></code> will be defined as a combination of the
-node uids separated by <code class="docutils literal notranslate"><span class="pre">-</span></code>. The separation sign can be changed in the
+as a key value for all dict which saving edge objects. If no path uid
+is specified the path <code class="docutils literal notranslate"><span class="pre">uid</span></code> will be defined as a combination of the
+edge uids separated by <code class="docutils literal notranslate"><span class="pre">|</span></code>. The separation sign can be changed in the
 config file.</p>
 </dd>
 <dt><strong>directed</strong><span class="classifier">bool, optional (default = True)</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code> the edge is directed, i.e. quantities can only transmited

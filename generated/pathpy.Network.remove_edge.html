@@ -116,11 +116,36 @@
 <h1>pathpy.Network.remove_edge<a class="headerlink" href="#pathpy-network-remove-edge" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pathpy.Network.remove_edge">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">remove_edge</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">path: 'str'</em><span class="sig-paren">)</span> &#x2192; 'None'<a class="reference internal" href="../_modules/pathpy/core/network.html#Network.remove_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Network.remove_edge" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">remove_edge</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">uid: 'str'</em>, <em class="sig-param">*args: 'str'</em><span class="sig-paren">)</span> &#x2192; 'None'<a class="reference internal" href="../_modules/pathpy/core/network.html#Network.remove_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Network.remove_edge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove a single edge from the network.</p>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Implement this function!</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If an edge is removed from the network, all associated paths are
+deleted. Nodes are not removed from the network. Edge and Node
+counter are adjusted accordingly.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>uid</strong><span class="classifier">str</span></dt><dd><p>The parameter <code class="docutils literal notranslate"><span class="pre">uid</span></code> is the unique identifier for the edge which
+should be removed.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Generate a network with some edges.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="k">import</span> <span class="n">Network</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s1">&#39;a-b&#39;</span><span class="p">,</span> <span class="s1">&#39;b-c&#39;</span><span class="p">,</span> <span class="s1">&#39;c-d&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p>Remove an edge.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="s1">&#39;b-c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
+<span class="go">2</span>
+</pre></div>
 </div>
 </dd></dl>
 
