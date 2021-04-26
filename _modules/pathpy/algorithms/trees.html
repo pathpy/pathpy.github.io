@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.algorithms.trees &#8212; pathpy 3.0.0a2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../examples/index.html">Gallery</a></li>
+                <li><a href="../../../tutorial.html">Tutorial</a></li>
+                <li><a href="../../../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pathpy.algorithms.trees</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Pathpy tree algorithms.&quot;&quot;&quot;</span>
+<span class="c1"># !/usr/bin/python -tt</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># File      : tree.py -- Module containing tree algorithms</span>
+<span class="c1"># Author    : Ingo Scholtes &lt;scholtes@uni-wuppertal.de&gt;</span>
+<span class="c1"># Time-stamp: &lt;Mon 2021-03-29 16:45 juergen&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2016-2020 Pathpy Developers</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="c1"># from functools import singledispatch</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="c1"># import numpy as np</span>
+<span class="c1"># from scipy import sparse  # pylint: disable=import-error</span>
+
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="c1"># pseudo load class for type checking</span>
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pathpy.models.network</span> <span class="kn">import</span> <span class="n">Network</span>
+
+<span class="c1"># create logger</span>
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="check_tree"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.trees.check_tree.html#pathpy.algorithms.trees.check_tree">[docs]</a><span class="k">def</span> <span class="nf">check_tree</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
+
+        <span class="c1"># identify node with zero indegree</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">network</span><span class="o">.</span><span class="n">indegrees</span><span class="p">()[</span><span class="n">v</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">root</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">root</span> <span class="o">=</span> <span class="n">v</span>
+                <span class="k">else</span><span class="p">:</span>   <span class="c1"># two nodes with in-degree zero -&gt; no tree</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># no node with indegree zero -&gt; no tree</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">visited</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+            <span class="k">nonlocal</span> <span class="n">visited</span>
+
+            <span class="n">visited</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">tree</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">successors</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">visited</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">]:</span>
+                    <span class="n">tree</span> <span class="o">&amp;=</span> <span class="kc">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tree</span> <span class="o">&amp;=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">tree</span>
+        <span class="k">return</span> <span class="n">dfs</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">root</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Tree checking not supported for undirected networks&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="tree_size"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.trees.tree_size.html#pathpy.algorithms.trees.tree_size">[docs]</a><span class="k">def</span> <span class="nf">tree_size</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+    <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">successors</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
+        <span class="n">size</span> <span class="o">+=</span> <span class="n">tree_size</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">size</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

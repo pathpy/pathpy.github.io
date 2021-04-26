@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pathpy.Node &#8212; pathpy 3.0.0a1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.Node &#8212; pathpy 3.0.0a2 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pathpy.Node.adjacent_edges" href="pathpy.Node.adjacent_edges.html" />
+    <link rel="next" title="pathpy.Node.uid" href="pathpy.Node.uid.html" />
     <link rel="prev" title="API reference" href="../api.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -41,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -116,9 +117,9 @@
   </div>
 <div class=col-md-9 content><div class="section" id="pathpy-node">
 <h1>pathpy.Node<a class="headerlink" href="#pathpy-node" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pathpy.Node">
-<em class="property">class </em><code class="sig-prename descclassname">pathpy.</code><code class="sig-name descname">Node</code><span class="sig-paren">(</span><em class="sig-param">uid: str</em>, <em class="sig-param">**kwargs: Any</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/core/node.html#Node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Node" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pathpy.</code><code class="sig-name descname">Node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">uid</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/core/node.html#Node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for a single node.</p>
 <p>A node (or vertex) is the fundamental unit of which networks are formed. In
 general nodes are treated as featureless and indivisible objects, although
@@ -149,37 +150,37 @@ node as <code class="docutils literal notranslate"><span class="pre">key=value</
 </div>
 <p class="rubric">Examples</p>
 <p>Load the <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> module and create an empty <a class="reference internal" href="#pathpy.Node" title="pathpy.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> object.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="k">import</span> <span class="n">Node</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">Node</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Get the id of the node.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="o">.</span><span class="n">uid</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="o">.</span><span class="n">uid</span>
 <span class="go">&#39;u&#39;</span>
 </pre></div>
 </div>
 <p>Create a node with attached attribute.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
 <span class="go">&#39;red&#39;</span>
 </pre></div>
 </div>
 <p>Add attribute to the node.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;circle&#39;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;circle&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">[</span><span class="s1">&#39;shape]</span>
 <span class="go">&#39;circle&#39;</span>
 </pre></div>
 </div>
 <p>Change single attribute.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span>
 </pre></div>
 </div>
 <p>Update multiple attributes.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;rectangle&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;rectangle&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Make a copy of the node.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="o">.</span><span class="n">uid</span>
 <span class="go">&#39;u&#39;</span>
 </pre></div>
@@ -190,16 +191,13 @@ node as <code class="docutils literal notranslate"><span class="pre">key=value</
 <p>Make a single plot command for plotting nodes.
 The code below is not working yet!</p>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="figure align-default">
-<img alt="../_images/pathpy-Node-1.png" src="../_images/pathpy-Node-1.png" />
-</div>
-<dl class="method">
+<dl class="py method">
 <dt id="pathpy.Node.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">uid: 'str'</em>, <em class="sig-param">**kwargs: 'Any'</em><span class="sig-paren">)</span> &#x2192; 'None'<a class="reference internal" href="../_modules/pathpy/core/node.html#Node.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Node.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">uid</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pathpy/core/node.html#Node.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Node.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the node object.</p>
 </dd></dl>
 
@@ -210,17 +208,8 @@ The code below is not working yet!</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Node.adjacent_edges.html#pathpy.Node.adjacent_edges" title="pathpy.Node.adjacent_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adjacent_edges</span></code></a></p></td>
-<td><p>Returns the set of edge uids adjacent to the node.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Node.incoming.html#pathpy.Node.incoming" title="pathpy.Node.incoming"><code class="xref py py-obj docutils literal notranslate"><span class="pre">incoming</span></code></a></p></td>
-<td><p>Returns the incoming edge uids of the node.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Node.outgoing.html#pathpy.Node.outgoing" title="pathpy.Node.outgoing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">outgoing</span></code></a></p></td>
-<td><p>Returns the outgoing edge uids of the node.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Node.uid.html#pathpy.Node.uid" title="pathpy.Node.uid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uid</span></code></a></p></td>
-<td><p>Return the unique identifier (uid) of the node.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Node.uid.html#pathpy.Node.uid" title="pathpy.Node.uid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uid</span></code></a></p></td>
+<td><p>Return the unique identifier (uid) of the node object.</p></td>
 </tr>
 </tbody>
 </table>
@@ -231,16 +220,16 @@ The code below is not working yet!</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Node.copy.html#pathpy.Node.copy" title="pathpy.Node.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>(self)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Node.copy.html#pathpy.Node.copy" title="pathpy.Node.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>()</p></td>
 <td><p>Return a copy of the node.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Node.summary.html#pathpy.Node.summary" title="pathpy.Node.summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summary</span></code></a>(self)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Node.summary.html#pathpy.Node.summary" title="pathpy.Node.summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summary</span></code></a>()</p></td>
 <td><p>Returns a summary of the node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Node.update.html#pathpy.Node.update" title="pathpy.Node.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(self, other, attributes, \*\*kwargs)</p></td>
-<td><p>Update of the node object.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Node.update.html#pathpy.Node.update" title="pathpy.Node.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(**kwargs)</p></td>
+<td><p>Update the attributes of the object.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Node.weight.html#pathpy.Node.weight" title="pathpy.Node.weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">weight</span></code></a>(self, weight, default)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Node.weight.html#pathpy.Node.weight" title="pathpy.Node.weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">weight</span></code></a>([weight, default])</p></td>
 <td><p>Returns the weight of the object.</p></td>
 </tr>
 </tbody>
@@ -264,8 +253,8 @@ The code below is not working yet!</p>
       
     </p>
     <p>
-        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

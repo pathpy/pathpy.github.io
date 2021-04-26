@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.visualisations.layout &#8212; pathpy 3.0.0a2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../examples/index.html">Gallery</a></li>
+                <li><a href="../../../tutorial.html">Tutorial</a></li>
+                <li><a href="../../../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pathpy.visualisations.layout</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python -tt</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># File      : layout.py -- Module to layout the network</span>
+<span class="c1"># Author    : Juergen Hackl &lt;hackl@ibi.baug.ethz.ch&gt;</span>
+<span class="c1"># Creation  : 2018-07-26</span>
+<span class="c1"># Time-stamp: &lt;Wed 2020-04-22 15:40 juergen&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2018 Juergen Hackl &lt;hackl@ibi.baug.ethz.ch&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">tqdm</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="layout"><a class="viewcode-back" href="../../../generated/pathpy.visualisations.layout.Layout.html#pathpy.visualisations.layout.layout">[docs]</a><span class="k">def</span> <span class="nf">layout</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function to generate a layout for the network.</span>
+
+<span class="sd">    This function genearates a layout configuration for the nodes in the</span>
+<span class="sd">    network. Thereby, different layouts and options can be chosen. The layout</span>
+<span class="sd">    function is directly included in the plot function or can be separately</span>
+<span class="sd">    called.</span>
+
+<span class="sd">    The layout function supports different network types and layout algorithm.</span>
+<span class="sd">    Currently supported networks are:</span>
+
+<span class="sd">    * &#39;cnet&#39;,</span>
+<span class="sd">    * &#39;networkx&#39;,</span>
+<span class="sd">    * &#39;igraph&#39;,</span>
+<span class="sd">    * &#39;pathpy&#39;</span>
+<span class="sd">    * node/edge list</span>
+
+<span class="sd">    Currently supported algorithms are:</span>
+
+<span class="sd">    * Fruchterman-Reingold force-directed algorithm</span>
+<span class="sd">    * Uniformly at random node positions</span>
+
+<span class="sd">    The appearance of the layout can be modified by keyword arguments which will</span>
+<span class="sd">    be explained in more detail below.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    network : network object</span>
+<span class="sd">        Network to be drawn. The network can be a &#39;cnet&#39;, &#39;networkx&#39;, &#39;igraph&#39;,</span>
+<span class="sd">        &#39;pathpy&#39; object, or a tuple of a node list and edge list.</span>
+
+<span class="sd">    kwds : keyword arguments, optional (default= no attributes)</span>
+<span class="sd">        Attributes used to modify the appearance of the layout.</span>
+<span class="sd">        For details see below.</span>
+
+
+<span class="sd">    Keyword arguments used for the layout:</span>
+
+<span class="sd">    **Layout:**</span>
+
+<span class="sd">    NOTE: All layout arguments can be entered with or without &#39;layout_&#39; at the</span>
+<span class="sd">    beginning, e.g. &#39;layout_iterations&#39; is equal to &#39;iterations&#39;</span>
+
+<span class="sd">    - ``layout`` : dict or string , optional (default = None)</span>
+<span class="sd">      A dictionary with the node positions on a 2-dimensional plane. The</span>
+<span class="sd">      key value of the dict represents the node id while the value</span>
+<span class="sd">      represents a tuple of coordinates (e.g. n = (x,y)). The initial</span>
+<span class="sd">      layout can be placed anywhere on the 2-dimensional plane.</span>
+
+<span class="sd">      Instead of a dictionary, the algorithm used for the layout can be defined</span>
+<span class="sd">      via a string value. Currently, supported are:</span>
+
+<span class="sd">      * Random layout, where the nodes are uniformly at random placed in the</span>
+<span class="sd">        unit square. This algorithm can be enabled with the keywords: &#39;Random&#39;,</span>
+<span class="sd">        &#39;random&#39;, &#39;rand&#39;, or None</span>
+
+<span class="sd">      * Fruchterman-Reingold force-directed algorithm. In this algorithm, the</span>
+<span class="sd">        nodes are represented by steel rings and the edges are springs between</span>
+<span class="sd">        them. The attractive force is analogous to the spring force and the</span>
+<span class="sd">        repulsive force is analogous to the electrical force. The basic idea is</span>
+<span class="sd">        to minimize the energy of the system by moving the nodes and changing</span>
+<span class="sd">        the forces between them. This algorithm can be enabled with the</span>
+<span class="sd">        keywords: &#39;Fruchterman-Reingold&#39;, &#39;fruchterman_reingold&#39;, &#39;fr&#39;,</span>
+<span class="sd">        &#39;spring_layout&#39;, &#39;spring layout&#39;, &#39;FR&#39;</span>
+
+<span class="sd">        ==================== ==================================================</span>
+<span class="sd">        Algorithms           Keywords</span>
+<span class="sd">        ==================== ==================================================</span>
+<span class="sd">        Random               Random, random, rand, None</span>
+<span class="sd">        Fruchterman-Reingold Fruchterman-Reingold, fruchterman_reingold, fr</span>
+<span class="sd">                             spring_layout, spring layout, FR</span>
+<span class="sd">        ==================== ==================================================</span>
+
+<span class="sd">    - ``force`` : float, optional (default = None)</span>
+<span class="sd">      Optimal distance between nodes.  If None the distance is set to</span>
+<span class="sd">      1/sqrt(n) where n is the number of nodes.  Increase this value to move</span>
+<span class="sd">      nodes farther apart.</span>
+
+<span class="sd">    - ``positions`` : dict or None  optional (default = None)</span>
+<span class="sd">      Initial positions for nodes as a dictionary with node as keys and values</span>
+<span class="sd">      as a coordinate list or tuple.  If None, then use random initial</span>
+<span class="sd">      positions.</span>
+
+<span class="sd">    - ``fixed`` : list or None, optional (default = None)</span>
+<span class="sd">      Nodes to keep fixed at initial position.</span>
+
+<span class="sd">    - ``iterations`` : int, optional (default = 50)</span>
+<span class="sd">      Maximum number of iterations taken</span>
+
+<span class="sd">    - ``threshold``: float, optional (default = 1e-4)</span>
+<span class="sd">      Threshold for relative error in node position changes.  The iteration</span>
+<span class="sd">      stops if the error is below this threshold.</span>
+
+<span class="sd">    - ``weight`` : string or None, optional (default = None)</span>
+<span class="sd">      The edge attribute that holds the numerical value used for the edge</span>
+<span class="sd">      weight.  If None, then all edge weights are 1.</span>
+
+<span class="sd">    - ``dimension`` : int, optional (default = 2)</span>
+<span class="sd">      Dimension of layout. Currently, only plots in 2 dimension are supported.</span>
+
+<span class="sd">    - ``seed`` : int or None, optional (default = None)</span>
+<span class="sd">      Set the random state for deterministic node layouts. If int, `seed` is</span>
+<span class="sd">      the seed used by the random number generator, if None, the a random seed</span>
+<span class="sd">      by created by the numpy random number generator is used.</span>
+
+<span class="sd">    In the layout style dictionary multiple keywords can be used to address</span>
+<span class="sd">    attributes. These keywords will be converted to an unique key word,</span>
+<span class="sd">    used in the remaining code.</span>
+
+<span class="sd">    ========= =================================</span>
+<span class="sd">    keys      other valid keys</span>
+<span class="sd">    ========= =================================</span>
+<span class="sd">    fixed     fixed_nodes, fixed_vertices,</span>
+<span class="sd">              fixed_n, fixed_v</span>
+<span class="sd">    positions initial_positions, node_positions</span>
+<span class="sd">              vertex_positions, n_positions,</span>
+<span class="sd">              v_positions</span>
+<span class="sd">    ========= =================================</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    For illustration purpose a similar network as in the python-igrap tutorial</span>
+<span class="sd">    is used. Instead of igraph, the cnet module is used for creating the</span>
+<span class="sd">    network.</span>
+
+<span class="sd">    Create an empty network object, and add some edges.</span>
+
+<span class="sd">    &gt;&gt;&gt; net = Network(name = &#39;my tikz test network&#39;,directed=True)</span>
+<span class="sd">    &gt;&gt;&gt; net.add_edges_from([(&#39;ab&#39;,&#39;a&#39;,&#39;b&#39;), (&#39;ac&#39;,&#39;a&#39;,&#39;c&#39;), (&#39;cd&#39;,&#39;c&#39;,&#39;d&#39;),</span>
+<span class="sd">    &gt;&gt;&gt;                     (&#39;de&#39;,&#39;d&#39;,&#39;e&#39;), (&#39;ec&#39;,&#39;e&#39;,&#39;c&#39;), (&#39;cf&#39;,&#39;c&#39;,&#39;f&#39;),</span>
+<span class="sd">    &gt;&gt;&gt;                     (&#39;fa&#39;,&#39;f&#39;,&#39;a&#39;), (&#39;fg&#39;,&#39;f&#39;,&#39;g&#39;),(&#39;gg&#39;,&#39;g&#39;,&#39;g&#39;),</span>
+<span class="sd">    &gt;&gt;&gt;                     (&#39;gd&#39;,&#39;g&#39;,&#39;d&#39;)])</span>
+
+<span class="sd">    Now a layout can be generated:</span>
+
+<span class="sd">    &gt;&gt;&gt; layout(net)</span>
+<span class="sd">    {&#39;b&#39;: array([0.88878309, 0.15685131]), &#39;d&#39;: array([0.4659341 , 0.79839535]),</span>
+<span class="sd">    &#39;c&#39;: array([0.60386662, 0.40727962]), &#39;e&#39;: array([0.71073353, 0.65608203]),</span>
+<span class="sd">    &#39;g&#39;: array([0.42663927, 0.47412449]), &#39;f&#39;: array([0.48759769, 0.86787594]),</span>
+<span class="sd">    &#39;a&#39;: array([0.84154488, 0.1633732 ])}</span>
+
+<span class="sd">    Per default, the node positions are assigned uniform random. In order to</span>
+<span class="sd">    create a layout, the layout methods of the packages can be used, or the</span>
+<span class="sd">    position of the nodes can be directly assigned, in form of a dictionary,</span>
+<span class="sd">    where the key is the node id and the value is a tuple of the node position</span>
+<span class="sd">    in x and y.</span>
+
+<span class="sd">    Let us generate a force directed layout (e.g. Fruchterman-Reingold):</span>
+
+<span class="sd">    &gt;&gt;&gt; layout(net, layout=&#39;fr&#39;)</span>
+<span class="sd">    {&#39;g&#39;: array([-0.77646408,  1.71291126]), &#39;c&#39;: array([-0.18639655,0.96232326]),</span>
+<span class="sd">    &#39;f&#39;: array([0.33394308, 0.93778681]), &#39;e&#39;: array([0.09740098, 1.28511973]),</span>
+<span class="sd">    &#39;a&#39;: array([1.37933158, 0.23171857]), &#39;b&#39;: array([ 2.93561876,-0.46183461]),</span>
+<span class="sd">    &#39;d&#39;: array([-0.29329793,  1.48971303])}</span>
+
+<span class="sd">    Note, instead of the command ``fr`` also the command</span>
+<span class="sd">    ``Fruchterman-Reingold`` or any other command mentioned above can be</span>
+<span class="sd">    used. For more information see table above.</span>
+
+<span class="sd">    In order to keep the properties of the layout for your network separate from</span>
+<span class="sd">    the network itself, you can simply set up a Python dictionary containing the</span>
+<span class="sd">    keyword arguments you would pass to :py:meth:`layout` and then use the</span>
+<span class="sd">    double asterisk (**) operator to pass your specific layout attributes to</span>
+<span class="sd">    :py:meth:`layout`:</span>
+
+<span class="sd">    &gt;&gt;&gt; layout_style = {}</span>
+<span class="sd">    &gt;&gt;&gt; layout_style[&#39;layout&#39;] = &#39;Fruchterman-Reingold&#39;</span>
+<span class="sd">    &gt;&gt;&gt; layout_style[&#39;seed&#39;] = 1</span>
+<span class="sd">    &gt;&gt;&gt; layout_style[&#39;iterations&#39;] = 100</span>
+<span class="sd">    &gt;&gt;&gt; layout(net,**layout_style)</span>
+<span class="sd">    {&#39;d&#39;: array([-0.31778276, 1.78246882]), &#39;f&#39;: array([-0.8603259, 0.82328291]),</span>
+<span class="sd">    &#39;c&#39;: array([-0.4423771 , 1.21203895]), &#39;e&#39;: array([-0.79934355, 1.49000119]),</span>
+<span class="sd">    &#39;g&#39;: array([0.43694799, 1.51428788]), &#39;a&#39;: array([-2.15517293, 0.23948823]),</span>
+<span class="sd">    &#39;b&#39;: array([-3.84803812, -0.71628417])}</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># initialize variables</span>
+    <span class="n">_weight</span> <span class="o">=</span> <span class="n">kwds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_weight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_weight</span> <span class="o">=</span> <span class="n">kwds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;layout_weight&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># check type of network</span>
+    <span class="k">if</span> <span class="s1">&#39;cnet&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">network</span><span class="p">)):</span>
+        <span class="c1"># log.debug(&#39;The network is of type &quot;cnet&quot;.&#39;)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="n">_weight</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="s1">&#39;networkx&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">network</span><span class="p">)):</span>
+        <span class="c1"># log.debug(&#39;The network is of type &quot;networkx&quot;.&#39;)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">_weight</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s1">&#39;igraph&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">network</span><span class="p">)):</span>
+        <span class="c1"># log.debug(&#39;The network is of type &quot;igraph&quot;.&#39;)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">vs</span><span class="p">)))</span>
+        <span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">coo_matrix</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">get_adjacency</span><span class="p">(</span><span class="n">attribute</span><span class="o">=</span><span class="n">_weight</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">coo_matrix</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s1">&#39;pathpy&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">network</span><span class="p">)):</span>
+        <span class="c1"># log.debug(&#39;The network is of type &quot;pathpy&quot;.&#39;)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_w</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_w</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">weighted</span><span class="o">=</span><span class="n">_w</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># elif isinstance(network, tuple):</span>
+    <span class="c1">#     # log.debug(&#39;The network is of type &quot;list&quot;.&#39;)</span>
+    <span class="c1">#     nodes = network[0]</span>
+    <span class="c1">#     from collections import OrderedDict</span>
+    <span class="c1">#     edges = OrderedDict()</span>
+    <span class="c1">#     for e in network[1]:</span>
+    <span class="c1">#         edges[e] = e</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Type of the network could not be determined.&#39;</span>
+                  <span class="s1">&#39; Currently only &quot;cnet&quot;, &quot;networkx&quot;,&quot;igraph&quot;, &quot;pathpy&quot;&#39;</span>
+                  <span class="s1">&#39; and &quot;node/edge list&quot; is supported!&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="c1"># create layout class</span>
+    <span class="n">layout</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">adjacency_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="c1"># return the layout</span>
+    <span class="k">return</span> <span class="n">layout</span><span class="o">.</span><span class="n">generate_layout</span><span class="p">()</span></div>
+
+
+<span class="k">class</span> <span class="nc">Layout</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Default class to create layouts</span>
+
+<span class="sd">    The :py:class:`Layout` class is used to generate node a layout drawer and</span>
+<span class="sd">    return the calculated node positions as a dictionary, where the keywords</span>
+<span class="sd">    represents the node ids and the values represents a two dimensional tuple</span>
+<span class="sd">    with the x and y coordinates for the associated nodes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nodes : list with node ids</span>
+<span class="sd">        The list contain a list of unique node ids.</span>
+
+<span class="sd">    attr : keyword arguments, optional (default = no attributes)</span>
+<span class="sd">        Attributes to add to node as key=value pairs.</span>
+<span class="sd">        See also :py:meth:`layout`</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    layout</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">adjacency_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">attr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the Layout class</span>
+
+<span class="sd">        The :py:class:`Layout` class is used to generate node a layout drawer</span>
+<span class="sd">        and return the calculated node positions as a dictionary, where the</span>
+<span class="sd">        keywords represents the node ids and the values represents a two</span>
+<span class="sd">        dimensional tuple with the x and y coordinates for the associated nodes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nodes : list with node ids</span>
+<span class="sd">            The list contain a list of unique node ids.</span>
+
+<span class="sd">        attr : keyword arguments, optional (default = no attributes)</span>
+<span class="sd">            Attributes to add to node as key=value pairs.</span>
+<span class="sd">            See also :py:meth:`layout`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># initialize variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">adjacency_matrix</span>
+
+        <span class="c1"># rename the attributes</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rename_attributes</span><span class="p">(</span><span class="o">**</span><span class="n">attr</span><span class="p">)</span>
+
+        <span class="c1"># options for the layouts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout_type</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;layout&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;force&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fixed&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iterations</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;iterations&#39;</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;threshold&#39;</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;dimension&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;seed&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;positions&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;radius&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_angle</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;start_angle&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+        <span class="c1"># TODO: allow also higher dimensional layouts</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Currently only plots with maximum dimension 2 are supported!&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">rename_attributes</span><span class="p">(</span><span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Rename layout attributes.</span>
+
+<span class="sd">        In the style dictionary multiple keywords can be used to address</span>
+<span class="sd">        attributes. These keywords will be converted to an unique key word,</span>
+<span class="sd">        used in the remaining code.</span>
+
+<span class="sd">        ========= =================================</span>
+<span class="sd">        keys      other valid keys</span>
+<span class="sd">        ========= =================================</span>
+<span class="sd">        fixed     fixed_nodes, fixed_vertices,</span>
+<span class="sd">                  fixed_n, fixed_v</span>
+<span class="sd">        positions initial_positions, node_positions</span>
+<span class="sd">                  vertex_positions, n_positions,</span>
+<span class="sd">                  v_positions</span>
+<span class="sd">        ========= =================================</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fixed&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;fixed_nodes&#39;</span><span class="p">,</span> <span class="s1">&#39;fixed_vertices&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;fixed_v&#39;</span><span class="p">,</span> <span class="s1">&#39;fixed_n&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;positions&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;initial_positions&#39;</span><span class="p">,</span> <span class="s1">&#39;node_positions&#39;</span><span class="p">,</span>
+                               <span class="s1">&#39;vertex_positions&#39;</span><span class="p">,</span> <span class="s1">&#39;n_positions&#39;</span><span class="p">,</span>
+                               <span class="s1">&#39;v_positions&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;layout_&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;layout_&#39;</span><span class="p">],</span>
+                 <span class="p">}</span>
+
+        <span class="n">_kwds</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">del_keys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwds</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">name_list</span> <span class="ow">in</span> <span class="n">names</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">name_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">key</span> <span class="ow">and</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">_kwds</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                            <span class="s1">&#39;layout_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">value</span>
+                        <span class="n">del_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                        <span class="k">break</span>
+        <span class="c1"># remove the replaced keys from the dict</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">del_keys</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">kwds</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">_kwds</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">generate_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function to pick and generate the right layout.&quot;&quot;&quot;</span>
+        <span class="c1"># method names</span>
+        <span class="n">names_rand</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Random&#39;</span><span class="p">,</span> <span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="s1">&#39;rand&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="n">names_fr</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Fruchterman-Reingold&#39;</span><span class="p">,</span> <span class="s1">&#39;fruchterman_reingold&#39;</span><span class="p">,</span> <span class="s1">&#39;fr&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;spring_layout&#39;</span><span class="p">,</span> <span class="s1">&#39;spring layout&#39;</span><span class="p">,</span> <span class="s1">&#39;FR&#39;</span><span class="p">]</span>
+        <span class="n">names_circular</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;circular&#39;</span><span class="p">,</span> <span class="s1">&#39;circle&#39;</span><span class="p">,</span> <span class="s1">&#39;ring&#39;</span><span class="p">,</span> <span class="s1">&#39;1d-lattice&#39;</span><span class="p">,</span> <span class="s1">&#39;lattice-1d&#39;</span><span class="p">]</span>
+        <span class="n">names_grid</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;grid&#39;</span><span class="p">,</span> <span class="s1">&#39;2d-lattice&#39;</span><span class="p">,</span> <span class="s1">&#39;lattice-2d&#39;</span><span class="p">]</span>
+        <span class="c1"># check which layout should be plotted</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout_type</span> <span class="ow">in</span> <span class="n">names_rand</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout_type</span> <span class="ow">in</span> <span class="n">names_circular</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layout_type</span> <span class="o">==</span> <span class="s1">&#39;lattice&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">circular</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout_type</span> <span class="ow">in</span> <span class="n">names_grid</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layout_type</span> <span class="o">==</span> <span class="s1">&#39;lattice&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout_type</span> <span class="ow">in</span> <span class="n">names_fr</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fruchterman_reingold</span><span class="p">()</span>
+
+        <span class="c1"># print(self.layout)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span>
+
+    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Position nodes uniformly at random in the unit square.</span>
+
+<span class="sd">        For every node, a position is generated by choosing each of dimension</span>
+<span class="sd">        coordinates uniformly at random on the interval [0.0, 1.0).</span>
+
+<span class="sd">        This algorithm can be enabled with the keywords: &#39;Random&#39;,</span>
+<span class="sd">        &#39;random&#39;, &#39;rand&#39;, or None</span>
+
+<span class="sd">        NumPy (http://scipy.org) is required for this function.</span>
+
+<span class="sd">        **Keyword arguments used for the layout:**</span>
+
+<span class="sd">        - ``dimension`` : int, optional (default = 2)</span>
+<span class="sd">          Dimension of layout. Currently, only plots in 2 dimension are supported.</span>
+
+<span class="sd">        - ``seed`` : int or None, optional (default = None)</span>
+<span class="sd">          Set the random state for deterministic node layouts. If int, `seed` is</span>
+<span class="sd">          the seed used by the random number generator, if None, the a random</span>
+<span class="sd">          seed by created by the numpy random number generator is used.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        layout : dict</span>
+<span class="sd">            A dictionary of positions keyed by node</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">layout</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">fruchterman_reingold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Position nodes using Fruchterman-Reingold force-directed algorithm.</span>
+
+<span class="sd">        In this algorithm, the nodes are represented by steel rings and the</span>
+<span class="sd">        edges are springs between them. The attractive force is analogous to the</span>
+<span class="sd">        spring force and the repulsive force is analogous to the electrical</span>
+<span class="sd">        force. The basic idea is to minimize the energy of the system by moving</span>
+<span class="sd">        the nodes and changing the forces between them.</span>
+
+<span class="sd">        This algorithm can be enabled with the keywords: &#39;Fruchterman-Reingold&#39;,</span>
+<span class="sd">        &#39;fruchterman_reingold&#39;, &#39;fr&#39;, &#39;spring_layout&#39;, &#39;spring layout&#39;, &#39;FR&#39;</span>
+
+<span class="sd">        **Keyword arguments used for the layout:**</span>
+
+<span class="sd">        - ``force`` : float, optional (default = None)</span>
+<span class="sd">          Optimal distance between nodes.  If None the distance is set to</span>
+<span class="sd">          1/sqrt(n) where n is the number of nodes.  Increase this value to move</span>
+<span class="sd">          nodes farther apart.</span>
+
+<span class="sd">        - ``positions`` : dict or None  optional (default = None)</span>
+<span class="sd">          Initial positions for nodes as a dictionary with node as keys and values</span>
+<span class="sd">          as a coordinate list or tuple.  If None, then use random initial</span>
+<span class="sd">          positions.</span>
+
+<span class="sd">        - ``fixed`` : list or None, optional (default = None)</span>
+<span class="sd">          Nodes to keep fixed at initial position.</span>
+
+<span class="sd">        - ``iterations`` : int, optional (default = 50)</span>
+<span class="sd">          Maximum number of iterations taken</span>
+
+<span class="sd">        - ``threshold``: float, optional (default = 1e-4)</span>
+<span class="sd">          Threshold for relative error in node position changes.  The iteration</span>
+<span class="sd">          stops if the error is below this threshold.</span>
+
+<span class="sd">        - ``weight`` : string or None, optional (default = None)</span>
+<span class="sd">          The edge attribute that holds the numerical value used for the edge</span>
+<span class="sd">          weight.  If None, then all edge weights are 1.</span>
+
+<span class="sd">        - ``dimension`` : int, optional (default = 2)</span>
+<span class="sd">          Dimension of layout. Currently, only plots in 2 dimension are supported.</span>
+
+<span class="sd">        - ``seed`` : int or None, optional (default = None)</span>
+<span class="sd">          Set the random state for deterministic node layouts. If int, `seed` is</span>
+<span class="sd">          the seed used by the random number generator, if None, the a random seed</span>
+<span class="sd">          by created by the numpy random number generator is used.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        layout : dict</span>
+<span class="sd">            A dictionary of positions keyed by node</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># convert adjacency matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Determine size of existing domain to adjust initial positions</span>
+            <span class="n">_size</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">coord</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">t</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">_size</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">)</span> <span class="o">*</span> <span class="n">_size</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># We must adjust k by domain size for layouts not near 1x1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">_size</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Sparse matrix</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">:</span>  <span class="c1"># sparse solver for large graphs</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span>
+            <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sparse_fruchterman_reingold</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fruchterman_reingold</span><span class="p">()</span>
+
+        <span class="n">layout</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">layout</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">layout</span>
+
+    <span class="k">def</span> <span class="nf">_fruchterman_reingold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fruchterman-Reingold algorithm for dense matrices.</span>
+
+<span class="sd">        This algorithm is based on the Fruchterman-Reingold algorithm provided</span>
+<span class="sd">        by networkx. (Copyright (C) 2004-2018 by Aric Hagberg &lt;hagberg@lanl.gov&gt;</span>
+<span class="sd">        Dan Schult &lt;dschult@colgate.edu&gt; Pieter Swart &lt;swart@lanl.gov&gt; Richard</span>
+<span class="sd">        Penney &lt;rwpenney@users.sourceforge.net&gt; All rights reserved. BSD</span>
+<span class="sd">        license.)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_n</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Fruchterman-Reingold algorithm needs an adjacency &#39;</span>
+                      <span class="s1">&#39;matrix as input&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+        <span class="c1"># make sure we have an array instead of a matrix</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># random initial positions</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+            <span class="n">layout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span>
+                <span class="n">_n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># make sure positions are of same type as matrix</span>
+            <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="c1"># optimal distance between nodes</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">_n</span><span class="p">)</span>
+        <span class="c1"># the initial &quot;temperature&quot;  is about .1 of domain area (=1x1)</span>
+        <span class="c1"># this is the largest step allowed in the dynamics.</span>
+        <span class="c1"># We need to calculate this in case our fixed positions force our domain</span>
+        <span class="c1"># to be much bigger than 1x1</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                <span class="nb">max</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="o">*</span> <span class="mf">0.1</span>
+        <span class="c1"># simple cooling scheme.</span>
+        <span class="c1"># linearly step down by dt on each iteration so last iteration is size dt.</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">t</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterations</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">layout</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">layout</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="c1"># the inscrutable (but fast) version</span>
+        <span class="c1"># this is still O(V^2)</span>
+        <span class="c1"># could use multilevel methods to speed this up significantly</span>
+        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterations</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Calculating Fruchterman-Reingold layout&#39;</span><span class="p">):</span>
+            <span class="c1"># matrix of difference between points</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">layout</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">layout</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+            <span class="c1"># distance between points</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># enforce minimum distance of 0.01</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">distance</span><span class="p">)</span>
+            <span class="c1"># displacement &quot;force&quot;</span>
+            <span class="n">displacement</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ijk,ij-&gt;ik&#39;</span><span class="p">,</span>
+                                     <span class="n">delta</span><span class="p">,</span>
+                                     <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">k</span> <span class="o">/</span> <span class="n">distance</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">A</span> <span class="o">*</span> <span class="n">distance</span> <span class="o">/</span> <span class="n">k</span><span class="p">))</span>
+            <span class="c1"># update layoutitions</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">displacement</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">length</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+            <span class="n">delta_layout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ij,i-&gt;ij&#39;</span><span class="p">,</span> <span class="n">displacement</span><span class="p">,</span> <span class="n">t</span> <span class="o">/</span> <span class="n">length</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># don&#39;t change positions of fixed nodes</span>
+                <span class="n">delta_layout</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fixed</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">layout</span> <span class="o">+=</span> <span class="n">delta_layout</span>
+            <span class="c1"># cool temperature</span>
+            <span class="n">t</span> <span class="o">-=</span> <span class="n">dt</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">delta_layout</span><span class="p">)</span> <span class="o">/</span> <span class="n">_n</span>
+            <span class="k">if</span> <span class="n">error</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">layout</span>
+
+    <span class="k">def</span> <span class="nf">_sparse_fruchterman_reingold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fruchterman-Reingold algorithm for sparse matrices.</span>
+
+<span class="sd">        This algorithm is based on the Fruchterman-Reingold algorithm provided</span>
+<span class="sd">        by networkx. (Copyright (C) 2004-2018 by Aric Hagberg &lt;hagberg@lanl.gov&gt;</span>
+<span class="sd">        Dan Schult &lt;dschult@colgate.edu&gt; Pieter Swart &lt;swart@lanl.gov&gt; Richard</span>
+<span class="sd">        Penney &lt;rwpenney@users.sourceforge.net&gt; All rights reserved. BSD</span>
+<span class="sd">        license.)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjacency_matrix</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_n</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Fruchterman-Reingold algorithm needs an adjacency &#39;</span>
+                      <span class="s1">&#39;matrix as input&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">spdiags</span><span class="p">,</span> <span class="n">coo_matrix</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;The sparse Fruchterman-Reingold algorithm needs the &#39;</span>
+                      <span class="s1">&#39;scipy package: http://scipy.org/&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span>
+        <span class="c1"># make sure we have a LIst of Lists representation</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">A</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">tolil</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">coo_matrix</span><span class="p">(</span><span class="n">A</span><span class="p">))</span><span class="o">.</span><span class="n">tolil</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># random initial positions</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+            <span class="n">layout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span>
+                <span class="n">_n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># make sure positions are of same type as matrix</span>
+            <span class="n">layout</span> <span class="o">=</span> <span class="n">layout</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="c1"># no fixed nodes</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># optimal distance between nodes</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">_n</span><span class="p">)</span>
+        <span class="c1"># the initial &quot;temperature&quot;  is about .1 of domain area (=1x1)</span>
+        <span class="c1"># this is the largest step allowed in the dynamics.</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                <span class="nb">max</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="o">*</span> <span class="mf">0.1</span>
+        <span class="c1"># simple cooling scheme.</span>
+        <span class="c1"># linearly step down by dt on each iteration so last iteration is size dt.</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">t</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterations</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">displacement</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="n">_n</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterations</span><span class="p">):</span>
+            <span class="n">displacement</span> <span class="o">*=</span> <span class="mi">0</span>
+            <span class="c1"># loop over rows</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="c1"># difference between this row&#39;s node position and all others</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">layout</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">layout</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+                <span class="c1"># distance between points</span>
+                <span class="n">distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">delta</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+                <span class="c1"># enforce minimum distance of 0.01</span>
+                <span class="n">distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">distance</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">distance</span><span class="p">)</span>
+                <span class="c1"># the adjacency matrix row</span>
+                <span class="n">Ai</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">getrowview</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">())</span>
+                <span class="c1"># displacement &quot;force&quot;</span>
+                <span class="n">displacement</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span>\
+                    <span class="p">(</span><span class="n">delta</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">k</span> <span class="o">/</span> <span class="n">distance</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">Ai</span> <span class="o">*</span> <span class="n">distance</span> <span class="o">/</span> <span class="n">k</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># update positions</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">displacement</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">length</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+            <span class="n">delta_layout</span> <span class="o">=</span> <span class="p">(</span><span class="n">displacement</span> <span class="o">*</span> <span class="n">t</span> <span class="o">/</span> <span class="n">length</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+            <span class="n">layout</span> <span class="o">+=</span> <span class="n">delta_layout</span>
+            <span class="c1"># cool temperature</span>
+            <span class="n">t</span> <span class="o">-=</span> <span class="n">dt</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">delta_layout</span><span class="p">)</span> <span class="o">/</span> <span class="n">_n</span>
+            <span class="k">if</span> <span class="n">err</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">layout</span>
+
+
+    <span class="k">def</span> <span class="nf">circular</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Position nodes on a circle with given radius. </span>
+
+<span class="sd">        This algorithm can be enabled with the keywords: &#39;circular&#39;, &#39;circle&#39;, &#39;ring&#39;, &#39;lattice-1d&#39;, &#39;1d-lattice&#39;, &#39;lattice&#39;</span>
+
+<span class="sd">        **Keyword arguments used for the layout:**       </span>
+
+<span class="sd">        - ``radius`` : float, optional (default = 1.0)</span>
+<span class="sd">          Sets the radius of the circle on which nodes</span>
+<span class="sd">          are positioned</span>
+
+<span class="sd">        - ``direction`` : float, optional (default = 1.0)</span>
+<span class="sd">          Sets the direction in which nodes are placed on the circle. 1.0 for clockwise (default) </span>
+<span class="sd">          and -1.0 for counter-clockwise direction.</span>
+
+<span class="sd">        - ``start_angle`` : float, optional (default = 90.0)</span>
+<span class="sd">          Sets the angle of the first node relative to the 3pm position on a clock.</span>
+<span class="sd">          and -1.0 for counter-clockwise direction.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        layout : dict</span>
+<span class="sd">            A dictionary of positions keyed by node</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="n">rad</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">n</span>
+        <span class="n">rotation</span> <span class="o">=</span> <span class="p">(</span><span class="mf">90.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_angle</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rotation</span> <span class="o">-</span> <span class="n">i</span><span class="o">*</span><span class="n">rad</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rotation</span> <span class="o">-</span> <span class="n">i</span><span class="o">*</span><span class="n">rad</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
+            <span class="n">layout</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">layout</span>
+
+
+    <span class="k">def</span> <span class="nf">grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Position nodes on a two-dimensional grid</span>
+
+<span class="sd">        This algorithm can be enabled with the keywords: &#39;grid&#39;, &#39;lattice-2d&#39;, &#39;2d-lattice&#39;, &#39;lattice&#39;</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        layout : dict</span>
+<span class="sd">            A dictionary of positions keyed by node</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+        <span class="c1"># number of nodes in horizontal/vertical direction</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">width</span> <span class="o">/</span> <span class="n">k</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">layout</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">((</span><span class="n">i</span><span class="o">%</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span><span class="n">dist</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">dist</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">layout</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># eof</span>
+<span class="c1">#</span>
+<span class="c1"># Local Variables:</span>
+<span class="c1"># mode: python</span>
+<span class="c1"># mode: linum</span>
+<span class="c1"># mode: auto-fill</span>
+<span class="c1"># fill-column: 80</span>
+<span class="c1"># End:</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

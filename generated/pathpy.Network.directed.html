@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pathpy.Network.directed &#8212; pathpy 3.0.0a1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.Network.directed &#8212; pathpy 3.0.0a2 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -41,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -114,14 +115,14 @@
   </div>
 <div class="col-md-9"><div class="section" id="pathpy-network-directed">
 <h1>pathpy.Network.directed<a class="headerlink" href="#pathpy-network-directed" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
+<dl class="py method">
 <dt id="pathpy.Network.directed">
 <em class="property">property </em><code class="sig-prename descclassname">Network.</code><code class="sig-name descname">directed</code><a class="headerlink" href="#pathpy.Network.directed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return if the network is directed (True) or undirected (False).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><dl class="simple">
-<dt>bool</dt><dd><p>Retun <code class="docutils literal notranslate"><span class="pre">True</span></code> if the network is directed or <code class="docutils literal notranslate"><span class="pre">False</span></code> if the
+<dt>bool</dt><dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the network is directed or <code class="docutils literal notranslate"><span class="pre">False</span></code> if the
 network is undirected.</p>
 </dd>
 </dl>
@@ -129,7 +130,7 @@ network is undirected.</p>
 </dl>
 <p class="rubric">Examples</p>
 <p>Generate an undirected network.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="k">import</span> <span class="n">Network</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">Network</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s1">&#39;a-b&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">directed</span>
 <span class="go">False</span>
@@ -156,8 +157,8 @@ network is undirected.</p>
       
     </p>
     <p>
-        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Overview: module code &#8212; pathpy 3.0.0a1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Overview: module code &#8212; pathpy 3.0.0a2 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -39,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -107,13 +108,38 @@
     <div class="body col-md-12 content" role="main">
       
   <h1>All modules for which code is available</h1>
-<ul><li><a href="pathpy/algorithms/matrices.html">pathpy.algorithms.matrices</a></li>
-<li><a href="pathpy/core/base/classes.html">pathpy.core.base.classes</a></li>
+<ul><li><a href="abc.html">abc</a></li>
+<li><a href="pathpy/algorithms/centralities.html">pathpy.algorithms.centralities</a></li>
+<li><a href="pathpy/algorithms/community_detection.html">pathpy.algorithms.community_detection</a></li>
+<li><a href="pathpy/algorithms/components.html">pathpy.algorithms.components</a></li>
+<li><a href="pathpy/algorithms/evaluation.html">pathpy.algorithms.evaluation</a></li>
+<li><a href="pathpy/algorithms/matrices.html">pathpy.algorithms.matrices</a></li>
+<li><a href="pathpy/algorithms/path_extraction.html">pathpy.algorithms.path_extraction</a></li>
+<li><a href="pathpy/algorithms/shortest_paths.html">pathpy.algorithms.shortest_paths</a></li>
+<li><a href="pathpy/algorithms/trees.html">pathpy.algorithms.trees</a></li>
+<li><a href="pathpy/converters/networkx.html">pathpy.converters.networkx</a></li>
+<li><a href="pathpy/core/classes.html">pathpy.core.classes</a></li>
+<li><a href="pathpy/core/collecions.html">pathpy.core.collecions</a></li>
 <li><a href="pathpy/core/edge.html">pathpy.core.edge</a></li>
-<li><a href="pathpy/core/network.html">pathpy.core.network</a></li>
 <li><a href="pathpy/core/node.html">pathpy.core.node</a></li>
 <li><a href="pathpy/core/path.html">pathpy.core.path</a></li>
-<li><a href="pathpy/visualizations/plot.html">pathpy.visualizations.plot</a></li>
+<li><a href="pathpy/generators/lattice.html">pathpy.generators.lattice</a></li>
+<li><a href="pathpy/generators/random_graphs.html">pathpy.generators.random_graphs</a></li>
+<li><a href="pathpy/io/csv.html">pathpy.io.csv</a></li>
+<li><a href="pathpy/io/graphml.html">pathpy.io.graphml</a></li>
+<li><a href="pathpy/io/graphtool.html">pathpy.io.graphtool</a></li>
+<li><a href="pathpy/io/konect.html">pathpy.io.konect</a></li>
+<li><a href="pathpy/io/pandas.html">pathpy.io.pandas</a></li>
+<li><a href="pathpy/io/sql.html">pathpy.io.sql</a></li>
+<li><a href="pathpy/models/network.html">pathpy.models.network</a></li>
+<li><a href="pathpy/processes/random_walk.html">pathpy.processes.random_walk</a></li>
+<li><a href="pathpy/statistics/clustering.html">pathpy.statistics.clustering</a></li>
+<li><a href="pathpy/statistics/degrees.html">pathpy.statistics.degrees</a></li>
+<li><a href="pathpy/statistics/likelihoods.html">pathpy.statistics.likelihoods</a></li>
+<li><a href="pathpy/statistics/modularity.html">pathpy.statistics.modularity</a></li>
+<li><a href="pathpy/statistics/subpaths.html">pathpy.statistics.subpaths</a></li>
+<li><a href="pathpy/visualisations/layout.html">pathpy.visualisations.layout</a></li>
+<li><a href="pathpy/visualisations/plot.html">pathpy.visualisations.plot</a></li>
 </ul>
 
     </div>
@@ -130,8 +156,8 @@
       
     </p>
     <p>
-        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

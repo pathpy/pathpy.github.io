@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pathpy.Network.edges &#8212; pathpy 3.0.0a1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.Network.edges &#8212; pathpy 3.0.0a2 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pathpy.Network.name" href="pathpy.Network.name.html" />
+    <link rel="next" title="pathpy.Network.incident_edges" href="pathpy.Network.incident_edges.html" />
     <link rel="prev" title="pathpy.Network.directed" href="pathpy.Network.directed.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -41,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -114,7 +115,7 @@
   </div>
 <div class="col-md-9"><div class="section" id="pathpy-network-edges">
 <h1>pathpy.Network.edges<a class="headerlink" href="#pathpy-network-edges" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
+<dl class="py method">
 <dt id="pathpy.Network.edges">
 <em class="property">property </em><code class="sig-prename descclassname">Network.</code><code class="sig-name descname">edges</code><a class="headerlink" href="#pathpy.Network.edges" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the associated edges of the network.</p>
@@ -129,12 +130,12 @@
 </dl>
 <p class="rubric">Examples</p>
 <p>Generate a simple network.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="k">import</span> <span class="n">Network</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">Network</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s1">&#39;a-b-c&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Get the edges of the network</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">edges</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">edges</span>
 <span class="go">{&#39;a-b&#39;: Edge a-b, &#39;b-c&#39;: Edge b-c}</span>
 </pre></div>
 </div>
@@ -157,8 +158,8 @@
       
     </p>
     <p>
-        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

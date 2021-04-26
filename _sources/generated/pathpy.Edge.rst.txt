@@ -1,4 +1,4 @@
-.. raw:: html
+﻿.. raw:: html
 
     </div>
     <div class=col-md-9 content>
@@ -20,7 +20,6 @@ pathpy.Edge
    .. autosummary::
       :toctree:
    
-      ~Edge.directed
       ~Edge.nodes
       ~Edge.uid
       ~Edge.v
@@ -34,10 +33,7 @@ pathpy.Edge
    .. autosummary::
       :toctree:
    
-      ~Edge.add_node
-      ~Edge.add_nodes_from
       ~Edge.copy
-      ~Edge.delete
       ~Edge.summary
       ~Edge.update
       ~Edge.weight

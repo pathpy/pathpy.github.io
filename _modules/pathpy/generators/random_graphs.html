@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.generators.random_graphs &#8212; pathpy 3.0.0a2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../examples/index.html">Gallery</a></li>
+                <li><a href="../../../tutorial.html">Tutorial</a></li>
+                <li><a href="../../../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pathpy.generators.random_graphs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Methhods to generate random graphs according to different models&quot;&quot;&quot;</span>
+<span class="c1"># !/usr/bin/python -tt</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># File      : random_graphs.py -- Module to generate random graphs</span>
+<span class="c1"># Author    : Ingo Scholtes &lt;scholtes@uni-wuppertal.de&gt;</span>
+<span class="c1"># Time-stamp: &lt;Mon 2021-03-29 17:09 juergen&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2016-2020 Pathpy Developers</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">pathpy.core.edge</span> <span class="kn">import</span> <span class="n">Edge</span>
+<span class="kn">from</span> <span class="nn">pathpy.core.node</span> <span class="kn">import</span> <span class="n">Node</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.network</span> <span class="kn">import</span> <span class="n">Network</span>
+
+<span class="kn">import</span> <span class="nn">scipy</span>
+
+<span class="c1"># create logger</span>
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="max_edges"><a class="viewcode-back" href="../../../generated/pathpy.generators.random_graphs.max_edges.html#pathpy.generators.random_graphs.max_edges">[docs]</a><span class="k">def</span> <span class="nf">max_edges</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">multiedges</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Returns the maximum number of edges that a directed or undirected network with n nodes can</span>
+<span class="sd">    possible have (with or without loops).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n : int </span>
+
+<span class="sd">        The number of nodes in the network</span>
+
+<span class="sd">    directed : bool</span>
+
+<span class="sd">        If True, return the maximum number of edges in a directed network.</span>
+
+<span class="sd">    multiedges : bool </span>
+
+<span class="sd">        If True, multiple edges between each node pair are allowed. In this case np.inf is returned.</span>
+
+<span class="sd">    loops : bool </span>
+
+<span class="sd">        If True, include self-loops.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Compute maximum number of edges in directed/undirected network with/without self-loops and 100 nodes</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; print(pp.generators.max_edges(100)</span>
+<span class="sd">    4950</span>
+
+<span class="sd">    &gt;&gt;&gt; print(pp.generators.max_edges(100, directed=True)</span>
+<span class="sd">    9900</span>
+
+<span class="sd">    &gt;&gt;&gt; print(pp.generators.max_edges(100, directed=True, loops=True)</span>
+<span class="sd">    10000</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">multiedges</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="k">elif</span> <span class="n">loops</span> <span class="ow">and</span> <span class="n">directed</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">loops</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">directed</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">loops</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">directed</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># not loops and directed:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ER_nm"><a class="viewcode-back" href="../../../generated/pathpy.generators.random_graphs.ER_nm.html#pathpy.generators.random_graphs.ER_nm">[docs]</a><span class="k">def</span> <span class="nf">ER_nm</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+          <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+          <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+          <span class="n">multiedges</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+          <span class="n">node_uids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;(n, m) Erdös-Renyi model.</span>
+
+<span class="sd">    Generates a random graph with a fixed number of n nodes and m edges based on</span>
+<span class="sd">    the Erdös-Renyi model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n : int</span>
+
+<span class="sd">        The number of nodes in the generated network</span>
+
+<span class="sd">    m : int</span>
+
+<span class="sd">        The number of randomly generated edges in the network</span>
+
+<span class="sd">    directed : bool</span>
+
+<span class="sd">        Whether a directed network should be generated</span>
+
+<span class="sd">    loops : bool</span>
+
+<span class="sd">        Whether or not the generated network may contain</span>
+<span class="sd">        loops.</span>
+
+<span class="sd">    multi_edge : bool</span>
+
+<span class="sd">        Whether or not the same edge can be added multiple times</span>
+
+<span class="sd">    node_uids : list</span>
+
+<span class="sd">        Optional list of node uids that will be used.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Generate random undirected network with 10 nodes and 25 edges</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; random_graph = pp.algorithms.random_graphs.ER_nm(n=10, m=25)</span>
+<span class="sd">    &gt;&gt;&gt; print(random_graph.summary())</span>
+<span class="sd">    ...</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check parameter sanity</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">max_edges</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="n">loops</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="n">multiedges</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="n">M</span><span class="p">:</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+            <span class="s1">&#39;Given network type with n nodes can have at most </span><span class="si">{}</span><span class="s1"> edges.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">network</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">node_uids</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">node_uids</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;No valid node uids given, generating numeric node uids&#39;</span><span class="p">)</span>
+        <span class="n">node_uids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">node_uids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">network</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node_uids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="n">edges</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">edges</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">:</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">node_uids</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="n">loops</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">multiedges</span> <span class="ow">or</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">successors</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+            <span class="n">network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">w</span><span class="p">)</span>
+            <span class="n">edges</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">network</span></div>
+
+
+<div class="viewcode-block" id="ER_nm_randomize"><a class="viewcode-back" href="../../../generated/pathpy.generators.random_graphs.ER_nm_randomize.html#pathpy.generators.random_graphs.ER_nm_randomize">[docs]</a><span class="k">def</span> <span class="nf">ER_nm_randomize</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">multiedges</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Generates a random graph whose number of nodes, edges, edge directedness and node uids </span>
+<span class="sd">    match the corresponding values of a given network instance. Useful to generate a randomized </span>
+<span class="sd">    version of a network.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    network : pathpy.Network</span>
+
+<span class="sd">        Given network used to determine number of nodes, edges, node uids, and edge directedness    </span>
+
+<span class="sd">    loops : bool</span>
+
+<span class="sd">        Whether or not the generated network can contain loops.</span>
+
+<span class="sd">    multi_edge : bool</span>
+
+<span class="sd">        Whether or not multiple edges can be added to the same node pair</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Generate random undirected network with 10 nodes and 25 edges</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; n = pp.Network(directed=False)</span>
+<span class="sd">    &gt;&gt;&gt; n.add_edge(&#39;a&#39;, &#39;b&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; n.add_edge(&#39;b&#39;, &#39;c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; n.add_edge(&#39;d&#39;, &#39;e&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; r = pp.generators.ER_nm(n)</span>
+<span class="sd">    &gt;&gt;&gt; print(r)</span>
+<span class="sd">    Uid:		0x...</span>
+<span class="sd">    Type:		Network</span>
+<span class="sd">    Directed:	False</span>
+<span class="sd">    Unique nodes:	5</span>
+<span class="sd">    Unique edges:	3</span>
+<span class="sd">    Unique paths:	0</span>
+<span class="sd">    Total paths:	0</span>
+<span class="sd">    &gt;&gt;&gt; print(r.nodes.uids)</span>
+<span class="sd">    { &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;}</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">ER_nm</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(),</span> <span class="n">network</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">(),</span> 
+                    <span class="n">directed</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="n">loops</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="n">multiedges</span><span class="p">,</span>
+                    <span class="n">node_uids</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ER_np"><a class="viewcode-back" href="../../../generated/pathpy.generators.random_graphs.ER_np.html#pathpy.generators.random_graphs.ER_np">[docs]</a><span class="k">def</span> <span class="nf">ER_np</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+          <span class="n">node_uids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Network</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;(n, p) Erdös-Renyi model</span>
+
+<span class="sd">    Generates a random graph with a fixed number of n nodes and edge probability</span>
+<span class="sd">    p based on the Erdös-Renyi model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n : int</span>
+
+<span class="sd">        The number of nodes in the generated network</span>
+
+<span class="sd">    p : float</span>
+
+<span class="sd">        The probability with which an edge will be created</span>
+<span class="sd">        between each pair of nodes</span>
+
+<span class="sd">    directed : bool</span>
+
+<span class="sd">        Whether a directed network should be generated</span>
+
+<span class="sd">    loops : bool</span>
+
+<span class="sd">        Whether or not the generated network may contain</span>
+<span class="sd">        loops.</span>
+
+<span class="sd">    node_uids : list</span>
+
+<span class="sd">        Optional list of node uids that will be used.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Generate random undirected network with 10 nodes</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; random_graph = pp.algorithms.random_graphs.ER_np(n=10, p=0.03)</span>
+<span class="sd">    &gt;&gt;&gt; print(random_graph.summary())</span>
+<span class="sd">    ...</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">node_uids</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">node_uids</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;No valid node uids given, generating numeric node uids&#39;</span><span class="p">)</span>
+        <span class="n">node_uids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">node_uids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">network</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node_uids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="s1">&#39;generating G(n,p) network&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">directed</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="n">s</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">loops</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">:</span>
+                <span class="n">network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">node_uids</span><span class="p">[</span><span class="n">s</span><span class="p">],</span> <span class="n">node_uids</span><span class="p">[</span><span class="n">t</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">network</span></div>
+
+
+<div class="viewcode-block" id="ER_np_randomize"><a class="viewcode-back" href="../../../generated/pathpy.generators.random_graphs.ER_np_randomize.html#pathpy.generators.random_graphs.ER_np_randomize">[docs]</a><span class="k">def</span> <span class="nf">ER_np_randomize</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Network</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generates a random microstate based on the G(n,p) model. The number of nodes,</span>
+<span class="sd">    the expected number of edges, the edge directedness and the node uids of the </span>
+<span class="sd">    generated network match the corresponding values of a given network instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">max_edges</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="n">loops</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">m</span><span class="o">/</span><span class="n">M</span>
+    <span class="k">return</span> <span class="n">ER_np</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="n">loops</span><span class="p">,</span> <span class="n">node_uids</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Watts_Strogatz"><a class="viewcode-back" href="../../../generated/pathpy.generators.random_graphs.Watts_Strogatz.html#pathpy.generators.random_graphs.Watts_Strogatz">[docs]</a><span class="k">def</span> <span class="nf">Watts_Strogatz</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                   <span class="n">node_uids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Network</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Undirected Watts-Strogatz lattice network</span>
+
+<span class="sd">    Generates an undirected Watts-Strogatz lattice network with lattice</span>
+<span class="sd">    dimensionality one.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n : int</span>
+
+<span class="sd">        The number of nodes in the generated network</span>
+
+<span class="sd">    s : float</span>
+
+<span class="sd">        The number of nearest neighbors that will be connected</span>
+<span class="sd">        in the ring lattice</span>
+
+<span class="sd">    p : float</span>
+
+<span class="sd">        The rewiring probability</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Generate a Watts-Strogatz network with 100 nodes</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; small_world = pp.algorithms.random_graphs.Watts_Strogatz(n=100, s=2, p=0.1)</span>
+<span class="sd">    &gt;&gt;&gt; print(small_world.summary())</span>
+<span class="sd">    ...</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">node_uids</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">node_uids</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;No valid node uids given, generating numeric node uids&#39;</span><span class="p">)</span>
+        <span class="n">node_uids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">network</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">Node</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
+            <span class="n">node_uids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">network</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node_uids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="c1"># construct a ring lattice (dimension 1)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">loops</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">s</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_uids</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_uids</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">)</span> <span class="o">%</span> <span class="n">n</span><span class="p">]]</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+                <span class="n">network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># nothing to do here</span>
+        <span class="k">return</span> <span class="n">network</span>
+
+    <span class="c1"># Rewire each link with probability p</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="s1">&#39;generating WS network&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">:</span>
+            <span class="c1"># Delete original link and remember source node</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">edge</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span>
+            <span class="n">network</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+            <span class="c1"># Find new random tgt, which is not yet connected to src</span>
+            <span class="n">new_target</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="c1"># This loop repeatedly chooses a random target until we find</span>
+            <span class="c1"># a target not yet connected to src. Note that this could potentially</span>
+            <span class="c1"># result in an infinite loop depending on parameters.</span>
+            <span class="k">while</span> <span class="n">new_target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">!=</span> <span class="n">v</span> <span class="ow">or</span> <span class="n">loops</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+                    <span class="n">new_target</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">new_target</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">network</span></div>
+
+
+<div class="viewcode-block" id="is_graphic_Erdos_Gallai"><a class="viewcode-back" href="../../../generated/pathpy.generators.random_graphs.is_graphic_Erdos_Gallai.html#pathpy.generators.random_graphs.is_graphic_Erdos_Gallai">[docs]</a><span class="k">def</span> <span class="nf">is_graphic_Erdos_Gallai</span><span class="p">(</span><span class="n">degrees</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check Erdös and Gallai condition.</span>
+
+<span class="sd">    Checks whether the condition by Erdös and Gallai (1967) for a graphic degree</span>
+<span class="sd">    sequence is fulfilled.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    degrees : list</span>
+
+<span class="sd">        List of integer node degrees to be tested.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Test non-graphic degree sequence with uneven sum</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; pp.generators.is_graphic_Erdos_Gallai([1,0])</span>
+<span class="sd">    False</span>
+
+<span class="sd">    Test non-graphic degree sequence with even sum</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; pp.generators.is_graphic_Erdos_Gallai([1,3])</span>
+<span class="sd">    False</span>
+
+<span class="sd">    Test graphic degree sequence:</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; pp.generators.is_graphic_Erdos_Gallai([1,1])</span>
+<span class="sd">    True</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">degree_sequence</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">degrees</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">degree_sequence</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">degree_sequence</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">S</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">S</span> <span class="o">+=</span> <span class="n">degree_sequence</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">M</span> <span class="o">+=</span> <span class="nb">min</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">degree_sequence</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">S</span> <span class="o">&gt;</span> <span class="n">r</span> <span class="o">*</span> <span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">M</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="generate_degree_sequence"><a class="viewcode-back" href="../../../generated/pathpy.generators.random_graphs.generate_degree_sequence.html#pathpy.generators.random_graphs.generate_degree_sequence">[docs]</a><span class="k">def</span> <span class="nf">generate_degree_sequence</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">distribution</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">rv_continuous</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">rv_discrete</span><span class="p">],</span> <span class="o">**</span><span class="n">distribution_args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generates a random graphic degree sequence drawn from a given degree distribution&quot;&quot;&quot;</span>
+    <span class="c1"># create rv_discrete object with custom distribution and generate degree sequence</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">distribution</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">distribution</span> <span class="p">]</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="p">[</span> <span class="n">distribution</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">degrees</span> <span class="p">]</span>
+
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">rv_discrete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;custom&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="n">degrees</span><span class="p">,</span> <span class="n">probs</span><span class="p">))</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span> <span class="p">]</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">is_graphic_Erdos_Gallai</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="o">**</span><span class="n">distribution_args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+    <span class="c1"># use scipy rv objects to generate graphic degree sequence</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">distribution</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">rv_discrete</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span> <span class="p">]</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">is_graphic_Erdos_Gallai</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="o">**</span><span class="n">distribution_args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">distribution</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">rv_continuous</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span> <span class="p">]</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">is_graphic_Erdos_Gallai</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="o">**</span><span class="n">distribution_args</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">s</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span> <span class="p">]</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Distribution must be either dict, scipy.stats.rv_continuous or scipy.stats.rv_discrete&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="Molloy_Reed"><a class="viewcode-back" href="../../../generated/pathpy.generators.random_graphs.Molloy_Reed.html#pathpy.generators.random_graphs.Molloy_Reed">[docs]</a><span class="k">def</span> <span class="nf">Molloy_Reed</span><span class="p">(</span><span class="n">degrees</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span> <span class="n">multiedge</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">relax</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">node_uids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Network</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Generate Molloy-Reed graph.</span>
+
+<span class="sd">    Generates a random undirected network with given degree sequence based on</span>
+<span class="sd">    the Molloy-Reed algorithm.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The condition proposed by Erdös and Gallai (1967) is used to test</span>
+<span class="sd">        whether the degree sequence is graphic, i.e. whether a network with the</span>
+<span class="sd">        given degree sequence exists.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    degrees : list</span>
+
+<span class="sd">        List of integer node degrees. The number of nodes of the generated</span>
+<span class="sd">        network corresponds to len(degrees).</span>
+
+<span class="sd">    relax : bool</span>
+
+<span class="sd">        If True, we conceptually allow self-loops and multi-edges, but do not</span>
+<span class="sd">        add them to the network This implies that the generated network may not</span>
+<span class="sd">        have exactly sum(degrees)/2 links, but it ensures that the algorithm</span>
+<span class="sd">        always finishes.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Generate random undirected network with given degree sequence</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; random_network = pp.algorithms.random_graphs.Molloy_Reed([1,0])</span>
+<span class="sd">    &gt;&gt;&gt; print(random_network.summary())</span>
+<span class="sd">    ...</span>
+
+<span class="sd">    Network generation fails for non-graphic sequences</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; random_network = pp.algorithms.random_graphs.Molloy_Reed([1,0])</span>
+<span class="sd">    &gt;&gt;&gt; print(random_network)</span>
+<span class="sd">    None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># assume that we are given a graphical degree sequence</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_graphic_Erdos_Gallai</span><span class="p">(</span><span class="n">degrees</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># create empty network with n nodes</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">degrees</span><span class="p">)</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="n">multiedge</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">node_uids</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">node_uids</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;No valid node uids given, generating numeric node uids&#39;</span><span class="p">)</span>
+        <span class="n">node_uids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">node_uids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">network</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node_uids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="c1"># generate link stubs based on degree sequence</span>
+    <span class="n">stubs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">degrees</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+            <span class="n">stubs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">node_uids</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+    <span class="c1"># connect randomly chosen pairs of link stubs</span>
+    <span class="k">while</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stubs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">stubs</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">w</span> <span class="ow">or</span> <span class="p">(</span><span class="n">multiedge</span> <span class="o">==</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">relax</span> <span class="o">==</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">successors</span><span class="p">[</span><span class="n">v</span><span class="p">]):</span>
+            <span class="c1"># remove random edge and add stubs</span>
+            <span class="k">if</span> <span class="n">network</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">edge</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">))</span>
+                <span class="n">stubs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+                <span class="n">stubs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+                <span class="n">network</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">successors</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+                <span class="n">network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+            <span class="n">stubs</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">stubs</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>            
+            
+
+    <span class="k">return</span> <span class="n">network</span></div>
+
+
+<div class="viewcode-block" id="Molloy_Reed_randomize"><a class="viewcode-back" href="../../../generated/pathpy.generators.random_graphs.Molloy_Reed_randomize.html#pathpy.generators.random_graphs.Molloy_Reed_randomize">[docs]</a><span class="k">def</span> <span class="nf">Molloy_Reed_randomize</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Network</span><span class="p">]:</span>
+
+    <span class="c1"># degrees are listed in order of node indices </span>
+    <span class="n">degrees</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">degree_sequence</span><span class="p">()</span>    
+
+    <span class="c1"># generate node uids in same order</span>
+    <span class="n">node_uids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;-&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">degrees</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">:</span>
+        <span class="n">node_uids</span><span class="p">[</span><span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">v</span><span class="p">]]</span> <span class="o">=</span> <span class="n">v</span>
+
+    <span class="k">return</span> <span class="n">Molloy_Reed</span><span class="p">(</span><span class="n">degrees</span><span class="p">,</span> <span class="n">node_uids</span><span class="o">=</span><span class="n">node_uids</span><span class="p">)</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

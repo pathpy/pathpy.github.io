@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pathpy.algorithms.matrices &#8212; pathpy 3.0.0a1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.algorithms.matrices &#8212; pathpy 3.0.0a2 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -39,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -107,35 +108,34 @@
     <div class="body col-md-12 content" role="main">
       
   <h1>Source code for pathpy.algorithms.matrices</h1><div class="highlight"><pre>
-<span></span><span class="ch">#!/usr/bin/python -tt</span>
+<span></span><span class="sd">&quot;&quot;&quot;Pathpy matrices.&quot;&quot;&quot;</span>
+<span class="c1"># !/usr/bin/python -tt</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1"># =============================================================================</span>
 <span class="c1"># File      : matrices.py -- Module to calculate various matrices</span>
 <span class="c1"># Author    : Jürgen Hackl &lt;hackl@ifi.uzh.ch&gt;</span>
-<span class="c1"># Time-stamp: &lt;Fri 2019-11-15 08:37 juergen&gt;</span>
+<span class="c1"># Time-stamp: &lt;Wed 2021-04-21 09:21 juergen&gt;</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (c) 2016-2019 Pathpy Developers</span>
 <span class="c1"># =============================================================================</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">annotations</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">singledispatch</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">sparse</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">sparse</span>  <span class="c1"># pylint: disable=import-error</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">tqdm</span>
-<span class="kn">from</span> <span class="nn">..core.base</span> <span class="k">import</span> <span class="n">BaseNetwork</span><span class="p">,</span> <span class="n">BaseHigherOrderNetwork</span>
-
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.classes</span> <span class="kn">import</span> <span class="n">BaseNetwork</span>
 
 <span class="c1"># create logger</span>
-<span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <span class="nd">@singledispatch</span>
-<span class="k">def</span> <span class="nf">adjacency_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="n">transposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-                     <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">adjacency_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;weight&#39;</span><span class="p">,</span>
+                     <span class="n">transposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">directed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Returns a sparse adjacency matrix of the network.</span>
 
 <span class="sd">    By default, the entry corresponding to a directed link v-&gt;w is stored in</span>
@@ -157,7 +157,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    scipy.sparse.coo_matrix</span>
+<span class="sd">    scipy.sparse.csr_matrix</span>
 <span class="sd">        Returns a space scipy matrix.</span>
 
 <span class="sd">    Examples</span>
@@ -166,7 +166,7 @@
 
 <span class="sd">    &gt;&gt;&gt; from pathpy import Network</span>
 <span class="sd">    &gt;&gt;&gt; net = Network()</span>
-<span class="sd">    &gt;&gt;&gt; net.add_edges_from([(&#39;a&#39;, &#39;b&#39;), (&#39;b&#39;, &#39;c&#39;)])</span>
+<span class="sd">    &gt;&gt;&gt; net.add_edges_from((&#39;a&#39;, &#39;b&#39;), (&#39;b&#39;, &#39;c&#39;))</span>
 <span class="sd">    &gt;&gt;&gt; net.adjacency_matrix().todense()</span>
 <span class="sd">    [[0. 1. 0.]</span>
 <span class="sd">     [0. 0. 1.]</span>
@@ -185,105 +185,89 @@
 <span class="sd">        Add more examples</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 
 <span class="nd">@adjacency_matrix</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">BaseNetwork</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">transposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-             <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+             <span class="n">transposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">directed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+             <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Returns a sparse adjacency matrix of the network.&quot;&quot;&quot;</span>
 
-    <span class="c1"># some information for debugging</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;I</span><span class="se">\&#39;</span><span class="s1">m a Network&#39;</span><span class="p">)</span>
+    <span class="c1"># # update weight if frequency is chosen</span>
+    <span class="c1"># if weight == config[&#39;attributes&#39;][&#39;frequency&#39;]:</span>
 
-    <span class="c1"># update weight if frequency is chosen</span>
-    <span class="k">if</span> <span class="n">weight</span> <span class="o">==</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">][</span><span class="s1">&#39;frequency&#39;</span><span class="p">]:</span>
-
-        <span class="c1"># update edge properties with the current frequencies</span>
-        <span class="c1"># TODO: find better solution to update frequencies</span>
-        <span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">frequency</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">counter</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">][</span><span class="n">weight</span><span class="p">]</span> <span class="o">=</span> <span class="n">frequency</span>
+    <span class="c1">#     # update edge properties with the current frequencies</span>
+    <span class="c1">#     for uid, frequency in self.edges.counter().items():</span>
+    <span class="c1">#         self.edges[uid][weight] = frequency</span>
 
     <span class="c1"># return an adjacency matrix</span>
-    <span class="k">return</span> <span class="n">_adjacency_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">transposed</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_adjacency_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">transposed</span><span class="p">,</span> <span class="n">directed</span><span class="p">)</span>
 
 
-<span class="nd">@adjacency_matrix</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">BaseHigherOrderNetwork</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">_hon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">transposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-         <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Returns a sparse adjacency matrix of the higher order network.&quot;&quot;&quot;</span>
+<span class="c1"># @adjacency_matrix.register(BaseHigherOrderNetwork)</span>
+<span class="c1"># def _hon(self, weight: Any = None, transposed: bool = False,</span>
+<span class="c1">#          **kwargs: Any) -&gt; sparse.csr_matrix:</span>
+<span class="c1">#     &quot;&quot;&quot;Returns a sparse adjacency matrix of the higher order network.&quot;&quot;&quot;</span>
 
-    <span class="c1"># some information for debugging</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;I</span><span class="se">\&#39;</span><span class="s1">m an adjacency matrix of a HigherOrderNetwork&#39;</span><span class="p">)</span>
+<span class="c1">#     # get additional information for HONs</span>
+<span class="c1">#     subpaths: bool = kwargs.get(&#39;subpaths&#39;, True)</span>
 
-    <span class="c1"># get additional information for HONs</span>
-    <span class="n">subpaths</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;subpaths&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="c1">#     # get the appropriate weights</span>
+<span class="c1">#     if weight is None and subpaths:</span>
+<span class="c1">#         weight = config[&#39;attributes&#39;][&#39;frequency&#39;]</span>
 
-    <span class="c1"># get the appropriate weights</span>
-    <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">subpaths</span><span class="p">:</span>
-        <span class="n">weight</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">][</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span>
+<span class="c1">#         # update edge properties with the current frequencies</span>
+<span class="c1">#         for uid, frequency in self.edges.counter().items():</span>
+<span class="c1">#             self.edges[uid][weight] = frequency</span>
 
-        <span class="c1"># update edge properties with the current frequencies</span>
-        <span class="c1"># TODO: find better solution to update frequencies</span>
-        <span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">frequency</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">counter</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">][</span><span class="n">weight</span><span class="p">]</span> <span class="o">=</span> <span class="n">frequency</span>
+<span class="c1">#     elif weight is None and not subpaths:</span>
+<span class="c1">#         weight = &#39;observed&#39;</span>
+<span class="c1">#         print(&#39;observed&#39;)</span>
 
-    <span class="k">elif</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">subpaths</span><span class="p">:</span>
-        <span class="n">weight</span> <span class="o">=</span> <span class="s1">&#39;observed&#39;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;observed&#39;</span><span class="p">)</span>
-
-    <span class="c1"># return an adjacency matrix</span>
-    <span class="k">return</span> <span class="n">_adjacency_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">transposed</span><span class="p">)</span>
+<span class="c1">#     # return an adjacency matrix</span>
+<span class="c1">#     return _adjacency_matrix(self, weight, transposed)</span>
 
 
-<span class="k">def</span> <span class="nf">_adjacency_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                      <span class="n">transposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_adjacency_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">transposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                      <span class="n">directed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">loops</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Function to generate the adjacency matrix.&quot;&quot;&quot;</span>
 
     <span class="c1"># initializing variables</span>
-    <span class="n">row</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">col</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">rows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">cols</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">entries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
 
-    <span class="c1"># get a list of nodes for the matrix indices</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="c1"># get number of nodes</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
 
     <span class="c1"># iterate over the edges of the network</span>
-    <span class="k">for</span> <span class="n">e_id</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;adj matrix&#39;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
 
-        <span class="c1"># add notes if network is directed</span>
-        <span class="n">row</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">))</span>
-        <span class="n">col</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">))</span>
+        <span class="c1"># directed network</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">])</span>
+        <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">])</span>
+        <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">weight</span><span class="p">))</span>
 
         <span class="c1"># add additional nodes if not directed</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
-            <span class="n">row</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">))</span>
-            <span class="n">col</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">directed</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="o">!=</span> <span class="n">e</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span> <span class="ow">or</span> <span class="n">loops</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">])</span>
+                <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">])</span>
+                <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">weight</span><span class="p">))</span>
 
-        <span class="c1"># add weight</span>
-        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">weight</span><span class="p">))</span>
-
-        <span class="c1"># add weight for undirected edges</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
-            <span class="c1"># exclude self loops</span>
-            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="o">!=</span> <span class="n">e</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">:</span>
-                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">weight</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
-    <span class="c1"># generate scipy sparse matrix</span>
-    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">())</span>
-    <span class="n">A</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
-
-    <span class="c1"># transpose matrix if needed</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">entries</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">transposed</span><span class="p">:</span>
         <span class="n">A</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
 
-    <span class="c1"># return the matrix</span>
     <span class="k">return</span> <span class="n">A</span>
 
 
-<span class="c1"># @singledispatch</span>
-<span class="k">def</span> <span class="nf">transition_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">transposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-                      <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">transition_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">transposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                      <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Returns a transition matrix of the network.</span>
 
 <span class="sd">    The transition matrix is the matrix</span>
@@ -348,8 +332,8 @@
       
     </p>
     <p>
-        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

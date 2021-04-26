@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pathpy.Network &#8212; pathpy 3.0.0a1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.Network &#8212; pathpy 3.0.0a2 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -41,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -116,10 +117,10 @@
   </div>
 <div class=col-md-9 content><div class="section" id="pathpy-network">
 <h1>pathpy.Network<a class="headerlink" href="#pathpy-network" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pathpy.Network">
-<em class="property">class </em><code class="sig-prename descclassname">pathpy.</code><code class="sig-name descname">Network</code><span class="sig-paren">(</span><em class="sig-param">*args: pathpy.core.path.Path</em>, <em class="sig-param">uid: str = ''</em>, <em class="sig-param">directed: bool = True</em>, <em class="sig-param">temporal: bool = False</em>, <em class="sig-param">**kwargs: Any</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/core/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Network" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for a network.</p>
+<em class="property">class </em><code class="sig-prename descclassname">pathpy.</code><code class="sig-name descname">Network</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">uid</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">directed</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">multiedges</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/models/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for a network.</p>
 <p>A network is a structure amounting to a set of objects in which some of the
 objects are related to each other. The objects correspond to mathematical
 abstractions called nodes (or vertices) and each of the related pairs of
@@ -168,18 +169,18 @@ the network as <code class="docutils literal notranslate"><span class="pre">key=
 </div>
 <p class="rubric">Examples</p>
 <p>Create an empty network structure with no nodes, edges or paths.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">form</span> <span class="n">pathpy</span> <span class="kn">import</span> <span class="nn">Node</span><span class="o">,</span> <span class="nn">Edge</span><span class="o">,</span> <span class="nn">Path</span><span class="o">,</span> <span class="nn">Network</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">form</span> <span class="n">pathpy</span> <span class="kn">import</span> <span class="nn">Node</span><span class="o">,</span> <span class="nn">Edge</span><span class="o">,</span> <span class="nn">Path</span><span class="o">,</span> <span class="nn">Network</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Some properties of the network are: the name, if directed or if temporal</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;my test network&#39;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;my test network&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">name</span>
 <span class="go">my test network</span>
 </pre></div>
 </div>
 <p>Per default the network is directed and static</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">directed</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">directed</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">temporal</span>
 <span class="go">False</span>
@@ -188,78 +189,51 @@ the network as <code class="docutils literal notranslate"><span class="pre">key=
 <p>The network can be grown in several ways.</p>
 <p><strong>Nodes:</strong></p>
 <p>Add single node to the network.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Also a node object can be added to the network.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In addition to single nodes, also nodes from a list can added to the
 network at once. Attributes are assigned to all nodes.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">,</span><span class="s1">&#39;e&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">,</span><span class="s1">&#39;e&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">][</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
 <span class="go">&#39;green&#39;</span>
 </pre></div>
 </div>
 <p>Single nodes can be removed.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>While multiple nodes can be removed from a list of nodes.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">remove_nodes_from</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">remove_nodes_from</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p><strong>Edges</strong></p>
 <p>Adding a singe new edge to the network.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;a-b&#39;</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Adding an existing edge object to the network.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
 <span class="go">2</span>
 </pre></div>
 </div>
-<p><strong>Path</strong></p>
-<p>Adding a single path to the network.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;a-b-c&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_path</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
-<span class="go">3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
-<span class="go">2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_paths</span><span class="p">()</span>
-<span class="go">1</span>
-</pre></div>
-</div>
-<p><strong>str uids</strong></p>
-<p>String uids can be used to add objects to the network.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b-c&#39;</span><span class="p">,</span><span class="s1">&#39;c-d-e&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
-<span class="go">5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()</span>
-<span class="go">3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">number_of_paths</span><span class="p">()</span>
-<span class="go">1</span>
-</pre></div>
-</div>
 <p>Plot a network.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s1">&#39;a-b-c-d&#39;</span><span class="p">,</span><span class="s1">&#39;b-e-f-c&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s1">&#39;a-b-c-d&#39;</span><span class="p">,</span><span class="s1">&#39;b-e-f-c&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="figure align-default">
-<img alt="../_images/pathpy-Network-1.png" src="../_images/pathpy-Network-1.png" />
-</div>
-<dl class="method">
+<dl class="py method">
 <dt id="pathpy.Network.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">*args: 'Path'</em>, <em class="sig-param">uid: 'str' = ''</em>, <em class="sig-param">directed: 'bool' = True</em>, <em class="sig-param">temporal: 'bool' = False</em>, <em class="sig-param">**kwargs: 'Any'</em><span class="sig-paren">)</span> &#x2192; 'None'<a class="reference internal" href="../_modules/pathpy/core/network.html#Network.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Network.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">uid</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">directed</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">multiedges</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pathpy/models/network.html#Network.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Network.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the network object.</p>
 </dd></dl>
 
@@ -276,23 +250,35 @@ network at once. Attributes are assigned to all nodes.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.edges.html#pathpy.Network.edges" title="pathpy.Network.edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges</span></code></a></p></td>
 <td><p>Return the associated edges of the network.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.name.html#pathpy.Network.name" title="pathpy.Network.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
-<td><p>Return the name of the network if defined, else an empty string.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.incident_edges.html#pathpy.Network.incident_edges" title="pathpy.Network.incident_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">incident_edges</span></code></a></p></td>
+<td><p>Retuns a dict with sets of adjacent edges.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.incoming.html#pathpy.Network.incoming" title="pathpy.Network.incoming"><code class="xref py py-obj docutils literal notranslate"><span class="pre">incoming</span></code></a></p></td>
+<td><p>Retuns a dict with sets of incoming edges.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.is_connected.html#pathpy.Network.is_connected" title="pathpy.Network.is_connected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_connected</span></code></a></p></td>
+<td><p>Returns whether the network is (strongly) connected</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.multiedges.html#pathpy.Network.multiedges" title="pathpy.Network.multiedges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">multiedges</span></code></a></p></td>
+<td><p>Return if edges are directed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.neighbors.html#pathpy.Network.neighbors" title="pathpy.Network.neighbors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neighbors</span></code></a></p></td>
+<td><p>Retuns a dict with sets of adjacent nodes.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.nodes.html#pathpy.Network.nodes" title="pathpy.Network.nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes</span></code></a></p></td>
 <td><p>Return the associated nodes of the network.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.paths.html#pathpy.Network.paths" title="pathpy.Network.paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paths</span></code></a></p></td>
-<td><p>Return the associated paths of the network.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.outgoing.html#pathpy.Network.outgoing" title="pathpy.Network.outgoing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">outgoing</span></code></a></p></td>
+<td><p>Retuns a dict with sets of outgoing edges.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.shape.html#pathpy.Network.shape" title="pathpy.Network.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.predecessors.html#pathpy.Network.predecessors" title="pathpy.Network.predecessors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predecessors</span></code></a></p></td>
+<td><p>Returns a dict of sets of all predecessor nodes for a given node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.shape.html#pathpy.Network.shape" title="pathpy.Network.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></a></p></td>
 <td><p>Return the size of the Network as tuple of number of nodes, edges and paths.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.subpaths.html#pathpy.Network.subpaths" title="pathpy.Network.subpaths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subpaths</span></code></a></p></td>
-<td><p>Returns a SubPath object.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.temporal.html#pathpy.Network.temporal" title="pathpy.Network.temporal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal</span></code></a></p></td>
-<td><p>Return if the network is temproal (True) or static (False).</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.successors.html#pathpy.Network.successors" title="pathpy.Network.successors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">successors</span></code></a></p></td>
+<td><p>Returns a dict of set of all successor nodes for a given node.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.uid.html#pathpy.Network.uid" title="pathpy.Network.uid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uid</span></code></a></p></td>
 <td><p>Returns the unique id of the network.</p></td>
@@ -306,61 +292,127 @@ network at once. Attributes are assigned to all nodes.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.add_edge.html#pathpy.Network.add_edge" title="pathpy.Network.add_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edge</span></code></a>(self, edge, \*args, \*\*kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.add_edge.html#pathpy.Network.add_edge" title="pathpy.Network.add_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edge</span></code></a>(*edge[, uid])</p></td>
 <td><p>Add a single edge to the network.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.add_edges_from.html#pathpy.Network.add_edges_from" title="pathpy.Network.add_edges_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edges_from</span></code></a>(self, edges, \*\*kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.add_edges.html#pathpy.Network.add_edges" title="pathpy.Network.add_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edges</span></code></a>(*edges, **kwargs)</p></td>
 <td><p>Add multiple edges from a list to the network.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.add_node.html#pathpy.Network.add_node" title="pathpy.Network.add_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_node</span></code></a>(self, node, \*\*kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.add_node.html#pathpy.Network.add_node" title="pathpy.Network.add_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_node</span></code></a>(*node, **kwargs)</p></td>
 <td><p>Add a single node to the network.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.add_nodes_from.html#pathpy.Network.add_nodes_from" title="pathpy.Network.add_nodes_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_nodes_from</span></code></a>(self, nodes, \*\*kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.add_nodes.html#pathpy.Network.add_nodes" title="pathpy.Network.add_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_nodes</span></code></a>(*nodes, **kwargs)</p></td>
 <td><p>Add multiple nodes from a list to the network.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.add_path.html#pathpy.Network.add_path" title="pathpy.Network.add_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_path</span></code></a>(self, path, \*args, \*\*kwargs)</p></td>
-<td><p>Add a single path to the network.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.add_paths_from.html#pathpy.Network.add_paths_from" title="pathpy.Network.add_paths_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_paths_from</span></code></a>(self, paths, \*\*kwargs)</p></td>
-<td><p>Add multiple paths from a list to the network.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.adjacency_matrix.html#pathpy.Network.adjacency_matrix" title="pathpy.Network.adjacency_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adjacency_matrix</span></code></a>(self, weight, transposed, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.adjacency_matrix.html#pathpy.Network.adjacency_matrix" title="pathpy.Network.adjacency_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adjacency_matrix</span></code></a>([weight, transposed, directed])</p></td>
 <td><p>Returns a sparse adjacency matrix of the network.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.copy.html#pathpy.Network.copy" title="pathpy.Network.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>(self)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.avg_clustering_coefficient.html#pathpy.Network.avg_clustering_coefficient" title="pathpy.Network.avg_clustering_coefficient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">avg_clustering_coefficient</span></code></a>()</p></td>
+<td><p>Calculates the average (global) clustering coefficient.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.avg_path_length.html#pathpy.Network.avg_path_length" title="pathpy.Network.avg_path_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">avg_path_length</span></code></a>([weight, exclude_zero])</p></td>
+<td><p>Calculates the average shortest path length in directed or undirected</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.betweenness_centrality.html#pathpy.Network.betweenness_centrality" title="pathpy.Network.betweenness_centrality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">betweenness_centrality</span></code></a>([normalized])</p></td>
+<td><p>Calculates the betweenness centrality of all nodes. .. note::.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.closeness_centrality.html#pathpy.Network.closeness_centrality" title="pathpy.Network.closeness_centrality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">closeness_centrality</span></code></a>([normalized])</p></td>
+<td><p>Calculates the closeness centrality of all nodes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.copy.html#pathpy.Network.copy" title="pathpy.Network.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>()</p></td>
 <td><p>Return a copy of the node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.number_of_edges.html#pathpy.Network.number_of_edges" title="pathpy.Network.number_of_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_edges</span></code></a>(self, unique)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.degree_assortativity.html#pathpy.Network.degree_assortativity" title="pathpy.Network.degree_assortativity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree_assortativity</span></code></a>([mode, weight])</p></td>
+<td><p>Calculates the degree assortativity coefficient of a network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.degree_central_moment.html#pathpy.Network.degree_central_moment" title="pathpy.Network.degree_central_moment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree_central_moment</span></code></a>([k, weight])</p></td>
+<td><p>Calculates the k-th central moment of the degree distribution.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.degree_distribution.html#pathpy.Network.degree_distribution" title="pathpy.Network.degree_distribution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree_distribution</span></code></a>([weight])</p></td>
+<td><p>Calculates the degree distribution of a network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.degree_generating_function.html#pathpy.Network.degree_generating_function" title="pathpy.Network.degree_generating_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree_generating_function</span></code></a>(x[, weight])</p></td>
+<td><p>Returns the generating function of the (weighted) degree distribution of a network,</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.degree_raw_moment.html#pathpy.Network.degree_raw_moment" title="pathpy.Network.degree_raw_moment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree_raw_moment</span></code></a>([k, weight])</p></td>
+<td><p>Calculates the k-th raw moment of the degree distribution of a network</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.degree_sequence.html#pathpy.Network.degree_sequence" title="pathpy.Network.degree_sequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree_sequence</span></code></a>([weight])</p></td>
+<td><p>Calculates the degree sequence of a network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.degrees.html#pathpy.Network.degrees" title="pathpy.Network.degrees"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degrees</span></code></a>([weight])</p></td>
+<td><p>Retuns a dict with degrees of the nodes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.diameter.html#pathpy.Network.diameter" title="pathpy.Network.diameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">diameter</span></code></a>([weight])</p></td>
+<td><p>Calculates the length of the longest shortest path</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.distance_matrix.html#pathpy.Network.distance_matrix" title="pathpy.Network.distance_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance_matrix</span></code></a>([weight])</p></td>
+<td><p>Calculates shortest path distances between all pairs of nodes</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.find_connected_components.html#pathpy.Network.find_connected_components" title="pathpy.Network.find_connected_components"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_connected_components</span></code></a>()</p></td>
+<td><p>Computes connected components of a network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.from_paths.html#pathpy.Network.from_paths" title="pathpy.Network.from_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_paths</span></code></a>(paths, **kwargs)</p></td>
+<td><p>Create network from a collection of paths</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.from_temporal_network.html#pathpy.Network.from_temporal_network" title="pathpy.Network.from_temporal_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_temporal_network</span></code></a>(temporal_network, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.indegrees.html#pathpy.Network.indegrees" title="pathpy.Network.indegrees"><code class="xref py py-obj docutils literal notranslate"><span class="pre">indegrees</span></code></a>([weight])</p></td>
+<td><p>Retuns a dict with indegrees of the nodes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.largest_component_size.html#pathpy.Network.largest_component_size" title="pathpy.Network.largest_component_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">largest_component_size</span></code></a>()</p></td>
+<td><p>Largest component size of the network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.largest_connected_component.html#pathpy.Network.largest_connected_component" title="pathpy.Network.largest_connected_component"><code class="xref py py-obj docutils literal notranslate"><span class="pre">largest_connected_component</span></code></a>()</p></td>
+<td><p>Returns the largest connected component of the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.local_clustering_coefficient.html#pathpy.Network.local_clustering_coefficient" title="pathpy.Network.local_clustering_coefficient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">local_clustering_coefficient</span></code></a>(v)</p></td>
+<td><p>Calculates the local clustering coefficient of a node in a network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.mean_degree.html#pathpy.Network.mean_degree" title="pathpy.Network.mean_degree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_degree</span></code></a>([weight])</p></td>
+<td><p>Calculates the mean (weighted degree of a network)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.mean_neighbor_degree.html#pathpy.Network.mean_neighbor_degree" title="pathpy.Network.mean_neighbor_degree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_neighbor_degree</span></code></a>([weight, exclude_neighbor])</p></td>
+<td><p>Calculates the mean (weighted degree of a network)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.molloy_reed_fraction.html#pathpy.Network.molloy_reed_fraction" title="pathpy.Network.molloy_reed_fraction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">molloy_reed_fraction</span></code></a>([weight])</p></td>
+<td><p>Calculates the Molloy-Reed fraction.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.number_of_edges.html#pathpy.Network.number_of_edges" title="pathpy.Network.number_of_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_edges</span></code></a>()</p></td>
 <td><p>Return the number of edges in the network.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.number_of_nodes.html#pathpy.Network.number_of_nodes" title="pathpy.Network.number_of_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_nodes</span></code></a>(self, unique)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.number_of_nodes.html#pathpy.Network.number_of_nodes" title="pathpy.Network.number_of_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_nodes</span></code></a>()</p></td>
 <td><p>Return the number of nodes in the network.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.number_of_paths.html#pathpy.Network.number_of_paths" title="pathpy.Network.number_of_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_paths</span></code></a>(self, unique)</p></td>
-<td><p>Return the number of paths in the network.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.outdegrees.html#pathpy.Network.outdegrees" title="pathpy.Network.outdegrees"><code class="xref py py-obj docutils literal notranslate"><span class="pre">outdegrees</span></code></a>([weight])</p></td>
+<td><p>Retuns a dict with outdegrees of the nodes.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.plot.html#pathpy.Network.plot" title="pathpy.Network.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(self[, filename, fileformat])</p></td>
-<td><p>Plot a network.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.plot.html#pathpy.Network.plot" title="pathpy.Network.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>([filename, backend])</p></td>
+<td><p>Plot the object</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.remove_edge.html#pathpy.Network.remove_edge" title="pathpy.Network.remove_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_edge</span></code></a>(self, uid, \*args)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.remove_edge.html#pathpy.Network.remove_edge" title="pathpy.Network.remove_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_edge</span></code></a>(*edge[, uid])</p></td>
 <td><p>Remove a single edge from the network.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.remove_node.html#pathpy.Network.remove_node" title="pathpy.Network.remove_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_node</span></code></a>(self, uid)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.remove_edges.html#pathpy.Network.remove_edges" title="pathpy.Network.remove_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_edges</span></code></a>(*edges)</p></td>
+<td><p>Remove multiple edges from the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.remove_node.html#pathpy.Network.remove_node" title="pathpy.Network.remove_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_node</span></code></a>(node)</p></td>
 <td><p>Remove a single node from the network.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.remove_path.html#pathpy.Network.remove_path" title="pathpy.Network.remove_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_path</span></code></a>(self, uid, frequency)</p></td>
-<td><p>Remove a single path from the network.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.remove_nodes.html#pathpy.Network.remove_nodes" title="pathpy.Network.remove_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_nodes</span></code></a>(*nodes)</p></td>
+<td><p>Remove multiple nodes from the network.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.summary.html#pathpy.Network.summary" title="pathpy.Network.summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summary</span></code></a>(self)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.summary.html#pathpy.Network.summary" title="pathpy.Network.summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summary</span></code></a>()</p></td>
 <td><p>Returns a summary of the network.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.transition_matrix.html#pathpy.Network.transition_matrix" title="pathpy.Network.transition_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix</span></code></a>(self, weight, transposed, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.transition_matrix.html#pathpy.Network.transition_matrix" title="pathpy.Network.transition_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix</span></code></a>([weight, transposed])</p></td>
 <td><p>Returns a transition matrix of the network.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.update.html#pathpy.Network.update" title="pathpy.Network.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(self, \*\*kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.update.html#pathpy.Network.update" title="pathpy.Network.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(**kwargs)</p></td>
 <td><p>Update the attributes of the object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.weight.html#pathpy.Network.weight" title="pathpy.Network.weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">weight</span></code></a>(self, weight, default)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.weight.html#pathpy.Network.weight" title="pathpy.Network.weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">weight</span></code></a>([weight, default])</p></td>
 <td><p>Returns the weight of the object.</p></td>
 </tr>
 </tbody>
@@ -384,8 +436,8 @@ network at once. Attributes are assigned to all nodes.</p>
       
     </p>
     <p>
-        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

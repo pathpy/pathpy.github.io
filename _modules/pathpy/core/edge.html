@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pathpy.core.edge &#8212; pathpy 3.0.0a1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.core.edge &#8212; pathpy 3.0.0a2 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -39,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -107,30 +108,31 @@
     <div class="body col-md-12 content" role="main">
       
   <h1>Source code for pathpy.core.edge</h1><div class="highlight"><pre>
-<span></span><span class="ch">#!/usr/bin/python -tt</span>
+<span></span><span class="sd">&quot;&quot;&quot;Edge class&quot;&quot;&quot;</span>
+<span class="c1"># !/usr/bin/python -tt</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1"># =============================================================================</span>
 <span class="c1"># File      : edge.py -- Base class for an single edge</span>
 <span class="c1"># Author    : Jürgen Hackl &lt;hackl@ifi.uzh.ch&gt;</span>
-<span class="c1"># Time-stamp: &lt;Fri 2020-03-20 14:18 juergen&gt;</span>
+<span class="c1"># Time-stamp: &lt;Wed 2021-04-21 20:27 juergen&gt;</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (c) 2016-2020 Pathpy Developers</span>
 <span class="c1"># =============================================================================</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">annotations</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">singledispatchmethod</span> <span class="kn">import</span> <span class="n">singledispatchmethod</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">config</span>
-<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseClass</span>
-<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">NodeDict</span>
-<span class="kn">from</span> <span class="nn">.utils.separator</span> <span class="k">import</span> <span class="n">separator</span>
-<span class="kn">from</span> <span class="nn">.utils._check_node</span> <span class="k">import</span> <span class="n">_check_node</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">Node</span>
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">pathpy.core.classes</span> <span class="kn">import</span> <span class="n">BaseEdge</span>
+<span class="kn">from</span> <span class="nn">pathpy.core.collecions</span> <span class="kn">import</span> <span class="n">BaseCollection</span>
+<span class="kn">from</span> <span class="nn">pathpy.core.node</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">NodeSet</span><span class="p">,</span> <span class="n">NodeCollection</span>
 
 <span class="c1"># create logger for the Edge class</span>
-<span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Edge"><a class="viewcode-back" href="../../../generated/pathpy.Edge.html#pathpy.Edge">[docs]</a><span class="k">class</span> <span class="nc">Edge</span><span class="p">(</span><span class="n">BaseClass</span><span class="p">):</span>
+<div class="viewcode-block" id="Edge"><a class="viewcode-back" href="../../../generated/pathpy.Edge.html#pathpy.Edge">[docs]</a><span class="k">class</span> <span class="nc">Edge</span><span class="p">(</span><span class="n">BaseEdge</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Base class for an single edge.</span>
 
 <span class="sd">    An edge is (together with nodes) one of the two basic units out of which</span>
@@ -309,108 +311,41 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Edge.__init__"><a class="viewcode-back" href="../../../generated/pathpy.Edge.html#pathpy.Edge.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">w</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                 <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Edge.__init__"><a class="viewcode-back" href="../../../generated/pathpy.Edge.html#pathpy.Edge.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">w</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Initialize the edge object.&quot;&quot;&quot;</span>
 
         <span class="c1"># initialize the base class</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="c1"># set unique identifier of the edge</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="c1"># a set containing node objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
-        <span class="c1"># inidcator whether the edge is directed or undirected</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">directed</span>
-
-        <span class="c1"># a dictionary containing node objects</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">:</span> <span class="n">NodeDict</span> <span class="o">=</span> <span class="n">NodeDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
-
-        <span class="c1"># use separator if given otherwise use config default value</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">separator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="c1"># add attributes to the edge</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># check nodes</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Node</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">Node</span><span class="p">):</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;v and w have to be Node objects!&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span>
 
         <span class="c1"># add nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="p">:</span> <span class="n">Node</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_w</span><span class="p">:</span> <span class="n">Node</span> <span class="o">=</span> <span class="n">w</span>
 
-        <span class="c1"># set source and target nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_w</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">w</span><span class="p">)</span></div>
 
-        <span class="c1"># set uid of the edge</span>
-        <span class="k">if</span> <span class="n">uid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="p">[</span><span class="s1">&#39;edge&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span> <span class="o">=</span> <span class="n">uid</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Print a summary of the edge.</span>
 
-        <span class="c1"># update associated nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">outgoing</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">incoming</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">outgoing</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">incoming</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span></div>
+<span class="sd">        The summary contains the uid, the associated nodes, and if it is</span>
+<span class="sd">        directed or not.</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Return the description of the edge.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        str</span>
-
-<span class="sd">            Returns the description of the edge with the class and assigned</span>
-<span class="sd">            edge uid.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        Generate new edge without dedicated uid</span>
-
-<span class="sd">        &gt;&gt;&gt; from pathpy import Node, Edge</span>
-<span class="sd">        &gt;&gt;&gt; vw = Edge(&#39;v&#39;, &#39;w&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; vw</span>
-<span class="sd">        Edge v-w</span>
+<span class="sd">        If logging is enabled (see config), the summary is written to the log</span>
+<span class="sd">        file and showed as information on in the terminal. If logging is not</span>
+<span class="sd">        enabled, the function will return a string with the information, which</span>
+<span class="sd">        can be printed to the console.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_desc</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_desc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Return a string *Edge()*.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the unique hash of the edge.</span>
-
-<span class="sd">        Here the hash value is defined by the unique edge id!</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
-
-    <span class="c1"># def __del__(self) -&gt; None:</span>
-    <span class="c1">#     &quot;&quot;&quot;Delete the edge.&quot;&quot;&quot;</span>
-    <span class="c1">#     # update associated nodes</span>
-    <span class="c1">#     self.delete()</span>
-
-<div class="viewcode-block" id="Edge.delete"><a class="viewcode-back" href="../../../generated/pathpy.Edge.delete.html#pathpy.Edge.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Delete the edge.&quot;&quot;&quot;</span>
-        <span class="c1"># update associated nodes</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">outgoing</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="k">pass</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">incoming</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="k">pass</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">incoming</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">pass</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">outgoing</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">pass</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">uid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -432,10 +367,10 @@
 <span class="sd">        &#39;v-w&#39;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">uid</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeDict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Return the associated nodes of the edge.</span>
 
 <span class="sd">        Returns</span>
@@ -468,7 +403,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        :py:class:`Node`</span>
 
-<span class="sd">            Retun the source :py:class:`Node` of the edge.</span>
+<span class="sd">            Return the source :py:class:`Node` of the edge.</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -480,7 +415,8 @@
 <span class="sd">        Node v</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="p">]</span>
+        <span class="c1"># pylint: disable=invalid-name</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">w</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span><span class="p">:</span>
@@ -490,7 +426,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        :py:class:`Node`</span>
 
-<span class="sd">            Retun the target :py:class:`Node` of the edge.</span>
+<span class="sd">            Return the target :py:class:`Node` of the edge.</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -502,32 +438,10 @@
 <span class="sd">        Node w</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_w</span><span class="p">]</span>
+        <span class="c1"># pylint: disable=invalid-name</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_w</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">directed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Return if the edge is directed (True) or undirected (False).</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        bool</span>
-
-<span class="sd">            Retun ``True`` if the edge is directed or ``False`` if the edge is</span>
-<span class="sd">            undirected.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        Generate an undirected edge.</span>
-
-<span class="sd">        &gt;&gt;&gt; from pathpy import Edge</span>
-<span class="sd">        &gt;&gt;&gt; vw = Edge(&#39;v&#39;, &#39;w&#39;, directed=False)</span>
-<span class="sd">        &gt;&gt;&gt; vw.directed</span>
-<span class="sd">        False</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_directed</span>
-
-<div class="viewcode-block" id="Edge.summary"><a class="viewcode-back" href="../../../generated/pathpy.Edge.summary.html#pathpy.Edge.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="Edge.summary"><a class="viewcode-back" href="../../../generated/pathpy.Edge.summary.html#pathpy.Edge.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a summary of the edge.</span>
 
 <span class="sd">        The summary contains the uid, the associated nodes, and if it is</span>
@@ -546,133 +460,615 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">summary</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s1">&#39;Uid:</span><span class="se">\t\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">),</span>
-            <span class="s1">&#39;Type:</span><span class="se">\t\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span>
-            <span class="s1">&#39;Directed:</span><span class="se">\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">)),</span>
-            <span class="s1">&#39;Source node:</span><span class="se">\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">),</span>
-            <span class="s1">&#39;Target node:</span><span class="se">\t\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">),</span>
+            <span class="s1">&#39;Uid:</span><span class="se">\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">),</span>
+            <span class="s1">&#39;Type:</span><span class="se">\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span>
+            <span class="s1">&#39;Source node:</span><span class="se">\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()),</span>
+            <span class="s1">&#39;Target node:</span><span class="se">\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()),</span>
         <span class="p">]</span>
-        <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;logging&#39;</span><span class="p">][</span><span class="s1">&#39;enabled&#39;</span><span class="p">]:</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">summary</span><span class="p">:</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
-            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">HyperEdge</span><span class="p">(</span><span class="n">BaseEdge</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for an single edge.</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    Node</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Node</span><span class="p">],</span> <span class="n">w</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">Node</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">uid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the edge object.&quot;&quot;&quot;</span>
+
+        <span class="c1"># initialize the base class</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># a set containing node objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="c1"># add attributes to the edge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># check nodes</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Node</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">}</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">Node</span><span class="p">):</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="p">{</span><span class="n">w</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="n">w</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">v</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">set</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="nb">set</span><span class="p">):</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Nodes must be a set of Node objects!&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">((</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">Node</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">v</span> <span class="o">|</span> <span class="n">w</span><span class="p">)):</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;All nodes must be Node objects!&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span>
+
+        <span class="c1"># add nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="p">:</span> <span class="n">NodeSet</span> <span class="o">=</span> <span class="n">NodeSet</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_w</span><span class="p">:</span> <span class="n">NodeSet</span> <span class="o">=</span> <span class="n">NodeSet</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_v</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">w</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_w</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Print a summary of the edge.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">uid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the unique identifier (uid) of the edge.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">uid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Node</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return the associated nodes of the edge.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">v</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeSet</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the source node v of the edge.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=invalid-name</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">w</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeSet</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the target node w of the edge.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=invalid-name</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_w</span>
+
+    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a summary of the edge.</span>
+
+<span class="sd">        The summary contains the uid, the associated nodes, and if it is</span>
+<span class="sd">        directed or not.</span>
+
+<span class="sd">        If logging is enabled (see config), the summary is written to the log</span>
+<span class="sd">        file and showed as information on in the terminal. If logging is not</span>
+<span class="sd">        enabled, the function will return a string with the information, which</span>
+<span class="sd">        can be printed to the console.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Return a summary of the edge.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">summary</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;Uid:</span><span class="se">\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">),</span>
+            <span class="s1">&#39;Type:</span><span class="se">\t\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">:</span>
+            <span class="n">summary</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;Nodes: </span><span class="se">\t\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span></div>
+            <span class="n">summary</span> <span class="o">+=</span> <span class="p">[</span>
+                <span class="s1">&#39;Source node:</span><span class="se">\t</span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()),</span>
+                <span class="s1">&#39;Target node:</span><span class="se">\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())]</span>
 
-<div class="viewcode-block" id="Edge.add_node"><a class="viewcode-back" href="../../../generated/pathpy.Edge.add_node.html#pathpy.Edge.add_node">[docs]</a>    <span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Add a single node to the edge.</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        node : Node</span>
 
-<span class="sd">            The :py:class:`Node` object, which will be added to the edge.</span>
+<span class="k">class</span> <span class="nc">EdgeSet</span><span class="p">(</span><span class="n">BaseCollection</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A set of edges&quot;&quot;&quot;</span>
 
-<span class="sd">        kwargs : Any, optional (default = {})</span>
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add a node to the set of nodes.&quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=unused-argument</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">[</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="n">edge</span>
 
-<span class="sd">            Attributes assigned to the node as key=value pairs.</span>
+    <span class="k">def</span> <span class="nf">discard</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Removes the specified item from the set.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-<span class="sd">        .. note::</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Edge</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Edge</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a node object.&quot;&quot;&quot;</span>
+        <span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">Edge</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)):</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">edge</span>
 
-<span class="sd">            This function is only used internally. It can be used to consider</span>
-<span class="sd">            hyperedges in a futher version of pathpy.</span>
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;set a object&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">edge</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># check if the right object is provided.</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">:</span>
-            <span class="n">node</span> <span class="o">=</span> <span class="n">_check_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="c1"># add node to the edge</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span>
+<span class="k">class</span> <span class="nc">EdgeCollection</span><span class="p">(</span><span class="n">BaseCollection</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A collection of edges&quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable=too-many-instance-attributes</span>
 
-        <span class="c1"># update node counter</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">increase_counter</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">multiedges</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">hyperedges</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeCollection</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the network object.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Edge.add_nodes_from"><a class="viewcode-back" href="../../../generated/pathpy.Edge.add_nodes_from.html#pathpy.Edge.add_nodes_from">[docs]</a>    <span class="k">def</span> <span class="nf">add_nodes_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Node</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Add multiple nodes from a list.</span>
+        <span class="c1"># initialize the base class</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        nodes : List[Node]</span>
+        <span class="c1"># inidcator whether the network is directed or undirected</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">directed</span>
 
-<span class="sd">            Nodes from a list of :py:class:`Node` objects are added to the</span>
-<span class="sd">            edge.</span>
+        <span class="c1"># indicator whether the network has multi-edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_multiedges</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">multiedges</span>
 
-<span class="sd">        kwargs : Any, optional (default = {})</span>
+        <span class="c1"># indicator whether the network has hyper-edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hyperedges</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">hyperedges</span>
 
-<span class="sd">            Attributes assigned to all nodes in the list as key=value pairs.</span>
+        <span class="c1"># collection of nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">NodeCollection</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">nodes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span> <span class="o">=</span> <span class="n">nodes</span>
 
-<span class="sd">       .. note::</span>
+        <span class="c1"># map node tuples to edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="p">:</span> <span class="n">defaultdict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">EdgeSet</span><span class="p">)</span>
 
-<span class="sd">            This function is only used internally. It can be used to consider</span>
-<span class="sd">            hyperedges in a futher version of pathpy.</span>
+        <span class="c1"># map single node to edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node_map</span><span class="p">:</span> <span class="n">defaultdict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># iterate over a list of nodes</span>
-        <span class="c1"># TODO: parallelize this function</span>
-        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="c1"># class of objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node_class</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">Node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_edge_class</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">Edge</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hyperedges</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_edge_class</span> <span class="o">=</span> <span class="n">HyperEdge</span>
 
-<div class="viewcode-block" id="Edge.update"><a class="viewcode-back" href="../../../generated/pathpy.Edge.update.html#pathpy.Edge.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Edge</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-               <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Update of the edge object.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_added</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
-<span class="sd">        Update the edge with new kwargs or based on an other given</span>
-<span class="sd">        :py:class:`Edge` object. If an other object is given, the other</span>
-<span class="sd">        attributes can be used or not.</span>
+    <span class="nd">@singledispatchmethod</span>
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns if item is in edges.&quot;&quot;&quot;</span>
+        <span class="n">_contain</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        other : Edge, optional (default = None)</span>
+        <span class="k">return</span> <span class="n">_contain</span>
 
-<span class="sd">            An other :py:class:`Edge` object, which is used to update the edge</span>
-<span class="sd">            attributes and properties.</span>
+    <span class="nd">@__contains__</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Edge</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@__contains__</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">HyperEdge</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Edge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns if item is in edges.&quot;&quot;&quot;</span>
+        <span class="n">_contain</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">_contain</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">_contain</span>
 
-<span class="sd">        attributes : bool, optional (default = True)</span>
+    <span class="nd">@__contains__</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns if item is in edges.&quot;&quot;&quot;</span>
+        <span class="n">_contain</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">_contain</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">_contain</span>
 
-<span class="sd">            If ``True`` the attributes from the other edge are written to the</span>
-<span class="sd">            initial edge. If ``False`` only the information about the</span>
-<span class="sd">            associated nodes is updated.</span>
+    <span class="nd">@__contains__</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@__contains__</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns if item is in edges.&quot;&quot;&quot;</span>
+        <span class="n">_contain</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="sd">        kwargs : Any</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">((</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">set</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">({</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">}),</span>
+                             <span class="n">item</span><span class="p">))</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="p">:</span>
+                    <span class="n">_contain</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">elif</span> <span class="nb">all</span><span class="p">((</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_class</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="p">:</span>
+                    <span class="n">_contain</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">pass</span>
 
-<span class="sd">            Keyword arguments stored as edges attributes. Attributes are added</span>
-<span class="sd">            to the edge as ``key=value`` pairs.</span>
+        <span class="k">return</span> <span class="n">_contain</span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        Create an :py:class:`Edge` object with an assigned attribute.</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">Edge</span><span class="p">]</span>
+                    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Edge</span><span class="p">,</span> <span class="n">EdgeSet</span><span class="p">,</span> <span class="n">EdgeCollection</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a node object.&quot;&quot;&quot;</span>
 
-<span class="sd">        &gt;&gt;&gt; from pathpy import Edge</span>
-<span class="sd">        &gt;&gt;&gt; ab = Edge(&#39;a&#39;,&#39;b&#39;, length=10)</span>
-<span class="sd">        &gt;&gt;&gt; ab[&#39;length&#39;]</span>
-<span class="sd">        10</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="nb">all</span><span class="p">((</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Node</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">key</span><span class="p">))):</span>
+            <span class="n">_node</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiedges</span><span class="p">:</span>
+                <span class="n">edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="p">[</span><span class="n">_node</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="p">[</span><span class="n">_node</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-<span class="sd">        Update attributes (and add new).</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+              <span class="ow">and</span> <span class="nb">all</span><span class="p">((</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">set</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">key</span><span class="p">))):</span>
+            <span class="n">_nodes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">nodes</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+                <span class="n">_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">set</span><span class="p">())</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+                    <span class="n">_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">])</span>
+            <span class="n">_nodes</span> <span class="o">=</span> <span class="p">(</span><span class="nb">frozenset</span><span class="p">(</span><span class="n">_nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">_nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 
-<span class="sd">        &gt;&gt;&gt; ab.update(length = 2, capacity = 3, speed = 10)</span>
-<span class="sd">        &gt;&gt;&gt; ab.attributes</span>
-<span class="sd">        {&#39;length&#39;: 2, &#39;capacity&#39;: 3, &#39;speed&#39;: 10}</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiedges</span><span class="p">:</span>
+                <span class="n">edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="p">[</span><span class="n">_nodes</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="p">[</span><span class="n">_nodes</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-<span class="sd">        Create a new edge.</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edge_class</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">edge</span>
 
-<span class="sd">        &gt;&gt;&gt; cd = Edge(&#39;c&#39;, &#39;d&#39;, length=4, speed=30)</span>
-<span class="sd">        &gt;&gt;&gt; ab.update(cd)</span>
-<span class="sd">        &gt;&gt;&gt; ab.attributes</span>
-<span class="sd">        {&#39;length&#39;: 4, &#39;capacity&#39;: 3, &#39;speed&#39;: 30}</span>
+    <span class="k">def</span> <span class="fm">__lshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Quick assigment of an edge&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="n">edge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_added</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">other</span><span class="p">:</span>
-            <span class="c1"># get relations with the associated nodes</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__rshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Quick removal of an edge&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
 
-            <span class="c1"># get the attributes</span>
-            <span class="k">if</span> <span class="n">attributes</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                    <span class="o">**</span><span class="n">other</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">history</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeCollection</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the associated nodes. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">directed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return if edges are directed. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_directed</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">multiedges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return if edges are multiedges. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_multiedges</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">hyperedges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return if edges are hyperedges. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hyperedges</span>
+
+    <span class="nd">@singledispatchmethod</span>
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">edge</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add multiple edges. &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@add</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Edge</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@add</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">HyperEdge</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="c1"># remove uid kwarg for edge objects</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;uid&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;checking&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">indexing</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;indexing&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="c1"># check if more then one edge is given raise an AttributeError</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;More then one edge was given.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+        <span class="c1"># check if edge is an HyperEdge and hyper edges are enabled</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">HyperEdge</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyperedges</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;EdgeCollection cannot store HyperEdges! &#39;</span>
+                      <span class="s1">&#39; Please enable hyperedges!&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+        <span class="c1"># get edge object</span>
+        <span class="n">_edge</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># check if edge exists already</span>
+        <span class="k">if</span> <span class="n">_edge</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span> <span class="ow">and</span> <span class="n">_edge</span><span class="o">.</span><span class="n">uid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+
+            <span class="c1"># check if node exists already</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">_edge</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">node</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+            <span class="c1"># check if single edge between node v and w</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">_edge</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">_edge</span><span class="o">.</span><span class="n">w</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiedges</span><span class="p">:</span>
+
+                <span class="c1"># update edge attributes</span>
+                <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="n">_edge</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+                <span class="c1"># add edge to the network</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">_edge</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_if_exist</span><span class="p">(</span><span class="n">_edge</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># raise error if edge already exists</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_if_exist</span><span class="p">(</span><span class="n">_edge</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@add</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@add</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Node</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">edge</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Node</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="c1"># get additional parameters</span>
+        <span class="n">uid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;uid&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">nodes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;nodes&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># check if all objects are node or str</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="p">(</span><span class="n">Node</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">edge</span><span class="p">):</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;All objects have to be Node objects or str uids!&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span>
+
+        <span class="c1"># if nodes is true add nodes</span>
+        <span class="k">if</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="n">_nodes</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">()</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">edge</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">node</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="n">_nodes</span> <span class="o">+=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">],)</span>
+
+            <span class="c1"># create new edge object and add it to the network</span>
+            <span class="k">if</span> <span class="n">_nodes</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiedges</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_edge_class</span><span class="p">(</span><span class="o">*</span><span class="n">_nodes</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+            <span class="c1"># raise error if edge already exists</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_if_exist</span><span class="p">(</span><span class="n">_nodes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># add edge with unknown nodes</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_edge_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_node_class</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_class</span><span class="p">(),</span>
+                                      <span class="n">uid</span><span class="o">=</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+    <span class="nd">@add</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@add</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">edge</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="c1"># check length of the input</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">*</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># convert to set and add hyperedge</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyperedges</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">set</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyperedges</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_edge</span> <span class="ow">in</span> <span class="n">edge</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_edge</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;The provided edge &quot;</span><span class="si">%s</span><span class="s1">&quot; is of the wrong format!&#39;</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+    <span class="nd">@add</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">edge</span><span class="p">:</span> <span class="nb">set</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="c1"># check if hyperedges are enabled:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyperedges</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;EdgeCollection cannot store HyperEdges! &#39;</span>
+                      <span class="s1">&#39; Please enable hyperedges!&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+        <span class="c1"># get additional parameters</span>
+        <span class="n">uid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;uid&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">_nodes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">nodes</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">edge</span><span class="p">):</span>
+            <span class="n">_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">set</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">node</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="n">_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">_nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">_nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiedges</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_edge_class</span><span class="p">(</span><span class="n">_nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">_nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># raise error if node already exists</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_if_exist</span><span class="p">(</span><span class="n">_nodes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_if_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Helper function if the edge does already exsist.&quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=no-self-use</span>
+        <span class="c1"># pylint: disable=unused-argument</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;The edge &quot;</span><span class="si">%s</span><span class="s1">&quot; already exists in the Network&#39;</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span>
+
+    <span class="k">def</span> <span class="nf">update_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Update the index structure of the EdgeCollection.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_added</span><span class="p">):</span>
+            <span class="n">_v</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">edge</span><span class="o">.</span><span class="n">v</span>
+            <span class="n">_w</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">edge</span><span class="o">.</span><span class="n">w</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge</span><span class="p">,</span> <span class="n">HyperEdge</span><span class="p">):</span>
+                <span class="n">_v</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                <span class="n">_w</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="p">[(</span><span class="n">_v</span><span class="p">,</span> <span class="n">_w</span><span class="p">)]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="p">[(</span><span class="n">_w</span><span class="p">,</span> <span class="n">_v</span><span class="p">)]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_node_map</span><span class="p">[</span><span class="n">_v</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_node_map</span><span class="p">[</span><span class="n">_w</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_added</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="p">):</span>
+
+            <span class="n">_v</span> <span class="o">=</span> <span class="n">edge</span><span class="o">.</span><span class="n">v</span>
+            <span class="n">_w</span> <span class="o">=</span> <span class="n">edge</span><span class="o">.</span><span class="n">w</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge</span><span class="p">,</span> <span class="n">HyperEdge</span><span class="p">):</span>
+                <span class="n">_v</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                <span class="n">_w</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="p">[(</span><span class="n">_v</span><span class="p">,</span> <span class="n">_w</span><span class="p">)]</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="p">[(</span><span class="n">_w</span><span class="p">,</span> <span class="n">_v</span><span class="p">)]</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_node_map</span><span class="p">[</span><span class="n">_v</span><span class="p">]</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_node_map</span><span class="p">[</span><span class="n">_w</span><span class="p">]</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">_a</span><span class="p">,</span> <span class="n">_b</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">_v</span><span class="p">,</span> <span class="n">_w</span><span class="p">),</span> <span class="p">(</span><span class="n">_w</span><span class="p">,</span> <span class="n">_v</span><span class="p">)]:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="p">[(</span><span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">)])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_nodes_map</span><span class="o">.</span><span class="n">pop</span><span class="p">((</span><span class="n">_a</span><span class="p">,</span> <span class="n">_b</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_node_map</span><span class="p">[</span><span class="n">_a</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_node_map</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">_a</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span><span class="p">,</span> <span class="n">indexing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add an edge to the set of edges.&quot;&quot;&quot;</span>
+        <span class="c1"># add edge to the dict</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="n">edge</span>
+
+        <span class="c1"># store new added edge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_added</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+        <span class="c1"># update the index structure</span>
+        <span class="k">if</span> <span class="n">indexing</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_index</span><span class="p">()</span>
+
+    <span class="nd">@singledispatchmethod</span>
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">edge</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Remove multiple edges. &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@remove</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Edge</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@remove</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">HyperEdge</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># pylint: disable=unused-argument</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;checking&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">indexing</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;indexing&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="nd">@remove</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@remove</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Node</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">edge</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Node</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="c1"># get additional parameters</span>
+        <span class="n">uid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;uid&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="k">elif</span> <span class="n">uid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">uid</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">edge</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_edge</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edge_class</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">(</span><span class="n">_edge</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_edge</span><span class="p">,</span> <span class="n">EdgeSet</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">_e</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">_edge</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">(</span><span class="n">_e</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;No edge was removed!&#39;</span><span class="p">)</span>
+
+    <span class="nd">@remove</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@remove</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">edge</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="c1"># check length of the input</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="o">*</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># convert to set and add hyperedge</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyperedges</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">set</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;No edge was removed!&#39;</span><span class="p">)</span>
+
+    <span class="nd">@remove</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">edge</span><span class="p">:</span> <span class="nb">set</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="c1"># check if hyperedges are enabled:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyperedges</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;EdgeCollection cannot remove HyperEdges! &#39;</span>
+                      <span class="s1">&#39; Please enable hyperedges!&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+        <span class="c1"># get additional parameters</span>
+        <span class="n">uid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;uid&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">uid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">uid</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">edge</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_edge</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edge_class</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">(</span><span class="n">_edge</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_edge</span><span class="p">,</span> <span class="n">EdgeSet</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">_e</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">_edge</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_remove</span><span class="p">(</span><span class="n">_e</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;No edge was removed!&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span><span class="p">,</span> <span class="n">indexing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Remove an edge from the set of edges.&quot;&quot;&quot;</span>
+        <span class="c1"># remove edge from the dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># store removed edge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+        <span class="c1"># update the index structure</span>
+        <span class="k">if</span> <span class="n">indexing</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_index</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeCollection</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EdgeCollection</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return a new copy of the edge collection.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">nodes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">edges</span> <span class="o">=</span> <span class="n">EdgeCollection</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">,</span>
+                               <span class="n">multiedges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">multiedges</span><span class="p">,</span>
+                               <span class="n">hyperedges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hyperedges</span><span class="p">,</span>
+                               <span class="n">nodes</span><span class="o">=</span><span class="n">nodes</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">edges</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">edges</span>
 
 
 <span class="c1"># =============================================================================</span>
@@ -700,8 +1096,8 @@
       
     </p>
     <p>
-        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

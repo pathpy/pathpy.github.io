@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.core.classes &#8212; pathpy 3.0.0a2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../examples/index.html">Gallery</a></li>
+                <li><a href="../../../tutorial.html">Tutorial</a></li>
+                <li><a href="../../../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pathpy.core.classes</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Module for base classes in the core module.&quot;&quot;&quot;</span>
+<span class="c1"># !/usr/bin/python -tt</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># File      : classes.py -- Base classes for pathpy</span>
+<span class="c1"># Author    : Jürgen Hackl &lt;hackl@ifi.uzh.ch&gt;</span>
+<span class="c1"># Time-stamp: &lt;Wed 2021-04-21 09:45 juergen&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2016-2020 Pathpy Developers</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+
+<span class="k">class</span> <span class="nc">BaseClass</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all pathpy core objects.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the base class.&quot;&quot;&quot;</span>
+
+        <span class="c1"># declare variable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_python_uid</span><span class="p">:</span> <span class="nb">bool</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span> <span class="n">Any</span>
+
+        <span class="c1"># assign node identifier</span>
+        <span class="k">if</span> <span class="n">uid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_python_uid</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_python_uid</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># update attributes if given</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="n">kwargs</span>  <span class="c1"># .update(**kwargs)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># initialize attributes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add a specific attribute to the object.</span>
+
+<span class="sd">        An attribute has a key and the corresponding value expressed as a pair,</span>
+<span class="sd">        key: value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key: Any</span>
+<span class="sd">            Unique identifier for a corrisponding value.</span>
+
+<span class="sd">        value: Any</span>
+<span class="sd">            A value i.e. attribute which is associated with the object.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Generate new node.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node</span>
+<span class="sd">        &gt;&gt;&gt; u = Node(&#39;u&#39;)</span>
+
+<span class="sd">        Add atribute to the node.</span>
+
+<span class="sd">        &gt;&gt;&gt; u[&#39;color&#39;] = &#39;blue&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a specific attribute of the object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key: any</span>
+<span class="sd">            Key value for the attribute of the object.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        any</span>
+<span class="sd">            Returns the attribute of the node associated with the given key</span>
+<span class="sd">            value.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        KeyError</span>
+<span class="sd">            If no attribute with the assiciated key is defined.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Generate new node with blue color</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node</span>
+<span class="sd">        &gt;&gt;&gt; u = Node(&#39;u&#39;, color=&#39;blue&#39;)</span>
+
+<span class="sd">        Get the node attribute.</span>
+
+<span class="sd">        &gt;&gt;&gt; u[&#39;color&#39;]</span>
+<span class="sd">        &#39;blue&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the description of the object.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Returns the description of the object with the class and assigned</span>
+<span class="sd">            node uid.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Genarate new node.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node</span>
+<span class="sd">        &gt;&gt;&gt; u = Node(&#39;u&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; print(u)</span>
+<span class="sd">        Node u</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># declare variable</span>
+        <span class="n">string</span><span class="p">:</span> <span class="nb">str</span>
+
+        <span class="c1"># check if python id is used as uid or not</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_python_uid</span><span class="p">:</span>
+            <span class="c1"># if python id is used dont show in the object description</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># if user uid is used show in the object description</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">string</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">uid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the unique identifier (uid) of the object.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">            Return the node identifier (uid) as a string.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate a single node and print the uid.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node</span>
+<span class="sd">        &gt;&gt;&gt; u = Node(&#39;u&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; u.uid</span>
+<span class="sd">        u</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uid</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Update the attributes of the object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kwargs : Any</span>
+<span class="sd">            Attributes to add or update for the object as key=value pairs.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Generate simple node with attribute.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node</span>
+<span class="sd">        &gt;&gt;&gt; u = Node(&#39;u&#39;,color=&#39;red&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; u.attributes</span>
+<span class="sd">        {&#39;color&#39;: &#39;red&#39;}</span>
+
+<span class="sd">        Update attributes.</span>
+
+<span class="sd">        &gt;&gt;&gt; u.update(color=&#39;green&#39;,shape=&#39;rectangle&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; u.attributes</span>
+<span class="sd">        {&#39;color&#39;: &#39;green&#39;, &#39;shape&#39;: &#39;rectangle&#39;}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a copy of the node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :py:class:`Node`</span>
+<span class="sd">            A copy of the node.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from pathpy import Node</span>
+<span class="sd">        &gt;&gt;&gt; u = Node(&#39;u&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v = u.copy()</span>
+<span class="sd">        &gt;&gt;&gt; v.uid</span>
+<span class="sd">        u</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the weight of the object.</span>
+
+<span class="sd">        Per default the attribute with the key &#39;weight&#39; is used as</span>
+<span class="sd">        weight. Should there be no such attribute, a new one will be crated</span>
+<span class="sd">        with weight = 1.0.</span>
+
+<span class="sd">        If an other attribute should be used as weight, the option weight has</span>
+<span class="sd">        to be changed.</span>
+
+<span class="sd">        If a weight is assigned but for calculation a weight of 1.0 is needed,</span>
+<span class="sd">        the weight can be disabled with False or None.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        weight : str, optional (default = &#39;weight&#39;)</span>
+<span class="sd">            The weight parameter defines which attribute is used as weight. Per</span>
+<span class="sd">            default the attribute &#39;weight&#39; is used. If `None` or `False` is</span>
+<span class="sd">            chosen, the weight will be 1.0. Also any other attribute of the</span>
+<span class="sd">            edge can be used as a weight</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Returns the attribute value associated with the keyword.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Create new edge and get the weight.</span>
+
+<span class="sd">        &gt;&gt;&gt; form pathpy import Edge</span>
+<span class="sd">        &gt;&gt;&gt; vw = Edge(&#39;v&#39;,&#39;w&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; vw.weight()</span>
+<span class="sd">        1.0</span>
+
+<span class="sd">        Change the weight.</span>
+
+<span class="sd">        &gt;&gt;&gt; vw[&#39;weight&#39;] = 4</span>
+<span class="sd">        &gt;&gt;&gt; vw.weight()</span>
+<span class="sd">        4.0</span>
+
+<span class="sd">        &gt;&gt;&gt; vw.weight(False)</span>
+<span class="sd">        1.0</span>
+
+<span class="sd">        Add an attribute and use this as weight.</span>
+
+<span class="sd">        &gt;&gt;&gt; vw[&#39;length&#39;] = 5</span>
+<span class="sd">        &gt;&gt;&gt; vw.weight(&#39;length&#39;)</span>
+<span class="sd">        5.0</span>
+
+<span class="sd">        Create new path and get the weight.</span>
+
+<span class="sd">        &gt;&gt;&gt; form pathpy import Path</span>
+<span class="sd">        &gt;&gt;&gt; p = Path(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p.weight()</span>
+<span class="sd">        1.0</span>
+
+<span class="sd">        Change the weight.</span>
+
+<span class="sd">        &gt;&gt;&gt; p[&#39;weight&#39;] = 4</span>
+<span class="sd">        &gt;&gt;&gt; p.weight()</span>
+<span class="sd">        4.0</span>
+
+<span class="sd">        &gt;&gt;&gt; p.weight(False)</span>
+<span class="sd">        1.0</span>
+
+<span class="sd">        Add an attribute and use this as weight.</span>
+
+<span class="sd">        &gt;&gt;&gt; p[&#39;length&#39;] = 5</span>
+<span class="sd">        &gt;&gt;&gt; p.weight(&#39;length&#39;)</span>
+<span class="sd">        5.0</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span><span class="p">:</span> <span class="nb">float</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">weight</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">weight</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">default</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">weight</span> <span class="o">!=</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="n">default</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+
+<span class="k">class</span> <span class="nc">BaseNode</span><span class="p">(</span><span class="n">BaseClass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for nodes.&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">BaseEdge</span><span class="p">(</span><span class="n">BaseClass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for edges.&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">BasePath</span><span class="p">(</span><span class="n">BaseClass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for paths.&quot;&quot;&quot;</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># eof</span>
+<span class="c1">#</span>
+<span class="c1"># Local Variables:</span>
+<span class="c1"># mode: python</span>
+<span class="c1"># mode: linum</span>
+<span class="c1"># mode: auto-fill</span>
+<span class="c1"># fill-column: 79</span>
+<span class="c1"># End:</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

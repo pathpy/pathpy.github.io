@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.io.graphtool &#8212; pathpy 3.0.0a2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../examples/index.html">Gallery</a></li>
+                <li><a href="../../../tutorial.html">Tutorial</a></li>
+                <li><a href="../../../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pathpy.io.graphtool</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Functions to read networks from graphtool binary format and to retrieve network data from the netzschleuder repository&quot;&quot;&quot;</span>
+<span class="c1">#!/usr/bin/python -tt</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># File      : graphtool.py -- Module for data import/export from graphtool binary format</span>
+<span class="c1"># Author    : Ingo Scholtes &lt;scholtes@uni-wuppertal.de&gt;</span>
+<span class="c1"># Time-stamp: &lt;Wed 2021-04-21 09:06 ingo&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2016-2021 Pathpy Developers</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">pathpy.io.pandas</span> <span class="kn">import</span> <span class="n">to_network</span><span class="p">,</span> <span class="n">to_temporal_network</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
+
+
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">from</span> <span class="nn">pathpy.core.network</span> <span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.temporal_network</span> <span class="kn">import</span> <span class="n">TemporalNetwork</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">request</span>
+<span class="kn">from</span> <span class="nn">urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># create logger</span>
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_parse_property_value</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">ptr</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">type_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">endianness</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parses a property value as well as the number of processed bytes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    data: bytes</span>
+
+<span class="sd">        byte array containing the data to be decoded</span>
+
+<span class="sd">    ptr: int</span>
+
+<span class="sd">        index of the first byte to be parsed</span>
+
+<span class="sd">    type_index: int</span>
+
+<span class="sd">        integer representing the type of the property value to be parsed</span>
+
+<span class="sd">    endianness: str</span>
+
+<span class="sd">        String representation of endianness, where &#39;&gt;&#39; represents Big Endian </span>
+<span class="sd">        and &#39;&lt;&#39; represents Little Endian</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Tuple (v, n) consisting of the property value v and the number of bytes n processed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">]),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">2</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">8</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">8</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;pathpy does not support properties with type long double. Properties have been dropped.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="n">str_len</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="nb">str</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="o">+</span><span class="n">str_len</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">str_len</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="n">num_values</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_values</span><span class="p">):</span>
+            <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">vals</span><span class="p">),</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">num_values</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="n">num_values</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_values</span><span class="p">):</span>
+            <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="o">+</span><span class="mi">2</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="mi">4</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">vals</span><span class="p">),</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">num_values</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>
+        <span class="n">num_values</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_values</span><span class="p">):</span>
+            <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="o">+</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="mi">4</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">vals</span><span class="p">),</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="n">num_values</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="n">num_values</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_values</span><span class="p">):</span>
+            <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="mi">8</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">8</span><span class="o">*</span><span class="n">num_values</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">11</span><span class="p">:</span>
+        <span class="n">num_values</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_values</span><span class="p">):</span>
+            <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="mi">8</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">vals</span><span class="p">),</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">8</span><span class="o">*</span><span class="n">num_values</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
+        <span class="n">val_len</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;pathpy does not support properties with type vector&lt;long double&gt;. Properties have been dropped.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">16</span><span class="o">*</span><span class="n">val_len</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>
+        <span class="n">num_strings</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">strs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_strings</span><span class="p">):</span>
+            <span class="n">str_len</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="mi">8</span>
+            <span class="n">strs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">offset</span><span class="o">+</span><span class="n">str_len</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="n">str_len</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">strs</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">type_index</span> <span class="o">==</span> <span class="mi">14</span><span class="p">:</span>
+        <span class="n">val_len</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="o">+</span><span class="n">val_len</span><span class="p">]),</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">val_len</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unknown type index </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_index</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="parse_graphtool_format"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.parse_graphtool_format.html#pathpy.io.graphtool.parse_graphtool_format">[docs]</a><span class="k">def</span> <span class="nf">parse_graphtool_format</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">ignore_temporal</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decodes data in graphtool binary format and returns a pathpy network. For a documentation of </span>
+<span class="sd">    hte graphtool binary format, see see doc at https://graph-tool.skewed.de/static/doc/gt_format.html</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    data: bytes</span>
+<span class="sd">        Array of bys to be decoded</span>
+
+<span class="sd">    ignore_temporal: bool=False</span>
+<span class="sd">        If False, this function will return a static or temporal network depending </span>
+<span class="sd">        on whether edges contain a time attribute. If True, pathpy will not interpret</span>
+<span class="sd">        time attributes and thus always return a static network.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    An instance of Network or TemporalNetwork</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># check magic bytes</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">!=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xe2\x9b\xbe\x20\x67\x74</span><span class="s1">&#39;</span><span class="p">:</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Invalid graphtool file. Wrong magic bytes.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s1">&#39;Invalid graphtool file.&#39;</span><span class="p">)</span>
+    <span class="n">ptr</span> <span class="o">=</span> <span class="mi">6</span>
+
+    <span class="c1"># read graphtool version byte</span>
+    <span class="n">graphtool_version</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">])</span>
+    <span class="n">ptr</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># read endianness</span>
+    <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">]):</span>
+        <span class="n">graphtool_endianness</span> <span class="o">=</span> <span class="s1">&#39;&gt;&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">graphtool_endianness</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span>
+    <span class="n">ptr</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># read length of comment</span>
+    <span class="n">str_len</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">graphtool_endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ptr</span> <span class="o">+=</span> <span class="mi">8</span>
+
+    <span class="c1"># read string comment</span>
+    <span class="n">comment</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">str_len</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+    <span class="n">ptr</span> <span class="o">+=</span> <span class="n">str_len</span>
+
+    <span class="c1"># read network directedness</span>
+    <span class="n">directed</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">])</span>
+    <span class="n">ptr</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># read number of nodes</span>
+    <span class="n">n_nodes</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">graphtool_endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ptr</span> <span class="o">+=</span> <span class="mi">8</span>
+
+    <span class="c1"># create pandas dataframe</span>
+    <span class="n">network_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># n = Network(directed = directed, multiedges=True)</span>
+
+    <span class="c1"># determine binary representation of neighbour lists</span>
+    <span class="k">if</span> <span class="n">n_nodes</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">**</span><span class="mi">8</span><span class="p">:</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;B&#39;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">n_nodes</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">**</span><span class="mi">16</span><span class="p">:</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;H&#39;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">n_nodes</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="p">:</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;I&#39;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;Q&#39;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="mi">8</span>
+
+    <span class="n">n_edges</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># parse lists of out-neighbors for all n nodes</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
+        <span class="c1"># read number of neighbors</span>
+        <span class="n">num_neighbors</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">graphtool_endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ptr</span> <span class="o">+=</span> <span class="mi">8</span>
+
+        <span class="c1"># add edges to record</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_neighbors</span><span class="p">):</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">graphtool_endianness</span> <span class="o">+</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">d</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">ptr</span> <span class="o">+=</span> <span class="n">d</span>
+            <span class="n">network_dict</span><span class="p">[</span><span class="n">n_edges</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="p">)]</span>
+            <span class="n">n_edges</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="n">network_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">network_dict</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">])</span>
+
+    <span class="c1"># collect all attributes from property maps</span>
+    <span class="n">network_attributes</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">edge_attribute_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">node_attributes</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">dict</span><span class="p">())</span>
+    <span class="n">edge_attributes</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">))</span>
+    
+    <span class="c1"># parse property maps</span>
+    <span class="n">property_maps</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">graphtool_endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ptr</span> <span class="o">+=</span> <span class="mi">8</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">property_maps</span><span class="p">):</span>
+        <span class="n">key_type</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">graphtool_endianness</span> <span class="o">+</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ptr</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">property_len</span>  <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">graphtool_endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ptr</span> <span class="o">+=</span> <span class="mi">8</span>
+
+        <span class="n">property_name</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="n">property_len</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="n">ptr</span> <span class="o">+=</span> <span class="n">property_len</span>
+
+        <span class="n">property_type</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">graphtool_endianness</span> <span class="o">+</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ptr</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">key_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># network property</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">_parse_property_value</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ptr</span><span class="p">,</span> <span class="n">property_type</span><span class="p">,</span> <span class="n">graphtool_endianness</span><span class="p">)</span>
+            <span class="n">network_attributes</span><span class="p">[</span><span class="n">property_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">ptr</span> <span class="o">+=</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">key_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># vertex property</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">_parse_property_value</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ptr</span><span class="p">,</span> <span class="n">property_type</span><span class="p">,</span> <span class="n">graphtool_endianness</span><span class="p">)</span>
+                <span class="n">node_attributes</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)][</span><span class="n">property_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ptr</span> <span class="o">+=</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">key_type</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="c1"># edge property</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_edges</span><span class="p">):</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">_parse_property_value</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ptr</span><span class="p">,</span> <span class="n">property_type</span><span class="p">,</span> <span class="n">graphtool_endianness</span><span class="p">)</span>
+                <span class="n">edge_attributes</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="n">property_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">edge_attribute_names</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">property_name</span><span class="p">)</span>
+                <span class="n">ptr</span> <span class="o">+=</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unknown key type </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key_type</span><span class="p">))</span>
+
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Version </span><span class="se">\t</span><span class="s1">= </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">graphtool_version</span><span class="p">))</span>
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Endianness </span><span class="se">\t</span><span class="s1">= </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">graphtool_endianness</span><span class="p">))</span>
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;comment size </span><span class="se">\t</span><span class="s1">= </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">str_len</span><span class="p">))</span>
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;comment </span><span class="se">\t</span><span class="s1">= </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">comment</span><span class="p">))</span>
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;directed </span><span class="se">\t</span><span class="s1">= </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">directed</span><span class="p">))</span>
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;nodes </span><span class="se">\t\t</span><span class="s1">= </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">))</span>
+
+    <span class="c1"># add edge properties to data frame</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">edge_attribute_names</span><span class="p">:</span>
+        <span class="c1"># due to use of default_dict, this will add NA values ot edges which are missing properties</span>
+        <span class="n">network_data</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span> <span class="n">edge_attributes</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="n">p</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_edges</span><span class="p">)</span> <span class="p">]</span>
+
+    <span class="c1"># create network from pandas dataframe</span>
+    <span class="n">n</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="n">edge_attribute_names</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ignore_temporal</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">to_temporal_network</span><span class="p">(</span><span class="n">network_data</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="o">**</span><span class="n">network_attributes</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">to_network</span><span class="p">(</span><span class="n">network_data</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="o">**</span><span class="n">network_attributes</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">node_attributes</span><span class="p">:</span>        
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">node_attributes</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+            <span class="c1"># for now we remove _pos for temporal networks due to type being incompatible with plotting</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="o">!=</span> <span class="s1">&#39;_pos&#39;</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;time&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">edge_attribute_names</span> <span class="ow">or</span> <span class="n">ignore_temporal</span><span class="p">):</span>
+                <span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_attributes</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">p</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">n</span></div>
+
+
+<div class="viewcode-block" id="read_graphtool"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.read_graphtool.html#pathpy.io.graphtool.read_graphtool">[docs]</a><span class="k">def</span> <span class="nf">read_graphtool</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]]:</span> 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads a file in graphtool binary format</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    file: str</span>
+<span class="sd">        Path to graphtool file to be read</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;.zst&#39;</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span> 
+                <span class="kn">import</span> <span class="nn">zstandard</span> <span class="k">as</span> <span class="nn">zstd</span> 
+                <span class="n">dctx</span> <span class="o">=</span> <span class="n">zstd</span><span class="o">.</span><span class="n">ZstdDecompressor</span><span class="p">()</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">parse_graphtool_format</span><span class="p">(</span><span class="n">dctx</span><span class="o">.</span><span class="n">decompress</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">max_output_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+            <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+                <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Package zstandard is needed to decode graphtool files. Please install module, e.g., using &quot;pip install zstandard&quot;.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>    
+            <span class="k">return</span> <span class="n">parse_graphtool_format</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="write_graphtool"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.write_graphtool.html#pathpy.io.graphtool.write_graphtool">[docs]</a><span class="k">def</span> <span class="nf">write_graphtool</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Writes a network to graphtool binary format</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="list_netzschleuder_records"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.list_netzschleuder_records.html#pathpy.io.graphtool.list_netzschleuder_records">[docs]</a><span class="k">def</span> <span class="nf">list_netzschleuder_records</span><span class="p">(</span><span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;https://networks.skewed.de&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Reads a list of data sets available at the netzschleuder repository.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    base_url: str=&#39;https://networks.skewed.de&#39;</span>
+
+<span class="sd">        Base URL of netzschleuder repository</span>
+<span class="sd">    </span>
+<span class="sd">    **kwargs</span>
+
+<span class="sd">        Keyword arguments that will be passed to the netzschleuder repository as HTTP GET parameters. </span>
+<span class="sd">        For supported parameters see https://networks.skewed.de/api</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Return a list of all data sets</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; pp.io.graphtool.list_netzschleuder_records()</span>
+<span class="sd">    [&#39;karate&#39;, &#39;reality_mining&#39;, &#39;sp_hypertext&#39;, ...]</span>
+
+<span class="sd">    Return a list of all data sets with a given tag</span>
+
+<span class="sd">    &gt;&gt;&gt; pp.io.graphtool.list_netzschleuder_records(tags=&#39;temporal&#39;)</span>
+<span class="sd">    [&#39;reality_mining&#39;, &#39;sp_hypertext&#39;, ...]</span>
+
+<span class="sd">    Return a dictionary containing all data set names (keys) as well as all network attributes</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; pp.io.graphtool.list_netzschleuder_records(full=True)</span>
+<span class="sd">    { &#39;reality_mining&#39;: [...], &#39;karate&#39;: [...] }</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Either a list of data set names or a dictionary containing all data set names and network attributes.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;/api/nets&#39;</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="s1">&#39;?</span><span class="si">{0}</span><span class="s1">=</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">base_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="read_netzschleuder_record"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.read_netzschleuder_record.html#pathpy.io.graphtool.read_netzschleuder_record">[docs]</a><span class="k">def</span> <span class="nf">read_netzschleuder_record</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;https://networks.skewed.de&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads metadata of a single data record with given name from the netzschleuder repository</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    name: str</span>
+
+<span class="sd">        Name of the data set for which to retrieve the metadata</span>
+
+<span class="sd">    base_url: str=&#39;https://networks.skewed.de&#39;</span>
+
+<span class="sd">        Base URL of netzschleuder repository</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Retrieve metadata of karate club network</span>
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; metdata = pp.io.graphtool.read_netzschleuder_record(&#39;karate&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; print(metadata)</span>
+<span class="sd">    { </span>
+<span class="sd">        &#39;analyses&#39;: {&#39;77&#39;: {&#39;average_degree&#39;: 4.52... } }</span>
+<span class="sd">    }</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Dictionary containing key-value pairs of metadata</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;/api/net/</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">base_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="read_netzschleuder_network"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.read_netzschleuder_network.html#pathpy.io.graphtool.read_netzschleuder_network">[docs]</a><span class="k">def</span> <span class="nf">read_netzschleuder_network</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">net</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+        <span class="n">ignore_temporal</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+        <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;https://networks.skewed.de&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;Reads a pathpy network record from the netzschleuder repository.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+
+<span class="sd">        Name of the network data sets to read from</span>
+
+<span class="sd">    net: Optional[str]=None</span>
+
+<span class="sd">        Identifier of the network within the data set to read. For data sets </span>
+<span class="sd">        containing a single network only, this can be set to None.</span>
+
+<span class="sd">    ignore_temporal: bool=False</span>
+
+<span class="sd">        If False, this function will return a static or temporal network depending </span>
+<span class="sd">        on whether edges contain a time attribute. If True, pathpy will not interpret</span>
+<span class="sd">        time attributes and thus always return a static network.</span>
+
+<span class="sd">    base_url: str=https://networks.skewed.de</span>
+
+<span class="sd">        Base URL of netzschleuder repository</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Read network &#39;77&#39; from karate club data set</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; n = pp.io.graphtool.read_netzschleuder_network(&#39;karate&#39;, &#39;77&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; print(type(n))</span>
+<span class="sd">    &gt;&gt;&gt; pp.plot(n)</span>
+<span class="sd">    pp.Network</span>
+
+<span class="sd">    Read a temporal network from a data set containing a single network only</span>
+<span class="sd">    (i.e. net can be omitted):</span>
+
+<span class="sd">    &gt;&gt;&gt; n = pp.io.graphtool.read_netzschleuder_network(&#39;reality_mining&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; print(type(n))</span>
+<span class="sd">    &gt;&gt;&gt; pp.plot(n)</span>
+<span class="sd">    pp.TemporalNetwork</span>
+
+<span class="sd">    Read temporal network but ignore time attribute of edges:</span>
+
+<span class="sd">    &gt;&gt;&gt; n = pp.io.graphtool.read_netzschleuder_network(&#39;reality_mining&#39;, ignore_temporal=True)</span>
+<span class="sd">    &gt;&gt;&gt; print(type(n))</span>
+<span class="sd">    &gt;&gt;&gt; pp.plot(n)</span>
+<span class="sd">    pp.Network</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Depending on whether the network data set contains an edge attribute</span>
+<span class="sd">    &#39;time&#39; (and whether ignore_temporal is set to True), this function </span>
+<span class="sd">    returns an instance of Network or TemporalNetwork</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">zstandard</span> <span class="k">as</span> <span class="nn">zstd</span> 
+        
+
+        <span class="c1"># retrieve network properties</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;/api/net/</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">base_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+        <span class="c1"># retrieve data</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">net</span><span class="p">:</span>
+            <span class="n">net</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;/net/</span><span class="si">{0}</span><span class="s1">/files/</span><span class="si">{1}</span><span class="s1">.gt.zst&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">net</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">base_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">HTTPError</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;HTTP 404 Error. Did you specify the network to load from this data set?&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># decompress data</span>
+        <span class="n">dctx</span> <span class="o">=</span> <span class="n">zstd</span><span class="o">.</span><span class="n">ZstdDecompressor</span><span class="p">()</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">dctx</span><span class="o">.</span><span class="n">stream_reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">decompressed</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">readall</span><span class="p">()</span>
+
+        <span class="c1"># parse graphtool binary format</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">parse_graphtool_format</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">decompressed</span><span class="p">),</span> <span class="n">ignore_temporal</span><span class="o">=</span><span class="n">ignore_temporal</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span><span class="p">:</span>
+            <span class="c1"># store network attributes</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">properties</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">n</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+        <span class="k">return</span> <span class="n">n</span>
+    <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Package zstandard is needed to decode graphtool files. Please install module, e.g., using &quot;pip install zstandard.&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

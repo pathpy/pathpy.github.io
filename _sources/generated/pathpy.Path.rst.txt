@@ -1,4 +1,4 @@
-.. raw:: html
+﻿.. raw:: html
 
     </div>
     <div class=col-md-9 content>
@@ -20,12 +20,10 @@ pathpy.Path
    .. autosummary::
       :toctree:
    
-      ~Path.as_edges
-      ~Path.as_nodes
-      ~Path.directed
       ~Path.edges
-      ~Path.name
+      ~Path.end
       ~Path.nodes
+      ~Path.start
       ~Path.uid
    
    
@@ -36,17 +34,11 @@ pathpy.Path
    .. autosummary::
       :toctree:
    
-      ~Path.add_edge
-      ~Path.add_edges_from
-      ~Path.add_node
-      ~Path.add_nodes_from
       ~Path.copy
-      ~Path.from_edges
-      ~Path.from_nodes
       ~Path.number_of_edges
       ~Path.number_of_nodes
-      ~Path.subpaths
       ~Path.summary
+      ~Path.tolist
       ~Path.update
       ~Path.weight
    

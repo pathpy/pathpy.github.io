@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pathpy.Network.adjacency_matrix &#8212; pathpy 3.0.0a1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.Network.adjacency_matrix &#8212; pathpy 3.0.0a2 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pathpy.Network.copy" href="pathpy.Network.copy.html" />
-    <link rel="prev" title="pathpy.Network.add_paths_from" href="pathpy.Network.add_paths_from.html" />
+    <link rel="next" title="pathpy.Network.avg_clustering_coefficient" href="pathpy.Network.avg_clustering_coefficient.html" />
+    <link rel="prev" title="pathpy.Network.add_nodes" href="pathpy.Network.add_nodes.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -41,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -114,9 +115,9 @@
   </div>
 <div class="col-md-9"><div class="section" id="pathpy-network-adjacency-matrix">
 <h1>pathpy.Network.adjacency_matrix<a class="headerlink" href="#pathpy-network-adjacency-matrix" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
+<dl class="py method">
 <dt id="pathpy.Network.adjacency_matrix">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">adjacency_matrix</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">weight: 'str' = 'weight'</em>, <em class="sig-param">transposed: 'bool' = False</em>, <em class="sig-param">**kwargs: 'Any'</em><span class="sig-paren">)</span> &#x2192; 'sparse.coo_matrix'<a class="headerlink" href="#pathpy.Network.adjacency_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">adjacency_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>str<span class="p">, </span>bool<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'weight'</span></em>, <em class="sig-param"><span class="n">transposed</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">directed</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; scipy.sparse.csr.csr_matrix<a class="headerlink" href="#pathpy.Network.adjacency_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a sparse adjacency matrix of the network.</p>
 <p>By default, the entry corresponding to a directed link v-&gt;w is stored in
 row v and column w and can be accessed via A[v,w].</p>
@@ -137,16 +138,16 @@ edge.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>scipy.sparse.coo_matrix</dt><dd><p>Returns a space scipy matrix.</p>
+<dt>scipy.sparse.csr_matrix</dt><dd><p>Returns a space scipy matrix.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <p>Generate simple network</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="k">import</span> <span class="n">Network</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">Network</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">((</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">()</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
 <span class="go">[[0. 1. 0.]</span>
 <span class="go"> [0. 0. 1.]</span>
@@ -154,7 +155,7 @@ edge.</p>
 </pre></div>
 </div>
 <p>The function can also be directly called from pathpy</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">net</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
 <span class="go">[[0. 1. 0.]</span>
 <span class="go"> [0. 0. 1.]</span>
@@ -184,8 +185,8 @@ edge.</p>
       
     </p>
     <p>
-        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

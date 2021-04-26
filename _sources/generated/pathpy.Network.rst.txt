@@ -1,4 +1,4 @@
-.. raw:: html
+﻿.. raw:: html
 
     </div>
     <div class=col-md-9 content>
@@ -22,12 +22,16 @@ pathpy.Network
    
       ~Network.directed
       ~Network.edges
-      ~Network.name
+      ~Network.incident_edges
+      ~Network.incoming
+      ~Network.is_connected
+      ~Network.multiedges
+      ~Network.neighbors
       ~Network.nodes
-      ~Network.paths
+      ~Network.outgoing
+      ~Network.predecessors
       ~Network.shape
-      ~Network.subpaths
-      ~Network.temporal
+      ~Network.successors
       ~Network.uid
    
    
@@ -39,20 +43,42 @@ pathpy.Network
       :toctree:
    
       ~Network.add_edge
-      ~Network.add_edges_from
+      ~Network.add_edges
       ~Network.add_node
-      ~Network.add_nodes_from
-      ~Network.add_path
-      ~Network.add_paths_from
+      ~Network.add_nodes
       ~Network.adjacency_matrix
+      ~Network.avg_clustering_coefficient
+      ~Network.avg_path_length
+      ~Network.betweenness_centrality
+      ~Network.closeness_centrality
       ~Network.copy
+      ~Network.degree_assortativity
+      ~Network.degree_central_moment
+      ~Network.degree_distribution
+      ~Network.degree_generating_function
+      ~Network.degree_raw_moment
+      ~Network.degree_sequence
+      ~Network.degrees
+      ~Network.diameter
+      ~Network.distance_matrix
+      ~Network.find_connected_components
+      ~Network.from_paths
+      ~Network.from_temporal_network
+      ~Network.indegrees
+      ~Network.largest_component_size
+      ~Network.largest_connected_component
+      ~Network.local_clustering_coefficient
+      ~Network.mean_degree
+      ~Network.mean_neighbor_degree
+      ~Network.molloy_reed_fraction
       ~Network.number_of_edges
       ~Network.number_of_nodes
-      ~Network.number_of_paths
+      ~Network.outdegrees
       ~Network.plot
       ~Network.remove_edge
+      ~Network.remove_edges
       ~Network.remove_node
-      ~Network.remove_path
+      ~Network.remove_nodes
       ~Network.summary
       ~Network.transition_matrix
       ~Network.update

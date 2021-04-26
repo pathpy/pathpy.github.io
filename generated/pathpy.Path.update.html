@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pathpy.Path.update &#8212; pathpy 3.0.0a1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.Path.update &#8212; pathpy 3.0.0a2 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pathpy.Path.weight" href="pathpy.Path.weight.html" />
-    <link rel="prev" title="pathpy.Path.summary" href="pathpy.Path.summary.html" />
+    <link rel="prev" title="pathpy.Path.tolist" href="pathpy.Path.tolist.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -41,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -114,48 +115,30 @@
   </div>
 <div class="col-md-9"><div class="section" id="pathpy-path-update">
 <h1>pathpy.Path.update<a class="headerlink" href="#pathpy-path-update" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
+<dl class="py method">
 <dt id="pathpy.Path.update">
-<code class="sig-prename descclassname">Path.</code><code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">other: 'Path' = None</em>, <em class="sig-param">attributes: 'bool' = True</em>, <em class="sig-param">**kwargs: 'Any'</em><span class="sig-paren">)</span> &#x2192; 'None'<a class="reference internal" href="../_modules/pathpy/core/path.html#Path.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.Path.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update of the path object.</p>
-<p>Update the path with new kwargs or based on an other given
-<a class="reference internal" href="pathpy.Path.html#pathpy.Path" title="pathpy.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> object. If an other object is given, the other
-attributes can be used or not.</p>
+<code class="sig-prename descclassname">Path.</code><code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pathpy.Path.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the attributes of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>other</strong><span class="classifier">Path, optional (default = None)</span></dt><dd><p>An other <a class="reference internal" href="pathpy.Path.html#pathpy.Path" title="pathpy.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> object, which is used to update the edge
-attributes and properties.</p>
-</dd>
-<dt><strong>attributes</strong><span class="classifier">bool, optional (default = True)</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code> the attributes from the other path are written to the
-initial path. If <code class="docutils literal notranslate"><span class="pre">False</span></code> only the information about the
-associated edges and nodes is updated.</p>
-</dd>
-<dt><strong>kwargs</strong><span class="classifier">Any</span></dt><dd><p>Keyword arguments stored as path attributes. Attributes are added
-to the path as <code class="docutils literal notranslate"><span class="pre">key=value</span></code> pairs.</p>
+<dt><strong>kwargs</strong><span class="classifier">Any</span></dt><dd><p>Attributes to add or update for the object as key=value pairs.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Create an <a class="reference internal" href="pathpy.Path.html#pathpy.Path" title="pathpy.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> object with an assigned attribute.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">path</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span>
-<span class="go">10</span>
+<p>Generate simple node with attribute.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">Node</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s1">&#39;u&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="o">.</span><span class="n">attributes</span>
+<span class="go">{&#39;color&#39;: &#39;red&#39;}</span>
 </pre></div>
 </div>
-<p>Update attributes (and add new).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">length</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">capacity</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">speed</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">attributes</span>
-<span class="go">{&#39;length&#39;: 2, &#39;capacity&#39;: 3, &#39;speed&#39;: 10}</span>
-</pre></div>
-</div>
-<p>Create a new path.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">speed</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">attributes</span>
-<span class="go">{&#39;length&#39;: 4, &#39;capacity&#39;: 3, &#39;speed&#39;: 30}</span>
+<p>Update attributes.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="s1">&#39;rectangle&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="o">.</span><span class="n">attributes</span>
+<span class="go">{&#39;color&#39;: &#39;green&#39;, &#39;shape&#39;: &#39;rectangle&#39;}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -177,8 +160,8 @@ to the path as <code class="docutils literal notranslate"><span class="pre">key=
       
     </p>
     <p>
-        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

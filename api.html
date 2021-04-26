@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>API reference &#8212; pathpy 3.0.0a1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API reference &#8212; pathpy 3.0.0a2 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="_static/copybutton.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="pathpy.Node" href="generated/pathpy.Node.html" />
-    <link rel="prev" title="Some standard network functions" href="tutorial/network.html" />
+    <link rel="prev" title="Official pathpy tutorial" href="tutorial.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -41,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -83,7 +84,13 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">API reference</a><ul>
 <li><a class="reference internal" href="#base-classes">Base classes</a></li>
-<li><a class="reference internal" href="#algorithms">Algorithms</a></li>
+<li><a class="reference internal" href="#object-based-interoperability">Object-based interoperability</a></li>
+<li><a class="reference internal" href="#visualisations">Visualisations</a></li>
+<li><a class="reference internal" href="#reading-and-writing-network-data">Reading and writing network data</a></li>
+<li><a class="reference internal" href="#generating-graphs">Generating graphs</a></li>
+<li><a class="reference internal" href="#statistical-analysis">Statistical analysis</a></li>
+<li><a class="reference internal" href="#algorithms-for-networks-and-paths">Algorithms for networks and paths</a></li>
+<li><a class="reference internal" href="#simulating-dynamical-processes">Simulating dynamical processes</a></li>
 </ul>
 </li>
 </ul>
@@ -125,23 +132,175 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>(uid, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.Node.html#pathpy.Node" title="pathpy.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a></p></td>
 <td><p>Base class for a single node.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.Edge.html#pathpy.Edge" title="pathpy.Edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code></a>(v, w[, uid, directed])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.Edge.html#pathpy.Edge" title="pathpy.Edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code></a></p></td>
 <td><p>Base class for an single edge.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.Path.html#pathpy.Path" title="pathpy.Path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Path</span></code></a>(*args[, uid, directed])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.Path.html#pathpy.Path" title="pathpy.Path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Path</span></code></a></p></td>
 <td><p>Base class for a path.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.Network.html#pathpy.Network" title="pathpy.Network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Network</span></code></a>(*args[, uid, directed, temporal])</p></td>
-<td><p>Base class for a network.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.Network.html#pathpy.Network" title="pathpy.Network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Network</span></code></a></p></td>
+<td><p>Class for a network.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="section" id="algorithms">
-<span id="algorithms-api"></span><h2>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="object-based-interoperability">
+<span id="converters-api"></span><h2>Object-based interoperability<a class="headerlink" href="#object-based-interoperability" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.converters.to_networkx.html#pathpy.converters.to_networkx" title="pathpy.converters.to_networkx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">converters.to_networkx</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.converters.from_networkx.html#pathpy.converters.from_networkx" title="pathpy.converters.from_networkx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">converters.from_networkx</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="visualisations">
+<span id="plotting-api"></span><h2>Visualisations<a class="headerlink" href="#visualisations" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.visualisations.plot.html#pathpy.visualisations.plot" title="pathpy.visualisations.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualisations.plot</span></code></a></p></td>
+<td><p>Plot the object</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.visualisations.layout.Layout.html#pathpy.visualisations.layout.layout" title="pathpy.visualisations.layout.layout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualisations.layout.layout</span></code></a></p></td>
+<td><p>Function to generate a layout for the network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualisations.layout.Layout</span></code></p></td>
+<td><p>Default class to create layouts</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="reading-and-writing-network-data">
+<span id="io-api"></span><h2>Reading and writing network data<a class="headerlink" href="#reading-and-writing-network-data" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.io.pandas.html#module-pathpy.io.pandas" title="pathpy.io.pandas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">io.pandas</span></code></a></p></td>
+<td><p>Functions to read and write network and path data to/from pandas data frames</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.io.csv.html#module-pathpy.io.csv" title="pathpy.io.csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">io.csv</span></code></a></p></td>
+<td><p>Functions to read and write csv tables.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.io.sql.html#module-pathpy.io.sql" title="pathpy.io.sql"><code class="xref py py-obj docutils literal notranslate"><span class="pre">io.sql</span></code></a></p></td>
+<td><p>Functions to read and write sql database tables.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.io.graphtool.html#module-pathpy.io.graphtool" title="pathpy.io.graphtool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">io.graphtool</span></code></a></p></td>
+<td><p>Functions to read networks from graphtool binary format and to retrieve network data from the netzschleuder repository</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.io.graphml.html#module-pathpy.io.graphml" title="pathpy.io.graphml"><code class="xref py py-obj docutils literal notranslate"><span class="pre">io.graphml</span></code></a></p></td>
+<td><p>Functions to read and write graphml files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.io.konect.html#module-pathpy.io.konect" title="pathpy.io.konect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">io.konect</span></code></a></p></td>
+<td><p>Functions to read files from the Koblenz Network Collection (konect.cc).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="generating-graphs">
+<span id="generators-api"></span><h2>Generating graphs<a class="headerlink" href="#generating-graphs" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.generators.lattice.html#module-pathpy.generators.lattice" title="pathpy.generators.lattice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generators.lattice</span></code></a></p></td>
+<td><p>Methods to generate regular lattice networks with different dimensions</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.generators.random_graphs.html#module-pathpy.generators.random_graphs" title="pathpy.generators.random_graphs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generators.random_graphs</span></code></a></p></td>
+<td><p>Methhods to generate random graphs according to different models</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="statistical-analysis">
+<span id="statistics-api"></span><h2>Statistical analysis<a class="headerlink" href="#statistical-analysis" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.statistics.clustering.html#module-pathpy.statistics.clustering" title="pathpy.statistics.clustering"><code class="xref py py-obj docutils literal notranslate"><span class="pre">statistics.clustering</span></code></a></p></td>
+<td><p>Methods to analyze clustering patterns in networks</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.statistics.degrees.html#module-pathpy.statistics.degrees" title="pathpy.statistics.degrees"><code class="xref py py-obj docutils literal notranslate"><span class="pre">statistics.degrees</span></code></a></p></td>
+<td><p>Methods to calculate degree statistics and assortativity in static networks.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.statistics.likelihoods.html#module-pathpy.statistics.likelihoods" title="pathpy.statistics.likelihoods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">statistics.likelihoods</span></code></a></p></td>
+<td><p>Methods to calculate model likelihoods based on observed paths.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.statistics.modularity.html#module-pathpy.statistics.modularity" title="pathpy.statistics.modularity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">statistics.modularity</span></code></a></p></td>
+<td><p>Methods to assess the modular structure of networks</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.statistics.subpaths.html#module-pathpy.statistics.subpaths" title="pathpy.statistics.subpaths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">statistics.subpaths</span></code></a></p></td>
+<td><p>Methods to calculate sub-path statistics in Paths and PathCollections</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="algorithms-for-networks-and-paths">
+<span id="algorithms-api"></span><h2>Algorithms for networks and paths<a class="headerlink" href="#algorithms-for-networks-and-paths" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.algorithms.centralities.html#module-pathpy.algorithms.centralities" title="pathpy.algorithms.centralities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algorithms.centralities</span></code></a></p></td>
+<td><p>Algorithms for centrality calculations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.algorithms.community_detection.html#module-pathpy.algorithms.community_detection" title="pathpy.algorithms.community_detection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algorithms.community_detection</span></code></a></p></td>
+<td><p>Algorithms to find community structures in networks.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.algorithms.components.html#module-pathpy.algorithms.components" title="pathpy.algorithms.components"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algorithms.components</span></code></a></p></td>
+<td><p>Algorithms for component calculations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.algorithms.shortest_paths.html#module-pathpy.algorithms.shortest_paths" title="pathpy.algorithms.shortest_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algorithms.shortest_paths</span></code></a></p></td>
+<td><p>Algorithms for shortest paths calculations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.algorithms.path_extraction.html#module-pathpy.algorithms.path_extraction" title="pathpy.algorithms.path_extraction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algorithms.path_extraction</span></code></a></p></td>
+<td><p>Algorithms to compute paths in temporal networks.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pathpy.algorithms.trees.html#module-pathpy.algorithms.trees" title="pathpy.algorithms.trees"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algorithms.trees</span></code></a></p></td>
+<td><p>Pathpy tree algorithms.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.algorithms.evaluation.html#module-pathpy.algorithms.evaluation" title="pathpy.algorithms.evaluation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algorithms.evaluation</span></code></a></p></td>
+<td><p>Algorithms for model evaluation.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="simulating-dynamical-processes">
+<span id="processes-api"></span><h2>Simulating dynamical processes<a class="headerlink" href="#simulating-dynamical-processes" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pathpy.processes.random_walk.html#module-pathpy.processes.random_walk" title="pathpy.processes.random_walk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">processes.random_walk</span></code></a></p></td>
+<td><p>This module contains classes to efficiently simlate random walks on static, temporal, and higher-order networks.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
@@ -160,8 +319,8 @@
       
     </p>
     <p>
-        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

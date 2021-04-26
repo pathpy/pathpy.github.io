@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.visualisations.layout.layout &#8212; pathpy 3.0.0a2 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pathpy.io.pandas" href="pathpy.io.pandas.html" />
+    <link rel="prev" title="pathpy.visualisations.plot" href="pathpy.visualisations.plot.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../examples/index.html">Gallery</a></li>
+                <li><a href="../tutorial.html">Tutorial</a></li>
+                <li><a href="../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">pathpy.visualisations.layout.layout</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  </div>
+<div class="col-md-9"><div class="section" id="pathpy-visualisations-layout-layout">
+<h1>pathpy.visualisations.layout.layout<a class="headerlink" href="#pathpy-visualisations-layout-layout" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="pathpy.visualisations.layout.layout">
+<code class="sig-prename descclassname">pathpy.visualisations.layout.</code><code class="sig-name descname">layout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwds</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/visualisations/layout.html#layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.visualisations.layout.layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to generate a layout for the network.</p>
+<p>This function genearates a layout configuration for the nodes in the
+network. Thereby, different layouts and options can be chosen. The layout
+function is directly included in the plot function or can be separately
+called.</p>
+<p>The layout function supports different network types and layout algorithm.
+Currently supported networks are:</p>
+<ul class="simple">
+<li><p>‘cnet’,</p></li>
+<li><p>‘networkx’,</p></li>
+<li><p>‘igraph’,</p></li>
+<li><p>‘pathpy’</p></li>
+<li><p>node/edge list</p></li>
+</ul>
+<p>Currently supported algorithms are:</p>
+<ul class="simple">
+<li><p>Fruchterman-Reingold force-directed algorithm</p></li>
+<li><p>Uniformly at random node positions</p></li>
+</ul>
+<p>The appearance of the layout can be modified by keyword arguments which will
+be explained in more detail below.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>network</strong><span class="classifier">network object</span></dt><dd><p>Network to be drawn. The network can be a ‘cnet’, ‘networkx’, ‘igraph’,
+‘pathpy’ object, or a tuple of a node list and edge list.</p>
+</dd>
+<dt><strong>kwds</strong><span class="classifier">keyword arguments, optional (default= no attributes)</span></dt><dd><p>Attributes used to modify the appearance of the layout.
+For details see below.</p>
+</dd>
+<dt><strong>Keyword arguments used for the layout:</strong></dt><dd></dd>
+<dt><strong>**Layout:**</strong></dt><dd></dd>
+<dt><strong>NOTE: All layout arguments can be entered with or without ‘layout_’ at the</strong></dt><dd></dd>
+<dt><strong>beginning, e.g. ‘layout_iterations’ is equal to ‘iterations’</strong></dt><dd></dd>
+<dt><strong>- ``layout``</strong><span class="classifier">dict or string , optional (default = None)</span></dt><dd><p>A dictionary with the node positions on a 2-dimensional plane. The
+key value of the dict represents the node id while the value
+represents a tuple of coordinates (e.g. n = (x,y)). The initial
+layout can be placed anywhere on the 2-dimensional plane.</p>
+<p>Instead of a dictionary, the algorithm used for the layout can be defined
+via a string value. Currently, supported are:</p>
+<ul>
+<li><p>Random layout, where the nodes are uniformly at random placed in the
+unit square. This algorithm can be enabled with the keywords: ‘Random’,
+‘random’, ‘rand’, or None</p></li>
+<li><p>Fruchterman-Reingold force-directed algorithm. In this algorithm, the
+nodes are represented by steel rings and the edges are springs between
+them. The attractive force is analogous to the spring force and the
+repulsive force is analogous to the electrical force. The basic idea is
+to minimize the energy of the system by moving the nodes and changing
+the forces between them. This algorithm can be enabled with the
+keywords: ‘Fruchterman-Reingold’, ‘fruchterman_reingold’, ‘fr’,
+‘spring_layout’, ‘spring layout’, ‘FR’</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 71%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Algorithms</p></th>
+<th class="head"><p>Keywords</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Random</p></td>
+<td><p>Random, random, rand, None</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fruchterman-Reingold</p></td>
+<td><p>Fruchterman-Reingold, fruchterman_reingold, fr
+spring_layout, spring layout, FR</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</dd>
+<dt><strong>- ``force``</strong><span class="classifier">float, optional (default = None)</span></dt><dd><p>Optimal distance between nodes.  If None the distance is set to
+1/sqrt(n) where n is the number of nodes.  Increase this value to move
+nodes farther apart.</p>
+</dd>
+<dt><strong>- ``positions``</strong><span class="classifier">dict or None  optional (default = None)</span></dt><dd><p>Initial positions for nodes as a dictionary with node as keys and values
+as a coordinate list or tuple.  If None, then use random initial
+positions.</p>
+</dd>
+<dt><strong>- ``fixed``</strong><span class="classifier">list or None, optional (default = None)</span></dt><dd><p>Nodes to keep fixed at initial position.</p>
+</dd>
+<dt><strong>- ``iterations``</strong><span class="classifier">int, optional (default = 50)</span></dt><dd><p>Maximum number of iterations taken</p>
+</dd>
+<dt><strong>- ``threshold``: float, optional (default = 1e-4)</strong></dt><dd><p>Threshold for relative error in node position changes.  The iteration
+stops if the error is below this threshold.</p>
+</dd>
+<dt><strong>- ``weight``</strong><span class="classifier">string or None, optional (default = None)</span></dt><dd><p>The edge attribute that holds the numerical value used for the edge
+weight.  If None, then all edge weights are 1.</p>
+</dd>
+<dt><strong>- ``dimension``</strong><span class="classifier">int, optional (default = 2)</span></dt><dd><p>Dimension of layout. Currently, only plots in 2 dimension are supported.</p>
+</dd>
+<dt><strong>- ``seed``</strong><span class="classifier">int or None, optional (default = None)</span></dt><dd><p>Set the random state for deterministic node layouts. If int, <cite>seed</cite> is
+the seed used by the random number generator, if None, the a random seed
+by created by the numpy random number generator is used.</p>
+</dd>
+<dt><strong>In the layout style dictionary multiple keywords can be used to address</strong></dt><dd></dd>
+<dt><strong>attributes. These keywords will be converted to an unique key word,</strong></dt><dd></dd>
+<dt><strong>used in the remaining code.</strong></dt><dd></dd>
+<dt><strong>========= =================================</strong></dt><dd></dd>
+<dt><strong>keys      other valid keys</strong></dt><dd></dd>
+<dt><strong>========= =================================</strong></dt><dd></dd>
+<dt><strong>fixed     fixed_nodes, fixed_vertices,</strong></dt><dd><p>fixed_n, fixed_v</p>
+</dd>
+<dt><strong>positions initial_positions, node_positions</strong></dt><dd><p>vertex_positions, n_positions,
+v_positions</p>
+</dd>
+<dt><strong>========= =================================</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>For illustration purpose a similar network as in the python-igrap tutorial
+is used. Instead of igraph, the cnet module is used for creating the
+network.</p>
+<p>Create an empty network object, and add some edges.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;my tikz test network&#39;</span><span class="p">,</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="s1">&#39;ab&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;ac&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;cd&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="p">(</span><span class="s1">&#39;de&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">,</span><span class="s1">&#39;e&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;ec&#39;</span><span class="p">,</span><span class="s1">&#39;e&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;cf&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;f&#39;</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="p">(</span><span class="s1">&#39;fa&#39;</span><span class="p">,</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;fg&#39;</span><span class="p">,</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">),(</span><span class="s1">&#39;gg&#39;</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="p">(</span><span class="s1">&#39;gd&#39;</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>Now a layout can be generated:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">layout</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+<span class="go">{&#39;b&#39;: array([0.88878309, 0.15685131]), &#39;d&#39;: array([0.4659341 , 0.79839535]),</span>
+<span class="go">&#39;c&#39;: array([0.60386662, 0.40727962]), &#39;e&#39;: array([0.71073353, 0.65608203]),</span>
+<span class="go">&#39;g&#39;: array([0.42663927, 0.47412449]), &#39;f&#39;: array([0.48759769, 0.86787594]),</span>
+<span class="go">&#39;a&#39;: array([0.84154488, 0.1633732 ])}</span>
+</pre></div>
+</div>
+<p>Per default, the node positions are assigned uniform random. In order to
+create a layout, the layout methods of the packages can be used, or the
+position of the nodes can be directly assigned, in form of a dictionary,
+where the key is the node id and the value is a tuple of the node position
+in x and y.</p>
+<p>Let us generate a force directed layout (e.g. Fruchterman-Reingold):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">layout</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;fr&#39;</span><span class="p">)</span>
+<span class="go">{&#39;g&#39;: array([-0.77646408,  1.71291126]), &#39;c&#39;: array([-0.18639655,0.96232326]),</span>
+<span class="go">&#39;f&#39;: array([0.33394308, 0.93778681]), &#39;e&#39;: array([0.09740098, 1.28511973]),</span>
+<span class="go">&#39;a&#39;: array([1.37933158, 0.23171857]), &#39;b&#39;: array([ 2.93561876,-0.46183461]),</span>
+<span class="go">&#39;d&#39;: array([-0.29329793,  1.48971303])}</span>
+</pre></div>
+</div>
+<p>Note, instead of the command <code class="docutils literal notranslate"><span class="pre">fr</span></code> also the command
+<code class="docutils literal notranslate"><span class="pre">Fruchterman-Reingold</span></code> or any other command mentioned above can be
+used. For more information see table above.</p>
+<p>In order to keep the properties of the layout for your network separate from
+the network itself, you can simply set up a Python dictionary containing the
+keyword arguments you would pass to <a class="reference internal" href="#pathpy.visualisations.layout.layout" title="pathpy.visualisations.layout.layout"><code class="xref py py-meth docutils literal notranslate"><span class="pre">layout()</span></code></a> and then use the
+double asterisk (**) operator to pass your specific layout attributes to
+<a class="reference internal" href="#pathpy.visualisations.layout.layout" title="pathpy.visualisations.layout.layout"><code class="xref py py-meth docutils literal notranslate"><span class="pre">layout()</span></code></a>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">layout_style</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layout_style</span><span class="p">[</span><span class="s1">&#39;layout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Fruchterman-Reingold&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layout_style</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layout_style</span><span class="p">[</span><span class="s1">&#39;iterations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layout</span><span class="p">(</span><span class="n">net</span><span class="p">,</span><span class="o">**</span><span class="n">layout_style</span><span class="p">)</span>
+<span class="go">{&#39;d&#39;: array([-0.31778276, 1.78246882]), &#39;f&#39;: array([-0.8603259, 0.82328291]),</span>
+<span class="go">&#39;c&#39;: array([-0.4423771 , 1.21203895]), &#39;e&#39;: array([-0.79934355, 1.49000119]),</span>
+<span class="go">&#39;g&#39;: array([0.43694799, 1.51428788]), &#39;a&#39;: array([-2.15517293, 0.23948823]),</span>
+<span class="go">&#39;b&#39;: array([-3.84803812, -0.71628417])}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.algorithms.centralities &#8212; pathpy 3.0.0a2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../examples/index.html">Gallery</a></li>
+                <li><a href="../../../tutorial.html">Tutorial</a></li>
+                <li><a href="../../../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pathpy.algorithms.centralities</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Algorithms for centrality calculations.&quot;&quot;&quot;</span>
+<span class="c1"># !/usr/bin/python -tt</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># File      : centralities.py -- Module to calculate node centrality measures</span>
+<span class="c1"># Author    : Ingo Scholtes &lt;scholtes@uni-wuppertal.de&gt;</span>
+<span class="c1"># Time-stamp: &lt;Mon 2021-03-29 17:15 juergen&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2016-2020 Pathpy Developers</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">linalg</span> <span class="k">as</span> <span class="n">spl</span>
+
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">pathpy.algorithms</span> <span class="kn">import</span> <span class="n">shortest_paths</span>
+<span class="kn">from</span> <span class="nn">pathpy.algorithms.matrices</span> <span class="kn">import</span> <span class="n">adjacency_matrix</span>
+
+<span class="kn">from</span> <span class="nn">pathpy.core.collecions</span> <span class="kn">import</span> <span class="n">BaseCollection</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.classes</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.models</span> <span class="kn">import</span> <span class="n">ABCHigherOrderNetwork</span>
+
+
+<span class="c1"># pseudo load class for type checking</span>
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pathpy.core.path</span> <span class="kn">import</span> <span class="n">PathCollection</span>
+    <span class="kn">from</span> <span class="nn">pathpy.core.network</span> <span class="kn">import</span> <span class="n">Network</span>
+    <span class="kn">from</span> <span class="nn">pathpy.models.higher_order_network</span> <span class="kn">import</span> <span class="n">HigherOrderNetwork</span>
+
+<span class="c1"># create logger</span>
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="betweenness_centrality"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.centralities.betweenness_centrality.html#pathpy.betweenness_centrality">[docs]</a><span class="nd">@singledispatch</span>
+<span class="k">def</span> <span class="nf">betweenness_centrality</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Calculates the betweenness centrality of all nodes.</span>
+<span class="sd">    .. note::</span>
+
+<span class="sd">        If `normalized=False` (default) for each node v the betweenness</span>
+<span class="sd">        centrality is given as $N_{st}[v]/N_{st}$, where $N_{st}[v]$ is the</span>
+<span class="sd">        number of shortest paths between nodes s and t passing through v and</span>
+<span class="sd">        $N_{st}$ is the number of all shortest paths from s to t. Shortest paths</span>
+<span class="sd">        are calculated using the function `shortest_paths.all_shortest_paths`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    network : Network</span>
+
+<span class="sd">        The :py:class:`Network` object that contains the network</span>
+
+<span class="sd">    normalized : bool</span>
+
+<span class="sd">        If True the resulting centralities will be normalized such that the</span>
+<span class="sd">        minimum centrality is zero and the maximum centrality is one.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Compute betweenness centrality in a simple network</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; net = pp.Network(directed=False)</span>
+<span class="sd">    &gt;&gt;&gt; net.add_edge(&#39;a&#39;, &#39;x&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; net.add_edge(&#39;x&#39;, &#39;b&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; c = pp.algorithms.centralities.betweenness_centrality(net)</span>
+<span class="sd">    &gt;&gt;&gt; c[&#39;x&#39;]</span>
+<span class="sd">    2.0</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<span class="nd">@betweenness_centrality</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">BaseCollection</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_bw_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">PathCollection</span><span class="p">,</span> <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Betweenness Centrality for Paths.&quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO: Move sp calculation to shortest_paths</span>
+    <span class="kn">from</span> <span class="nn">pathpy.statistics.subpaths</span> <span class="kn">import</span> <span class="n">SubPathCollection</span>
+
+    <span class="n">s_p</span><span class="p">:</span> <span class="n">defaultdict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">))</span>
+    <span class="n">s_p_lengths</span><span class="p">:</span> <span class="n">defaultdict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">))</span>
+
+    <span class="n">bw</span><span class="p">:</span> <span class="n">defaultdict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="n">paths</span> <span class="o">=</span> <span class="n">SubPathCollection</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">(</span><span class="n">include_path</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">start</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">end</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">s_p_lengths</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">d</span><span class="p">]:</span>
+            <span class="n">s_p_lengths</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">s_p</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="n">s_p</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">d</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">nodes</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">==</span> <span class="n">s_p_lengths</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">d</span><span class="p">]:</span>
+            <span class="n">s_p</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">d</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">nodes</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">s_p</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">s_p</span><span class="p">[</span><span class="n">s</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">s_p</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">d</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">s</span> <span class="o">!=</span> <span class="n">d</span> <span class="o">!=</span> <span class="n">x</span><span class="p">:</span>
+                        <span class="n">bw</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">s_p</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">d</span><span class="p">])</span>
+
+    <span class="c1"># assign zero values to nodes not occurring on shortest paths</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">:</span>
+        <span class="n">bw</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">normalized</span><span class="p">:</span>
+        <span class="n">max_centr</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">bw</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">min_centr</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">bw</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bw</span><span class="p">:</span>
+            <span class="n">bw</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">bw</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">-</span> <span class="n">min_centr</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_centr</span> <span class="o">-</span> <span class="n">min_centr</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">bw</span>
+
+
+<span class="nd">@betweenness_centrality</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_bw_network</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Betweenness Centrality for Networks.&quot;&quot;&quot;</span>
+
+    <span class="n">all_paths</span> <span class="o">=</span> <span class="n">shortest_paths</span><span class="o">.</span><span class="n">all_shortest_paths</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_distance_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">bw</span><span class="p">:</span> <span class="n">defaultdict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">all_paths</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">all_paths</span><span class="p">[</span><span class="n">s</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">all_paths</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">s</span> <span class="o">!=</span> <span class="n">t</span> <span class="o">!=</span> <span class="n">x</span><span class="p">:</span>
+                        <span class="n">bw</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_paths</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">])</span>
+
+    <span class="c1"># assign zero values to nodes not occurring on shortest paths</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">:</span>
+        <span class="n">bw</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">normalized</span><span class="p">:</span>
+        <span class="n">max_centr</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">bw</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">min_centr</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">bw</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bw</span><span class="p">:</span>
+            <span class="n">bw</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">bw</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">-</span> <span class="n">min_centr</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_centr</span> <span class="o">-</span> <span class="n">min_centr</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">bw</span>
+
+
+<span class="nd">@betweenness_centrality</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ABCHigherOrderNetwork</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_bw_hon</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">HigherOrderNetwork</span><span class="p">,</span> <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Betweenness Centrality for Networks.&quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">pathpy.core.edge</span> <span class="kn">import</span> <span class="n">Edge</span>
+    <span class="kn">from</span> <span class="nn">pathpy.core.path</span> <span class="kn">import</span> <span class="n">Path</span>
+
+    <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Calculating betweenness (order k = </span><span class="si">%s</span><span class="s1">) ...&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">)</span>
+
+    <span class="n">all_paths</span> <span class="o">=</span> <span class="n">shortest_paths</span><span class="o">.</span><span class="n">all_shortest_paths</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_distance_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">bw</span><span class="p">:</span> <span class="n">defaultdict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="n">lengths</span><span class="p">:</span> <span class="n">defaultdict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span>
+        <span class="k">lambda</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)))</span>
+    <span class="n">paths</span><span class="p">:</span> <span class="n">defaultdict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">path_1_order_k</span> <span class="ow">in</span> <span class="n">all_paths</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">path_2_order_k</span> <span class="ow">in</span> <span class="n">all_paths</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">path_order_k</span> <span class="ow">in</span> <span class="n">all_paths</span><span class="p">[</span><span class="n">path_1_order_k</span><span class="p">][</span><span class="n">path_2_order_k</span><span class="p">]:</span>
+                <span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">path_order_k</span><span class="p">:</span>
+                    <span class="n">nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+
+                <span class="n">path</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                    <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+                <span class="n">edges</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">_v</span><span class="p">,</span> <span class="n">_w</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">path</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+                    <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Edge</span><span class="p">(</span><span class="n">_v</span><span class="p">,</span> <span class="n">_w</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="n">edges</span><span class="p">:</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="o">*</span><span class="n">edges</span><span class="p">)</span>
+                    <span class="n">s1</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">start</span>
+                    <span class="n">t1</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">end</span>
+
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">lengths</span><span class="p">[</span><span class="n">s1</span><span class="p">][</span><span class="n">t1</span><span class="p">]:</span>
+                        <span class="n">lengths</span><span class="p">[</span><span class="n">s1</span><span class="p">][</span><span class="n">t1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+                        <span class="n">paths</span><span class="p">[</span><span class="n">s1</span><span class="p">][</span><span class="n">t1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                        <span class="n">paths</span><span class="p">[</span><span class="n">s1</span><span class="p">][</span><span class="n">t1</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">==</span> <span class="n">lengths</span><span class="p">[</span><span class="n">s1</span><span class="p">][</span><span class="n">t1</span><span class="p">]:</span>
+                        <span class="n">paths</span><span class="p">[</span><span class="n">s1</span><span class="p">][</span><span class="n">t1</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">s_order_1</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">t_order_1</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">[</span><span class="n">s_order_1</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">path_order_1</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">[</span><span class="n">s_order_1</span><span class="p">][</span><span class="n">t_order_1</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">path_order_1</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">s_order_1</span> <span class="o">!=</span> <span class="n">node</span> <span class="o">!=</span> <span class="n">t_order_1</span><span class="p">:</span>
+                        <span class="n">bw</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">[</span><span class="n">s_order_1</span><span class="p">][</span><span class="n">t_order_1</span><span class="p">])</span>
+
+    <span class="c1"># assign zero values to nodes not occurring on shortest paths</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">bw</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">normalized</span><span class="p">:</span>
+        <span class="n">max_centr</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">bw</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">min_centr</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">bw</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bw</span><span class="p">:</span>
+            <span class="n">bw</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">bw</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">-</span> <span class="n">min_centr</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_centr</span> <span class="o">-</span> <span class="n">min_centr</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">bw</span>
+
+
+<div class="viewcode-block" id="closeness_centrality"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.centralities.closeness_centrality.html#pathpy.closeness_centrality">[docs]</a><span class="k">def</span> <span class="nf">closeness_centrality</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Calculates the closeness centrality of all nodes.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        If `normalized=False` (Default) for each node v the closeness centrality</span>
+<span class="sd">        is given as 1/sum_w(dist(v,w)) where dist(v,w) is the shortest path</span>
+<span class="sd">        distance between v and w. For `normalized=True` the counter is</span>
+<span class="sd">        multiplied by n-1 where n is the number of nodes in the</span>
+<span class="sd">        network. Shortest path distances are calculated using the function</span>
+<span class="sd">        `shortest_paths.distance_matrix`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    network : Network</span>
+
+<span class="sd">        The :py:class:`Network` object that contains the network</span>
+
+<span class="sd">    normalized : bool</span>
+
+<span class="sd">        If True the resulting centralities will be normalized based on the</span>
+<span class="sd">        average shortest path length.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Compute closeness centrality in a simple network</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; net = pp.Network(directed=False)</span>
+<span class="sd">    &gt;&gt;&gt; net.add_edge(&#39;a&#39;, &#39;x&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; net.add_edge(&#39;x&#39;, &#39;b&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; c = pp.algorithms.centralities.closeness_centrality(net)</span>
+<span class="sd">    &gt;&gt;&gt; c[&#39;a&#39;]</span>
+<span class="sd">    0.3333333333333333</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">shortest_paths</span><span class="o">.</span><span class="n">distance_matrix</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
+    <span class="n">cl</span><span class="p">:</span> <span class="n">defaultdict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
+    <span class="c1"># calculate closeness values</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">d</span> <span class="o">!=</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">distances</span><span class="p">[</span><span class="n">d</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">:</span>
+                <span class="n">cl</span><span class="p">[</span><span class="n">mapping</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">distances</span><span class="p">[</span><span class="n">d</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span>
+
+    <span class="c1"># assign centrality zero to nodes not occurring</span>
+    <span class="c1"># on higher-order shortest paths</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">:</span>
+        <span class="n">cl</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.0</span>
+        <span class="k">if</span> <span class="n">cl</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">cl</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">cl</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">normalized</span><span class="p">:</span>
+            <span class="n">cl</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">*=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">cl</span></div>
+
+
+<div class="viewcode-block" id="degree_centrality"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.centralities.degree_centrality.html#pathpy.degree_centrality">[docs]</a><span class="k">def</span> <span class="nf">degree_centrality</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;degree&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Calculates the degree centrality of all nodes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    network : Network</span>
+
+<span class="sd">        The :py:class:`Network` object that contains the network</span>
+
+<span class="sd">    mode : str</span>
+
+<span class="sd">        Can be chose nas &#39;degree&#39;, &#39;indegree&#39;, or &#39;outdegree&#39;. Determines</span>
+<span class="sd">        whether to calculate undirected/total degrees, indegrees, or degrees</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Compute degree centrality in a simple network</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; net = pp.Network(directed=True)</span>
+<span class="sd">    &gt;&gt;&gt; net.add_edge(&#39;a&#39;, &#39;x&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; net.add_edge(&#39;x&#39;, &#39;b&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; c = pp.algorithms.centralities.degree_centrality(net)</span>
+<span class="sd">    &gt;&gt;&gt; c[&#39;a&#39;]</span>
+<span class="sd">    1</span>
+
+<span class="sd">    &gt;&gt;&gt; c = pp.algorithms.centralities.degree_centrality(net, mode=&#39;indegree&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; c[&#39;a&#39;]</span>
+<span class="sd">    0</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;degree&#39;</span><span class="p">,</span> <span class="s1">&#39;indegree&#39;</span><span class="p">,</span> <span class="s1">&#39;outdegree&#39;</span><span class="p">]):</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Mode must be </span><span class="se">\&#39;</span><span class="s1">degree</span><span class="se">\&#39;</span><span class="s1">, </span><span class="se">\&#39;</span><span class="s1">indegree</span><span class="se">\&#39;</span><span class="s1"> or </span><span class="se">\&#39;</span><span class="s1">outdegree</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span>
+
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;indegree&#39;</span><span class="p">:</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">indegrees</span><span class="p">()[</span><span class="n">v</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;outdegree&#39;</span><span class="p">:</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">outdegrees</span><span class="p">()[</span><span class="n">v</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">degrees</span><span class="p">()[</span><span class="n">v</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="eigenvector_centrality"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.centralities.eigenvector_centrality.html#pathpy.eigenvector_centrality">[docs]</a><span class="k">def</span> <span class="nf">eigenvector_centrality</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span>
+                           <span class="n">weight</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Calculates the eigenvector centrality of all nodes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    network : Network</span>
+
+<span class="sd">        The :py:class:`Network` object that contains the network</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Compute eigenvector centrality in a simple network</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; net = pp.Network(directed=True)</span>
+<span class="sd">    &gt;&gt;&gt; net.add_edge(&#39;a&#39;, &#39;x&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; net.add_edge(&#39;x&#39;, &#39;b&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; c = pp.algorithms.centralities.eigenvector_centrality(net)</span>
+<span class="sd">    &gt;&gt;&gt; c[&#39;a&#39;]</span>
+<span class="sd">    1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">evcent</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ev</span> <span class="o">=</span> <span class="n">spl</span><span class="o">.</span><span class="n">eigs</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;LM&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ev</span> <span class="o">=</span> <span class="n">spl</span><span class="o">.</span><span class="n">eigs</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;LM&#39;</span><span class="p">)</span>
+    <span class="n">ev</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ev</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="p">)</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+        <span class="n">evcent</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">ev</span><span class="p">[</span><span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">]]</span><span class="o">/</span><span class="n">S</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">evcent</span></div>
+
+
+<div class="viewcode-block" id="rank_centralities"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.centralities.rank_centralities.html#pathpy.rank_centralities">[docs]</a><span class="k">def</span> <span class="nf">rank_centralities</span><span class="p">(</span><span class="n">centralities</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;Returns a list of (node, centrality) tuples in which tuples are ordered</span>
+<span class="sd">    by centrality in descending order</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    centralities: dict</span>
+
+<span class="sd">        dictionary of centralities, e.g. generated by `closeness_centralities`,</span>
+<span class="sd">        `betweenness_centralities`, or `degree_centralities`.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; centralities = {&#39;a&#39;: .2, &#39;b&#39;: .8, &#39;c&#39;: .5}</span>
+<span class="sd">    &gt;&gt;&gt; pp.algorithms.centralities.rank_centralities(centralities)</span>
+<span class="sd">    [(&#39;b&#39;, 0.8), (&#39;c&#39;, 0.5), (&#39;a&#39;, 0.2)]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        list of (node,centrality) tuples</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ranked_nodes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">centralities</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">ranked_nodes</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">ranked_nodes</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

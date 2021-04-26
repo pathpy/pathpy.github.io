@@ -1,4 +1,4 @@
-.. raw:: html
+﻿.. raw:: html
 
     </div>
     <div class=col-md-9 content>
@@ -20,9 +20,6 @@ pathpy.Node
    .. autosummary::
       :toctree:
    
-      ~Node.adjacent_edges
-      ~Node.incoming
-      ~Node.outgoing
       ~Node.uid
    
    

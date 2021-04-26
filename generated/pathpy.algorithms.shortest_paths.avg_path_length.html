@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.algorithms.shortest_paths.avg_path_length &#8212; pathpy 3.0.0a2 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pathpy.algorithms.shortest_paths.diameter" href="pathpy.algorithms.shortest_paths.diameter.html" />
+    <link rel="prev" title="pathpy.algorithms.shortest_paths.all_shortest_paths" href="pathpy.algorithms.shortest_paths.all_shortest_paths.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../examples/index.html">Gallery</a></li>
+                <li><a href="../tutorial.html">Tutorial</a></li>
+                <li><a href="../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">pathpy.algorithms.shortest_paths.avg_path_length</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  </div>
+<div class="col-md-9"><div class="section" id="pathpy-algorithms-shortest-paths-avg-path-length">
+<h1>pathpy.algorithms.shortest_paths.avg_path_length<a class="headerlink" href="#pathpy-algorithms-shortest-paths-avg-path-length" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="pathpy.algorithms.shortest_paths.avg_path_length">
+<code class="sig-prename descclassname">pathpy.algorithms.shortest_paths.</code><code class="sig-name descname">avg_path_length</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">Network</span></em>, <em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>bool<span class="p">, </span>None<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_zero</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/pathpy/algorithms/shortest_paths.html#avg_path_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.algorithms.shortest_paths.avg_path_length" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Calculates the average shortest path length in directed or undirected</dt><dd><p>networks, according to the definition</p>
+<blockquote>
+<div><p>&lt;l&gt; := sum_{i</p>
+</div></blockquote>
+</dd>
+</dl>
+<p>eq j} D[i,j]/(n (n-1))</p>
+<blockquote>
+<div><p>where n is the number of nodes and D is a matrix containing shortest pair
+distances for all node pairs i,j. The above definition holds for the
+default case where paths between node pairs (i,i) are excluded.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Shortest path lengths are calculated using the implementation
+of the Floyd-Warshall algorithm in scipy.csgraph.</p>
+</div>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>network</strong><span class="classifier">Network</span></dt><dd><blockquote>
+<div><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code> object that contains the network</p>
+</div></blockquote>
+<p>weighted : bool</p>
+<blockquote>
+<div><p>If True cheapest paths will be calculated based on the given weight property.</p>
+</div></blockquote>
+<p>exclude_zero : bool</p>
+<blockquote>
+<div><p>If True, (zero) diagonal entries in the distance matrix will be excluded
+in the average shortest path length calculation.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Generate a simple network with two edges.
+Shortest path distance matrix in this network is</p>
+<blockquote>
+<div><p>[   a x c ]
+[ a 0 1 2 ]</p>
+</div></blockquote>
+<dl class="simple">
+<dt>D = [ x 1 0 1 ]</dt><dd><p>[ c 2 1 0 ]</p>
+</dd>
+</dl>
+<p>yielding an average shortest path length of 8/6 = 1.33</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">shortest_paths</span><span class="o">.</span><span class="n">avg_path_length</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+<span class="go">1.3333</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">shortest_paths</span><span class="o">.</span><span class="n">avg_path_length</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">exclude_zero</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">0.8888</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
