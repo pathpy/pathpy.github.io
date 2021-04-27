@@ -127,11 +127,10 @@
 
 <span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">tqdm</span>
 
-<span class="kn">from</span> <span class="nn">pathpy.models</span> <span class="kn">import</span> <span class="n">network</span> <span class="k">as</span> <span class="n">net</span>
+<span class="kn">import</span> <span class="nn">pathpy.models.api</span> <span class="k">as</span> <span class="nn">api</span>
 
 <span class="c1"># pseudo load class for type checking</span>
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="c1"># from pathpy.core.node import Node</span>
     <span class="kn">from</span> <span class="nn">pathpy.models.network</span> <span class="kn">import</span> <span class="n">Network</span>
 
 <span class="c1"># from pathpy.core.path import Path</span>
@@ -344,7 +343,7 @@
     <span class="sd">&quot;&quot;&quot;Computes a shortest path tree rooted at the node with the</span>
 <span class="sd">    given source uid.&quot;&quot;&quot;</span>
 
-    <span class="n">n_tree</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">n_tree</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">Q</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">dist</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>

@@ -18,7 +18,7 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API reference" href="api.html" />
+    <link rel="next" title="Setting up pathpy" href="tutorial/installation.html" />
     <link rel="prev" title="Simple Plot" href="examples/simple_plot.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -82,7 +82,9 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Official pathpy tutorial</a></li>
+<li><a class="reference internal" href="#">Official pathpy tutorial</a><ul>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -119,9 +121,144 @@
     <div class="col-md-6">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Network functions</h3>
+          <h3 class="panel-title">Getting started</h3>
         </div>
         <div class="panel-body"><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/installation.html">Setting up <code class="docutils literal notranslate"><span class="pre">pathpy</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/installation.html#python-environment"><code class="docutils literal notranslate"><span class="pre">python</span></code> Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/installation.html#installing-pathpy3">Installing <code class="docutils literal notranslate"><span class="pre">pathpy3</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/network.html">Basic <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/network.html#creating-networks">Creating networks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tutorial/network.html#node-and-edge-objects">Node and Edge objects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/network.html#networks-nodes-and-edges-with-attributes">Networks, Nodes and Edges with attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/network.html#adjacency-matrices">Adjacency matrices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/visualisation.html">Visualising static networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/visualisation.html#interactive-network-visualisation-in-jupyter">Interactive network visualisation in <code class="docutils literal notranslate"><span class="pre">jupyter</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/visualisation.html#network-layouts">Network Layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/visualisation.html#plotting-spatially-embedded-networks">Plotting spatially embedded networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/visualisation.html#plotting-networks-to-pdf">Plotting networks to PDF</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Reading network data</h3>
+        </div>
+        <div class="panel-body"><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/netzschleuder.html">Reading networks from netzschleuder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/netzschleuder.html#reading-static-networks">Reading static networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/netzschleuder.html#reading-temporal-networks">Reading temporal networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/netzschleuder.html#reading-temporal-data-as-static-networks">Reading temporal data as static networks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/konect.html">Reading networks from KONECT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/konect.html#reading-static-networks">Reading static networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/konect.html#reading-temporal-networks">Reading temporal networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/konect.html#reading-temporal-data-as-static-network">Reading temporal data as static network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/infomap.html">Exporting path data as InfoMap state files</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Basic network analysis</h3>
+        </div>
+        <div class="panel-body"><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/random_graphs.html">Generating random graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/components.html">Connected components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/centralities.html">Calculating node centralities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/clustering.html">Clustering and Mixing patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/community_detection.html">Community detection in static networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/cross_validation.html">Cross-validation experiments with networks</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Temporal network data</h3>
+        </div>
+        <div class="panel-body"><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/temporal_networks.html">Temporal Network Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/temporal_network_visualisation.html">Temporal Network Visualisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/path_extraction.html">Extracting paths from temporal networks</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Higher-Order Network Models</h3>
+        </div>
+        <div class="panel-body"><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/higher_order_models.html">Higher-Order Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/multi_order_models.html">Multi-Order Models</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Dynamical processes</h3>
+        </div>
+        <div class="panel-body"><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/random_walks.html">Random Walks in Static Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/higher_order_random_walks.html">Random Walks in Higher-Order Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/epidemic_spreading.html">Epidemic Spreading</a></li>
+</ul>
 </div>
         </div>
       </div>

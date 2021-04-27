@@ -113,11 +113,12 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1"># =============================================================================</span>
 <span class="c1"># File      : konect.py -- Read konect data files</span>
-<span class="c1"># Author    : Jürgen Hackl &lt;hackl@ifi.uzh.ch&gt;</span>
-<span class="c1"># Time-stamp: &lt;Sat 2020-08-22 17:58 juergen&gt;</span>
+<span class="c1"># Author    : Ingo Scholtes &lt;scholtes@uni-wuppertal&gt;</span>
+<span class="c1"># Time-stamp: &lt;Tue 2021-04-27 11:12 ingo&gt;</span>
 <span class="c1">#</span>
-<span class="c1"># Copyright (c) 2016-2020 Pathpy Developers</span>
+<span class="c1"># Copyright (c) 2016-2021 Pathpy Developers</span>
 <span class="c1"># =============================================================================</span>
+<span class="kn">from</span> <span class="nn">pathpy.utils.errors</span> <span class="kn">import</span> <span class="n">NetworkError</span>
 <span class="kn">import</span> <span class="nn">tarfile</span>
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">request</span>
@@ -129,14 +130,15 @@
 
 <span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span>
 <span class="kn">from</span> <span class="nn">pathpy.io.pandas</span> <span class="kn">import</span> <span class="n">to_network</span><span class="p">,</span> <span class="n">to_temporal_network</span>
-<span class="kn">from</span> <span class="nn">pathpy.core.network</span> <span class="kn">import</span> <span class="n">Network</span>
-<span class="kn">from</span> <span class="nn">pathpy.models.temporal_network</span> <span class="kn">import</span> <span class="n">TemporalNetwork</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.api</span> <span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.api</span> <span class="kn">import</span> <span class="n">TemporalNetwork</span>
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">FileFormatError</span><span class="p">,</span> <span class="n">NetworkError</span>
 
 <span class="c1"># create logger</span>
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="read_network"><a class="viewcode-back" href="../../../generated/pathpy.io.konect.read_network.html#pathpy.io.konect.read_network">[docs]</a><span class="k">def</span> <span class="nf">read_network</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ignore_temporal</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]:</span>
+<div class="viewcode-block" id="read_tsv_network"><a class="viewcode-back" href="../../../generated/pathpy.io.konect.read_tsv_network.html#pathpy.io.konect.read_tsv_network">[docs]</a><span class="k">def</span> <span class="nf">read_tsv_network</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ignore_temporal</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Reads a KONECT data file in TSV format and returns a pp.Network instance.</span>
 
 <span class="sd">    The unified KONECT data format is a compressed .tar.bz2 file containing two</span>
@@ -149,18 +151,62 @@
 <span class="sd">    network will be automatically determined based on the data file. Weight and</span>
 <span class="sd">    Time attributes are stored as edge attributes.</span>
 
+<span class="sd">    For more information on the TSV file format, see Section 9 in referenced handbook.</span>
+
+<span class="sd">    .. [1] J Kunegis, &quot;Handbook of Network Analysis - The Konect Project&quot;, https://github.com/kunegis/konect-handbook/blob/master/konect-handbook.pdf, 2019</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-
 <span class="sd">    file: str, Bytes</span>
-
 <span class="sd">        Filename or byte stream from which data should be loaded</span>
 
 <span class="sd">    ignore_temporal: bool=False</span>
-<span class="sd">        </span>
 <span class="sd">        If False (default), a temporal or static network will be returned depending on the data.</span>
-<span class="sd">        If True, a static network will be returned even if the edges of the KONECT network contain a time attribute. </span>
+<span class="sd">        If True, a static network will be returned even if the edges of the KONECT network contain a time attribute.</span>
 
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Network or TemporalNetwork</span>
+<span class="sd">        a static or temporal network object</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Read a static network</span>
+
+<span class="sd">    &gt;&gt;&gt; n = pp.io.konect.read_konect_name(&#39;ucidata-zachary.tsv&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; print(n)</span>
+<span class="sd">    Uid:			0x7f9a6878bb80</span>
+<span class="sd">    Type:			Network</span>
+<span class="sd">    Directed:		False</span>
+<span class="sd">    Multi-Edges:		False</span>
+<span class="sd">    Number of nodes:	34</span>
+<span class="sd">    Number of edges:	78</span>
+
+<span class="sd">    Read a temporal network</span>
+
+<span class="sd">    &gt;&gt;&gt; tn = pp.io.konect.read_konect_name(&#39;edit-htwikisource.tsv&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; print(tn)</span>
+<span class="sd">    Uid:			0x7f9a38914730</span>
+<span class="sd">    Type:			TemporalNetwork</span>
+<span class="sd">    Directed:		False</span>
+<span class="sd">    Multi-Edges:		True</span>
+<span class="sd">    Number of unique nodes:	115</span>
+<span class="sd">    Number of unique edges:	157</span>
+<span class="sd">    Number of temp nodes:	115</span>
+<span class="sd">    Number of temp edges:	315</span>
+<span class="sd">    Observation periode:	1151852649 - 1443816055.0</span>
+
+<span class="sd">    Read a temporal network as static network</span>
+
+<span class="sd">    &gt;&gt;&gt; n = pp.io.konect.read_konect_name(&#39;edit-htwikisource.tsv&#39;, ignore_temporal=True)</span>
+<span class="sd">    &gt;&gt;&gt; print(n)</span>
+<span class="sd">    Uid:			0x7f9a687cbb80</span>
+<span class="sd">    Type:			Network</span>
+<span class="sd">    Directed:		False</span>
+<span class="sd">    Multi-Edges:		True</span>
+<span class="sd">    Number of nodes:	115</span>
+<span class="sd">    Number of edges:	315</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># implicit semantics of columns in TSV files</span>
@@ -193,7 +239,9 @@
                             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                                 <span class="n">attributes</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not extract tar file </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Could not extract tar file </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                    <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">FileFormatError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
             <span class="c1"># read network data</span>
             <span class="k">elif</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;out.&#39;</span><span class="p">):</span>
@@ -218,7 +266,9 @@
                             <span class="n">multiedges</span> <span class="o">=</span> <span class="kc">True</span>
                         <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Detected columns: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">([</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">network_data</span><span class="o">.</span><span class="n">columns</span><span class="p">])))</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not extract file </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Could not extract tar file </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                    <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">FileFormatError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">if</span> <span class="s1">&#39;timeiso&#39;</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">dt</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;timeiso&#39;</span><span class="p">])</span>
@@ -236,7 +286,7 @@
 
 
 <div class="viewcode-block" id="read_konect_name"><a class="viewcode-back" href="../../../generated/pathpy.io.konect.read_konect_name.html#pathpy.io.konect.read_konect_name">[docs]</a><span class="k">def</span> <span class="nf">read_konect_name</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">ignore_temporal</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://konect.cc/files/download.tsv.&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;Retrieves a KONECT data set with a given name and returns a corresponding</span>
+    <span class="sd">&quot;&quot;&quot;Retrieves a data set with a given name from the KONECT repository and returns a corresponding</span>
 <span class="sd">    instance of pp.Network.</span>
 
 <span class="sd">    The unified KONECT data format is a compressed .tar.bz2 file containing two</span>
@@ -248,6 +298,13 @@
 <span class="sd">    multi-edge network with directed or undirected edges. The type of the</span>
 <span class="sd">    network will be automatically determined based on the data file. Weight and</span>
 <span class="sd">    Time attributes are stored as edge attributes.</span>
+
+<span class="sd">    .. [1] J Kunegis, &quot;Konect: the koblenz network collection&quot; Proceedings of the 22nd international conference on world wide web. 2013.</span>
+
+<span class="sd">    See also</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    read_tsv_network: Read (temporal) network from a TSV file</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -268,15 +325,59 @@
 <span class="sd">    ignore_temporal: bool=False</span>
 <span class="sd">        </span>
 <span class="sd">        If False (default), a temporal or static network will be returned depending on the data.</span>
-<span class="sd">        If True, a static network will be returned even if the edges of the KONECT network contain a time attribute. </span>
+<span class="sd">        If True, a static network will be returned even if the edges of the KONECT network contain a time attribute.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Instance of Network or TemporalNetwork</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Read a static network from the konect repository</span>
+
+<span class="sd">    &gt;&gt;&gt; n = pp.io.konect.read_konect_name(&#39;ucidata-zachary&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; print(n)</span>
+<span class="sd">    Uid:			0x7f9a6878bb80</span>
+<span class="sd">    Type:			Network</span>
+<span class="sd">    Directed:		False</span>
+<span class="sd">    Multi-Edges:		False</span>
+<span class="sd">    Number of nodes:	34</span>
+<span class="sd">    Number of edges:	78</span>
+
+<span class="sd">    Read a temporal network from the konect repository</span>
+
+<span class="sd">    &gt;&gt;&gt; tn = pp.io.konect.read_konect_name(&#39;edit-htwikisource&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; print(tn)</span>
+<span class="sd">    Uid:			0x7f9a38914730</span>
+<span class="sd">    Type:			TemporalNetwork</span>
+<span class="sd">    Directed:		False</span>
+<span class="sd">    Multi-Edges:		True</span>
+<span class="sd">    Number of unique nodes:	115</span>
+<span class="sd">    Number of unique edges:	157</span>
+<span class="sd">    Number of temp nodes:	115</span>
+<span class="sd">    Number of temp edges:	315</span>
+<span class="sd">    Observation periode:	1151852649 - 1443816055.0</span>
+
+<span class="sd">    Read a temporal network as static network</span>
+
+<span class="sd">    &gt;&gt;&gt; n = pp.io.konect.read_konect_name(&#39;edit-htwikisource&#39;, ignore_temporal=True)</span>
+<span class="sd">    &gt;&gt;&gt; print(n)</span>
+<span class="sd">    Uid:			0x7f9a687cbb80</span>
+<span class="sd">    Type:			Network</span>
+<span class="sd">    Directed:		False</span>
+<span class="sd">    Multi-Edges:		True</span>
+<span class="sd">    Number of nodes:	115</span>
+<span class="sd">    Number of edges:	315</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">base_url</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.tar.bz2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">read_network</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">ignore_temporal</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">read_tsv_network</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">ignore_temporal</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">HTTPError</span><span class="p">:</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;HTTP 404 Error, could not open URL.&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">None</span></div>
+        <span class="k">raise</span> <span class="n">NetworkError</span><span class="p">(</span><span class="s1">&#39;Could not connect to KONECT server at </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">base_url</span><span class="p">))</span></div>
 
 
 <span class="c1"># =============================================================================</span>

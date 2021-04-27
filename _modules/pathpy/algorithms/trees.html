@@ -130,13 +130,13 @@
 
 <span class="c1"># pseudo load class for type checking</span>
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">pathpy.models.network</span> <span class="kn">import</span> <span class="n">Network</span>
+    <span class="kn">from</span> <span class="nn">pathpy.models.api</span> <span class="kn">import</span> <span class="n">Network</span>
 
 <span class="c1"># create logger</span>
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="check_tree"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.trees.check_tree.html#pathpy.algorithms.trees.check_tree">[docs]</a><span class="k">def</span> <span class="nf">check_tree</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">):</span>
+<div class="viewcode-block" id="check_tree"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.trees.check_tree.html#pathpy.algorithms.trees.check_tree">[docs]</a><span class="k">def</span> <span class="nf">check_tree</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 
     <span class="k">if</span> <span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
 
@@ -173,7 +173,7 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="tree_size"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.trees.tree_size.html#pathpy.algorithms.trees.tree_size">[docs]</a><span class="k">def</span> <span class="nf">tree_size</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="tree_size"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.trees.tree_size.html#pathpy.algorithms.trees.tree_size">[docs]</a><span class="k">def</span> <span class="nf">tree_size</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 
     <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">successors</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>

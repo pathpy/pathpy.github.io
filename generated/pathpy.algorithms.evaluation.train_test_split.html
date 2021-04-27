@@ -118,7 +118,41 @@
 <dl class="py function">
 <dt id="pathpy.algorithms.evaluation.train_test_split">
 <code class="sig-prename descclassname">pathpy.algorithms.evaluation.</code><code class="sig-name descname">train_test_split</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">Network</span></em>, <em class="sig-param"><span class="n">test_size</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">train_size</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">split</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'node'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/algorithms/evaluation.html#train_test_split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.algorithms.evaluation.train_test_split" title="Permalink to this definition">¶</a></dt>
-<dd><p>Performs a random split of a network into a training and test network. The split can be performed along nodes or edges</p>
+<dt>
+<code class="sig-prename descclassname">pathpy.algorithms.evaluation.</code><code class="sig-name descname">train_test_split</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">TemporalNetwork</span></em>, <em class="sig-param"><span class="n">test_size</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">train_size</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">split</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'interactions'</span></em><span class="sig-paren">)</span></dt>
+<dd><p>Returns a train/test split of a network object. This method is implemented for instances of Network and TemporalNetwork. The train/test split is non-destructive and based on object references, i.e. the function returns new Network instances that contain references to the same node/edge objects. The original network is not affected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>network: Union[Network, TemporalNetwork]</strong></dt><dd><p>The network or temporal network for which the train/test split shall be performed.</p>
+</dd>
+<dt><strong>test_size: Optional[float] = 0.25</strong></dt><dd><p>Fraction of the network to include in the test network</p>
+</dd>
+<dt><strong>train_size: Optional[float] = 0.25</strong></dt><dd><p>Fraction of the network to include in the training network</p>
+</dd>
+<dt><strong>split: Optional[‘str’] = ‘node’</strong></dt><dd><p>Specifies how the train/test split shall be performed. For ‘node’ a random subset of nodes is selected, while for ‘edge’ a random subset of edges is selected.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Tuple (n1, n2) where n1 is the test network and n2 is the training network</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Network</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="p">,</span> <span class="n">train</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>    
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+<span class="go">Network with one node</span>
+<span class="go">Network with three nodes</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

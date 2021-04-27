@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.io.konect.read_tsv_network &#8212; pathpy 3.0.0a2 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pathpy.generators.lattice" href="pathpy.generators.lattice.html" />
+    <link rel="prev" title="pathpy.io.konect.read_konect_name" href="pathpy.io.konect.read_konect_name.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../examples/index.html">Gallery</a></li>
+                <li><a href="../tutorial.html">Tutorial</a></li>
+                <li><a href="../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">pathpy.io.konect.read_tsv_network</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  </div>
+<div class="col-md-9"><div class="section" id="pathpy-io-konect-read-tsv-network">
+<h1>pathpy.io.konect.read_tsv_network<a class="headerlink" href="#pathpy-io-konect-read-tsv-network" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="pathpy.io.konect.read_tsv_network">
+<code class="sig-prename descclassname">pathpy.io.konect.</code><code class="sig-name descname">read_tsv_network</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">ignore_temporal</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>pathpy.models.network.Network<span class="p">, </span>pathpy.models.temporal_network.TemporalNetwork<span class="p">]</span><a class="reference internal" href="../_modules/pathpy/io/konect.html#read_tsv_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.io.konect.read_tsv_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a KONECT data file in TSV format and returns a pp.Network instance.</p>
+<p>The unified KONECT data format is a compressed .tar.bz2 file containing two
+files meta.* and out.*. The key-value attributes in the meta file
+(typically containing data descriptions and link to original data source)
+are stored as attributes in the returned instance of pp.Network.</p>
+<p>Depending on the data file, the generated network will be a single -or
+multi-edge network with directed or undirected edges, or a Temporal Network. The type of the
+network will be automatically determined based on the data file. Weight and
+Time attributes are stored as edge attributes.</p>
+<p>For more information on the TSV file format, see Section 9 in referenced handbook.</p>
+<dl class="citation">
+<dt class="label" id="ra5227bbb67f1-1"><span class="brackets">1</span></dt>
+<dd><p>J Kunegis, “Handbook of Network Analysis - The Konect Project”, <a class="reference external" href="https://github.com/kunegis/konect-handbook/blob/master/konect-handbook.pdf">https://github.com/kunegis/konect-handbook/blob/master/konect-handbook.pdf</a>, 2019</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>file: str, Bytes</strong></dt><dd><p>Filename or byte stream from which data should be loaded</p>
+</dd>
+<dt><strong>ignore_temporal: bool=False</strong></dt><dd><p>If False (default), a temporal or static network will be returned depending on the data.
+If True, a static network will be returned even if the edges of the KONECT network contain a time attribute.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Network or TemporalNetwork</dt><dd><p>a static or temporal network object</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Read a static network</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">konect</span><span class="o">.</span><span class="n">read_konect_name</span><span class="p">(</span><span class="s1">&#39;ucidata-zachary.tsv&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="go">Uid:                        0x7f9a6878bb80</span>
+<span class="go">Type:                       Network</span>
+<span class="go">Directed:           False</span>
+<span class="go">Multi-Edges:                False</span>
+<span class="go">Number of nodes:    34</span>
+<span class="go">Number of edges:    78</span>
+</pre></div>
+</div>
+<p>Read a temporal network</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tn</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">konect</span><span class="o">.</span><span class="n">read_konect_name</span><span class="p">(</span><span class="s1">&#39;edit-htwikisource.tsv&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">tn</span><span class="p">)</span>
+<span class="go">Uid:                        0x7f9a38914730</span>
+<span class="go">Type:                       TemporalNetwork</span>
+<span class="go">Directed:           False</span>
+<span class="go">Multi-Edges:                True</span>
+<span class="go">Number of unique nodes:     115</span>
+<span class="go">Number of unique edges:     157</span>
+<span class="go">Number of temp nodes:       115</span>
+<span class="go">Number of temp edges:       315</span>
+<span class="go">Observation periode:        1151852649 - 1443816055.0</span>
+</pre></div>
+</div>
+<p>Read a temporal network as static network</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">konect</span><span class="o">.</span><span class="n">read_konect_name</span><span class="p">(</span><span class="s1">&#39;edit-htwikisource.tsv&#39;</span><span class="p">,</span> <span class="n">ignore_temporal</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="go">Uid:                        0x7f9a687cbb80</span>
+<span class="go">Type:                       Network</span>
+<span class="go">Directed:           False</span>
+<span class="go">Multi-Edges:                True</span>
+<span class="go">Number of nodes:    115</span>
+<span class="go">Number of edges:    315</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -119,24 +119,25 @@
 <span class="c1"># Copyright (c) 2016-2021 Pathpy Developers</span>
 <span class="c1"># =============================================================================</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">pathpy.io.pandas</span> <span class="kn">import</span> <span class="n">to_network</span><span class="p">,</span> <span class="n">to_temporal_network</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
 
-
-<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span>
-
-<span class="kn">from</span> <span class="nn">pathpy.core.network</span> <span class="kn">import</span> <span class="n">Network</span>
-<span class="kn">from</span> <span class="nn">pathpy.models.temporal_network</span> <span class="kn">import</span> <span class="n">TemporalNetwork</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
-
-<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">pathpy.utils.errors</span> <span class="kn">import</span> <span class="n">FileFormatError</span><span class="p">,</span> <span class="n">NetworkError</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">request</span>
 <span class="kn">from</span> <span class="nn">urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
-<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">pathpy.io.pandas</span> <span class="kn">import</span> <span class="n">to_network</span><span class="p">,</span> <span class="n">to_temporal_network</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.network</span> <span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.temporal_network</span> <span class="kn">import</span> <span class="n">TemporalNetwork</span>
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">FileFormatError</span><span class="p">,</span> <span class="n">NetworkError</span><span class="p">,</span> <span class="n">MissingModuleError</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># create logger</span>
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -247,8 +248,9 @@
         <span class="n">val_len</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">endianness</span> <span class="o">+</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="p">:</span><span class="n">ptr</span><span class="o">+</span><span class="mi">8</span><span class="o">+</span><span class="n">val_len</span><span class="p">]),</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">val_len</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unknown type index </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_index</span><span class="p">))</span>
-        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Unknown type index </span><span class="si">{0}</span><span class="s1"> while parsing graphtool file&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_index</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">FileFormatError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="parse_graphtool_format"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.parse_graphtool_format.html#pathpy.io.graphtool.parse_graphtool_format">[docs]</a><span class="k">def</span> <span class="nf">parse_graphtool_format</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">ignore_temporal</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]:</span>
@@ -276,7 +278,7 @@
     <span class="c1"># check magic bytes</span>
     <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">!=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xe2\x9b\xbe\x20\x67\x74</span><span class="s1">&#39;</span><span class="p">:</span>
         <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Invalid graphtool file. Wrong magic bytes.&#39;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s1">&#39;Invalid graphtool file.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">FileFormatError</span><span class="p">(</span><span class="s1">&#39;Invalid graphtool file. Wrong magic bytes.&#39;</span><span class="p">)</span>
     <span class="n">ptr</span> <span class="o">=</span> <span class="mi">6</span>
 
     <span class="c1"># read graphtool version byte</span>
@@ -426,7 +428,9 @@
                 <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
                 <span class="k">return</span> <span class="n">parse_graphtool_format</span><span class="p">(</span><span class="n">dctx</span><span class="o">.</span><span class="n">decompress</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">max_output_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
             <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
-                <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Package zstandard is needed to decode graphtool files. Please install module, e.g., using &quot;pip install zstandard&quot;.&#39;</span><span class="p">)</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Package zstandard is needed to decode graphtool files. Please install module, e.g., using &quot;pip install zstandard&quot;.&#39;</span>
+                <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>                
+                <span class="k">raise</span> <span class="n">MissingModuleError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>    
             <span class="k">return</span> <span class="n">parse_graphtool_format</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
 
@@ -482,8 +486,14 @@
     <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;/api/nets&#39;</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">url</span> <span class="o">+=</span> <span class="s1">&#39;?</span><span class="si">{0}</span><span class="s1">=</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">base_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">base_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">HTTPError</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Could not connect to netzschleuder repository at </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">base_url</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">NetworkError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="read_netzschleuder_record"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.read_netzschleuder_record.html#pathpy.io.graphtool.read_netzschleuder_record">[docs]</a><span class="k">def</span> <span class="nf">read_netzschleuder_record</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;https://networks.skewed.de&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -518,7 +528,12 @@
 <span class="sd">    Dictionary containing key-value pairs of metadata</span>
 <span class="sd">    &quot;&quot;&quot;</span> 
     <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;/api/net/</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">base_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">base_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="k">except</span> <span class="n">HTTPError</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Could not connect to netzschleuder repository at </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">base_url</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">NetworkError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="read_netzschleuder_network"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.read_netzschleuder_network.html#pathpy.io.graphtool.read_netzschleuder_network">[docs]</a><span class="k">def</span> <span class="nf">read_netzschleuder_network</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">net</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
@@ -583,8 +598,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">zstandard</span> <span class="k">as</span> <span class="nn">zstd</span> 
-        
+        <span class="kn">import</span> <span class="nn">zstandard</span> <span class="k">as</span> <span class="nn">zstd</span>
 
         <span class="c1"># retrieve network properties</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;/api/net/</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -597,8 +611,9 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">f</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">base_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">HTTPError</span><span class="p">:</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;HTTP 404 Error. Did you specify the network to load from this data set?&#39;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Could not connect to netzschleuder repository at </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">base_url</span><span class="p">)</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">NetworkError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="c1"># decompress data</span>
         <span class="n">dctx</span> <span class="o">=</span> <span class="n">zstd</span><span class="o">.</span><span class="n">ZstdDecompressor</span><span class="p">()</span>
@@ -614,7 +629,9 @@
 
         <span class="k">return</span> <span class="n">n</span>
     <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Package zstandard is needed to decode graphtool files. Please install module, e.g., using &quot;pip install zstandard.&#39;</span><span class="p">)</span></div>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Package zstandard is needed to decode graphtool files. Please install module, e.g., using &quot;pip install zstandard.&#39;</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">MissingModuleError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 </pre></div>
 
     </div>

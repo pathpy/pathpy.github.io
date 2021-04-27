@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Walks in Higher-Order Networks &#8212; pathpy 3.0.0a2 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Epidemic Spreading" href="epidemic_spreading.html" />
+    <link rel="prev" title="Random Walks in Static Networks" href="random_walks.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../examples/index.html">Gallery</a></li>
+                <li><a href="../tutorial.html">Tutorial</a></li>
+                <li><a href="../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Random Walks in Higher-Order Networks</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="random-walks-in-higher-order-networks">
+<h1>Random Walks in Higher-Order Networks<a class="headerlink" href="#random-walks-in-higher-order-networks" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+</pre></div>
+</div>
+<script charset="utf-8">
+// Load via requireJS if available (jupyter notebook environment)
+try {
+require.config({
+paths: {
+d3: "https://d3js.org/d3.v5.min.js".replace(".js", "")
+}
+});
+console.log("OKAY: requireJS was detected");
+}
+catch(err){
+console.log(err);
+console.log("ERROR: NO requireJS was detected");
+};
+require(['d3'], function(d3){
+console.log("OKAY: d3js was detected");
+});
+</script><p>We can use <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> to simulate random walks on higher-order networks.
+Let us first create a simple Higher-Order Network:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;a-b&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;b-c&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;c-a&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;c-d&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;d-a&#39;</span><span class="p">)</span>
+
+<span class="n">n2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">HigherOrderNetwork</span><span class="p">()</span>
+<span class="n">v1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">HigherOrderNode</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;a-b&#39;</span><span class="p">],</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;a-b&#39;</span><span class="p">)</span>
+<span class="n">v2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">HigherOrderNode</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;b-c&#39;</span><span class="p">],</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;b-c&#39;</span><span class="p">)</span>
+<span class="n">v3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">HigherOrderNode</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;c-a&#39;</span><span class="p">],</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;c-a&#39;</span><span class="p">)</span>
+<span class="n">v4</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">HigherOrderNode</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;c-d&#39;</span><span class="p">],</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;c-d&#39;</span><span class="p">)</span>
+<span class="n">v5</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">HigherOrderNode</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;d-a&#39;</span><span class="p">],</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;d-a&#39;</span><span class="p">)</span>
+
+<span class="n">n2</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;a-b-c&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">n2</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;b-c-a&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">n2</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">v4</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;b-c-d&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">n2</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">v3</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;c-a-b&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">n2</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">v4</span><span class="p">,</span> <span class="n">v5</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;c-d-a&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">n2</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">v5</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;d-a-b&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To simulate a random in the higher-order network, we can use the same
+class as for a standard, first-order network:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rw2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">RandomWalk</span><span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;weight&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can inspect the transition matrix as follows:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">rw2</span><span class="o">.</span><span class="n">matrix_pd</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="n">a</span><span class="o">-</span><span class="n">b</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>  <span class="n">d</span><span class="o">-</span><span class="n">a</span>
+<span class="n">a</span><span class="o">-</span><span class="n">b</span>  <span class="mf">0.0</span>  <span class="mf">1.0</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>
+<span class="n">b</span><span class="o">-</span><span class="n">c</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>  <span class="mf">1.0</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>
+<span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="mf">1.0</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>
+<span class="n">c</span><span class="o">-</span><span class="n">d</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>  <span class="mf">1.0</span>
+<span class="n">d</span><span class="o">-</span><span class="n">a</span>  <span class="mf">1.0</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>  <span class="mf">0.0</span>
+</pre></div>
+</div>
+<p>We can use the following code to simulate a random walk in the
+higher-order network. The generated <code class="docutils literal notranslate"><span class="pre">Path</span></code> object is automatically
+mapped to the first-order nodes. We have to specify a second-order node
+as the start node (or the number of randomly chosen second-order nodes).</p>
+<p>Based on the higher-order network above, a transition from <code class="docutils literal notranslate"><span class="pre">b</span></code> via
+<code class="docutils literal notranslate"><span class="pre">c</span></code> to <code class="docutils literal notranslate"><span class="pre">d</span></code> can never occur:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">rw2</span><span class="o">.</span><span class="n">generate_walk</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">start_node</span><span class="o">=</span><span class="n">n2</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;b-c&#39;</span><span class="p">])</span>
+<span class="n">pprint</span><span class="p">([</span> <span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span> <span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;a&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;b&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;c&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;a&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;b&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;c&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;a&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;b&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;c&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;a&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;b&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;c&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;a&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;b&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;c&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;a&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;b&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;c&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;a&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;b&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Conversely, the transition from <code class="docutils literal notranslate"><span class="pre">b</span></code> via <code class="docutils literal notranslate"><span class="pre">c</span></code> to <code class="docutils literal notranslate"><span class="pre">d</span></code> will occur in
+the corresponding first-order random walk:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rw</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">RandomWalk</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;weight&#39;</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">rw</span><span class="o">.</span><span class="n">generate_walk</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">start_node</span><span class="o">=</span><span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">])</span>
+<span class="n">pprint</span><span class="p">([</span> <span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span> <span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

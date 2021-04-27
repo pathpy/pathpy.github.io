@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Some standard network functions &#8212; pathpy 3.0.0a1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basic pathpy concepts &#8212; pathpy 3.0.0a2 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="API reference" href="../api.html" />
-    <link rel="prev" title="Official pathpy tutorial" href="../tutorial.html" />
+    <link rel="next" title="Visualising static networks" href="visualisation.html" />
+    <link rel="prev" title="Setting up pathpy" href="installation.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -41,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -81,8 +82,13 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Some standard network functions</a><ul>
-<li><a class="reference internal" href="#more-details">More details</a></li>
+<li><a class="reference internal" href="#">Basic <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> concepts</a><ul>
+<li><a class="reference internal" href="#creating-networks">Creating networks</a><ul>
+<li><a class="reference internal" href="#node-and-edge-objects">Node and Edge objects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#networks-nodes-and-edges-with-attributes">Networks, Nodes and Edges with attributes</a></li>
+<li><a class="reference internal" href="#adjacency-matrices">Adjacency matrices</a></li>
 </ul>
 </li>
 </ul>
@@ -114,28 +120,654 @@
   <div class="row">
     <div class="body col-md-12 content" role="main">
       
-  <div class="section" id="some-standard-network-functions">
-<span id="network-tutorial"></span><h1>Some standard network functions<a class="headerlink" href="#some-standard-network-functions" title="Permalink to this headline">¶</a></h1>
-<div class=col-md-9><p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+  <div class="section" id="basic-pathpy-concepts">
+<h1>Basic <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> concepts<a class="headerlink" href="#basic-pathpy-concepts" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">pathpy</span></code> has a user-friendly API that makes it easy to handle directed
+and undirected networks, networks with single and multiple edges,
+multi-layer networks or temporal networks. It also provides interactive
+HTML visualisations that can be directly displayed inside <code class="docutils literal notranslate"><span class="pre">jupyter</span></code>
+notebooks, which makes it particularly suitable for educational
+settings.</p>
+<p>To get started with <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> we first import <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> and assign the
+local alias <code class="docutils literal notranslate"><span class="pre">pp</span></code>:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<script charset="utf-8">
+// Load via requireJS if available (jupyter notebook environment)
+try {
+require.config({
+paths: {
+d3: "https://d3js.org/d3.v5.min.js".replace(".js", "")
+}
+});
+console.log("OKAY: requireJS was detected");
+}
+catch(err){
+console.log(err);
+console.log("ERROR: NO requireJS was detected");
+};
+require(['d3'], function(d3){
+console.log("OKAY: d3js was detected");
+});
+</script><p>If the <code class="docutils literal notranslate"><span class="pre">import</span></code> statement completes without error message, the
+installation was successful and we can now use <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> to generate,
+analyse, and visualise networks.</p>
+<div class="section" id="creating-networks">
+<h2>Creating networks<a class="headerlink" href="#creating-networks" title="Permalink to this headline">¶</a></h2>
+<p>For this purpose <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> provides the <code class="docutils literal notranslate"><span class="pre">Network</span></code> class. Calling the
+constructor will return an instance that represents an empty network
+with no nodes and no links. By default, networks in <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> are
+directed. If you want to create an undirected network you can pass the
+parameter <code class="docutils literal notranslate"><span class="pre">directed=False</span></code> in the constructor.</p>
+<p>Printing the <code class="docutils literal notranslate"><span class="pre">Network</span></code> object will give a short string summary which
+tells whether the network is directed or undirected, as well as the
+number of unique nodes and links.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Network</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">5.47213595499958</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fe5406f6040</span>
+<span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
+<span class="n">Directed</span><span class="p">:</span>           <span class="kc">True</span>
+<span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">False</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span>    <span class="mi">0</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span>    <span class="mi">0</span>
 </pre></div>
 </div>
-<div class="section" id="more-details">
-<h2>More details<a class="headerlink" href="#more-details" title="Permalink to this headline">¶</a></h2>
-<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="mi">8</span><span class="o">*</span><span class="mi">8</span>
+<p>A network is directed by default, but we can create an undirected
+network by passing the parameter <code class="docutils literal notranslate"><span class="pre">directed=False</span></code>.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">64</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fe5406f6250</span>
+<span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
+<span class="n">Directed</span><span class="p">:</span>           <span class="kc">False</span>
+<span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">False</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span>    <span class="mi">0</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span>    <span class="mi">0</span>
 </pre></div>
 </div>
-</div></div>
+<p>The examples above show that each network has a unique identifier. By
+default, this unique ID is derived from the hash value of the underlying
+python object, which allows you to quickly check whether two variables
+actually refer to the same network object. If you prefer to manage your
+own UIDs that are eadsier to remember, you can assign custom IDs by
+explicitly passing a uid property:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;MyUndirectedNetwork&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="n">MyUndirectedNetwork</span>
+<span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
+<span class="n">Directed</span><span class="p">:</span>           <span class="kc">False</span>
+<span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">False</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span>    <span class="mi">0</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span>    <span class="mi">0</span>
+</pre></div>
+</div>
+<p>The simplest way to add nodes and edges is to call the functions
+<code class="docutils literal notranslate"><span class="pre">add_node</span></code> and <code class="docutils literal notranslate"><span class="pre">add_edge</span></code>. In both cases, we can simply pass unique
+string identifiers of nodes, which will then be used as UIDs of the
+underlying node objects. To create an undirected network with three
+nodes and two edges, we can write:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;ExampleNetwork&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="n">ExampleNetwork</span>
+<span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
+<span class="n">Directed</span><span class="p">:</span>           <span class="kc">False</span>
+<span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">True</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span>    <span class="mi">3</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span>    <span class="mi">2</span>
+</pre></div>
+</div>
+<p>Unless we want to explicitly add isolated nodes with no incident edges,
+we can omit the explicit call of the <code class="docutils literal notranslate"><span class="pre">add_node</span></code> function. If we add
+edges any node that does not exist already will be created and added
+automatically. If we want to check explicitly whether a node exists
+before creating and edge, we can test this with the <code class="docutils literal notranslate"><span class="pre">in</span></code> operator on
+the set of node UIDS available via <code class="docutils literal notranslate"><span class="pre">Network.nodes.uids</span></code>:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;d&#39;</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kc">False</span>
+</pre></div>
+</div>
+<p>The following code will automatically add a new node <code class="docutils literal notranslate"><span class="pre">d</span></code>, along with a
+new edge from <code class="docutils literal notranslate"><span class="pre">d</span></code> to <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="n">ExampleNetwork</span>
+<span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
+<span class="n">Directed</span><span class="p">:</span>           <span class="kc">False</span>
+<span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">True</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span>    <span class="mi">4</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span>    <span class="mi">4</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;d&#39;</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kc">True</span>
+</pre></div>
+</div>
+<p>To count the number of nodes and edges in a network we can use the
+<code class="docutils literal notranslate"><span class="pre">number_of_nodes</span></code> and <code class="docutils literal notranslate"><span class="pre">number_of_edges</span></code> functions, or we could can
+compute <code class="docutils literal notranslate"><span class="pre">len</span></code> of <code class="docutils literal notranslate"><span class="pre">Network.nodes</span></code> and <code class="docutils literal notranslate"><span class="pre">Network.edges</span></code>:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Network has </span><span class="si">{0}</span><span class="s1"> nodes and </span><span class="si">{1}</span><span class="s1"> edges&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(),</span> <span class="n">n</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of nodes: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of edges: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">edges</span><span class="p">)))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Network</span> <span class="n">has</span> <span class="mi">4</span> <span class="n">nodes</span> <span class="ow">and</span> <span class="mi">4</span> <span class="n">edges</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span> <span class="mi">4</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<div class="section" id="node-and-edge-objects">
+<h3>Node and Edge objects<a class="headerlink" href="#node-and-edge-objects" title="Permalink to this headline">¶</a></h3>
+<p>In the simple example above, we generated nodes and edges by calling the
+<code class="docutils literal notranslate"><span class="pre">add_node</span></code> and <code class="docutils literal notranslate"><span class="pre">add_edge</span></code> function of the network instance.
+Internally, nodes and edges are represented as objects of type <code class="docutils literal notranslate"><span class="pre">Node</span></code>
+and <code class="docutils literal notranslate"><span class="pre">Edge</span></code> that can be referenced by one or more instances of type
+<code class="docutils literal notranslate"><span class="pre">Network</span></code>. Just like a <code class="docutils literal notranslate"><span class="pre">Network</span></code>, each instance of a <code class="docutils literal notranslate"><span class="pre">Node</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Edge</span></code> has a UID. In the example above, <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> has automatically
+created <code class="docutils literal notranslate"><span class="pre">Node</span></code> and <code class="docutils literal notranslate"><span class="pre">Edge</span></code> instances and has assigned the UIDs <code class="docutils literal notranslate"><span class="pre">a</span></code>,
+<code class="docutils literal notranslate"><span class="pre">b</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, and <code class="docutils literal notranslate"><span class="pre">d</span></code> to those nodes. We can access those node objects
+via the node container <code class="docutils literal notranslate"><span class="pre">Network.nodes</span></code>. We can iterate through this
+dictionary to print a summary of all node objects referenced with a
+network object:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                <span class="n">a</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Node</span>
+
+<span class="n">Uid</span><span class="p">:</span>                <span class="n">b</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Node</span>
+
+<span class="n">Uid</span><span class="p">:</span>                <span class="n">c</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Node</span>
+
+<span class="n">Uid</span><span class="p">:</span>                <span class="n">d</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Node</span>
+</pre></div>
+</div>
+<p>We can also use the uid of a node to access a specific node object in a
+network by using the uid as an index to the <code class="docutils literal notranslate"><span class="pre">nodes</span></code> container:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                <span class="n">a</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Node</span>
+</pre></div>
+</div>
+<p>Importantly, the same node object can be added to multiple networks
+(which comes in handy if, for instance, we want to store that the same
+set of nodes is connected via different network topologies). Above, we
+have created a second (so far empty) undirected network. We can now add
+the node object with uid <code class="docutils literal notranslate"><span class="pre">a</span></code> to this network as follows:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n2</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fe5406f6250</span>
+<span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
+<span class="n">Directed</span><span class="p">:</span>           <span class="kc">False</span>
+<span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">False</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span>    <span class="mi">1</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span>    <span class="mi">0</span>
+</pre></div>
+</div>
+<p>While a node object can be added to multiple network objects, each
+network can contain only a single node with a given uid, so uncommenting
+the following line should raise an exception:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># n.add_node(&#39;a&#39;)</span>
+</pre></div>
+</div>
+<p>Similar to <code class="docutils literal notranslate"><span class="pre">nodes</span></code>, the <code class="docutils literal notranslate"><span class="pre">edges</span></code> container of the network contains
+all edges of a network and each edge is actually stored as an <code class="docutils literal notranslate"><span class="pre">Edge</span></code>
+object. Let us iterate through the edges container of network <code class="docutils literal notranslate"><span class="pre">n</span></code> to
+better understand this:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fe5002f5760</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
+<span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">a</span>
+<span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">b</span>
+<span class="o">---</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fe5002f58b0</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
+<span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">b</span>
+<span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">c</span>
+<span class="o">---</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fe5406f6d60</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
+<span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">c</span>
+<span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">d</span>
+<span class="o">---</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fe5406f6df0</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
+<span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">d</span>
+<span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">a</span>
+</pre></div>
+</div>
+<p>We see that the edge container contains one <code class="docutils literal notranslate"><span class="pre">Edge</span></code> object instance for
+each edge that we added before. Each <code class="docutils literal notranslate"><span class="pre">Edge</span></code> has again a unique
+identifier, which has been automatically created in our example above.
+Just like for <code class="docutils literal notranslate"><span class="pre">Node</span></code> or <code class="docutils literal notranslate"><span class="pre">Network</span></code> objects, we can manually create an
+edge object with a custom UID that connects the two nodes <code class="docutils literal notranslate"><span class="pre">a</span></code> and
+<code class="docutils literal notranslate"><span class="pre">b</span></code> as follows:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">edge</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">w</span><span class="o">=</span><span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;MyEdge&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                <span class="n">MyEdge</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
+<span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">a</span>
+<span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">b</span>
+</pre></div>
+</div>
+<p>This <code class="docutils literal notranslate"><span class="pre">Edge</span></code> object has a different UID than the existing edge betwee
+node <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code>, which is why we can add it to network <code class="docutils literal notranslate"><span class="pre">n</span></code> even
+though this network already contains an edge (with a different UID)
+between nodes <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code>:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="n">ExampleNetwork</span>
+<span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
+<span class="n">Directed</span><span class="p">:</span>           <span class="kc">False</span>
+<span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">True</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span>    <span class="mi">4</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span>    <span class="mi">5</span>
+</pre></div>
+</div>
+<p>The summary of the network confirms that the network now contains five
+edges (between four pairs of nodes). This native support for multi-edge
+networks is an important feature of <code class="docutils literal notranslate"><span class="pre">pathpy</span></code>. It also means that every
+pair of nodes can be connected by more than one edge. We can access
+those edges via the <code class="docutils literal notranslate"><span class="pre">Network.edges</span></code> container in multiple ways. First,
+we can simply iterate through the edge objects as shown before. Second,
+we can directly access an <code class="docutils literal notranslate"><span class="pre">Edge</span></code> with a given UID as follows:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;MyEdge&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                <span class="n">MyEdge</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
+<span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">a</span>
+<span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">b</span>
+</pre></div>
+</div>
+<p>Finally, we often want to access those edges that connect a specific
+pair of nodes. We can thus alternatively pass a pair of node uids as
+index to <code class="docutils literal notranslate"><span class="pre">Network.edges</span></code>. Since multiple edges between the same pair
+of nodes are possible, this generally returns a list of Edge objects,
+which - in the case of the node pair <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> - contains two
+different edge objects with different UIDs.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">&lt;</span><span class="n">pathpy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">Edge</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7fe5002f5760</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Edge</span> <span class="n">MyEdge</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>We can access the degrees of nodes, i.e. the number of other nodes to
+which a node is connected, via the <code class="docutils literal notranslate"><span class="pre">degrees()</span></code> function of the
+Network. The degrees() function gives the undirected degree
+(i.e. irrespective of the directionality of an edge), while the
+<code class="docutils literal notranslate"><span class="pre">indegrees()</span></code> and <code class="docutils literal notranslate"><span class="pre">outdegrees()</span></code> functions give the degrees in a
+directed network (i.e. to how many other nodes the edges of a node point
+of from how many other nodes edges point to the given node).</p>
+<p>All of those functions return a dictionary that can be indexed via the
+unique node ids. In the case of a multi-edge network, the degree counts
+multiple edges to the same neighbor, which is why the degree of node
+<code class="docutils literal notranslate"><span class="pre">a</span></code> in the network above is 3:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">.</span><span class="n">degrees</span><span class="p">()[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">3</span>
+</pre></div>
+</div>
+<p>We can also remove nodes or edges. A network can contain isolated nodes
+(i.e. nodes with no incident edges), while it can (obviously) only
+contain edges between nodes that exist in the network.</p>
+<p>To ensure this constraint, a call to <code class="docutils literal notranslate"><span class="pre">remove_node</span></code> will also remove
+all edges that are incident to the removed node, i.e. if we remove node
+<code class="docutils literal notranslate"><span class="pre">a</span></code> the <code class="docutils literal notranslate"><span class="pre">Edge</span></code> object with uid <code class="docutils literal notranslate"><span class="pre">MyEdge</span></code> will be removed from the
+network (along with two additional edges (a,b) and (a,d)):</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;MyEdge&#39;</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">uids</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kc">False</span>
+<span class="n">Uid</span><span class="p">:</span>                        <span class="n">ExampleNetwork</span>
+<span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
+<span class="n">Directed</span><span class="p">:</span>           <span class="kc">False</span>
+<span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">True</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span>    <span class="mi">3</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span>    <span class="mi">2</span>
+</pre></div>
+</div>
+<p>A call to <code class="docutils literal notranslate"><span class="pre">remove_edge</span></code> on the other hand does not remove the nodes
+incident to the removed edge, thus possibly leaving isolated nodes. If
+we remove the edge from <code class="docutils literal notranslate"><span class="pre">b</span></code> to <code class="docutils literal notranslate"><span class="pre">c</span></code> this will leave an isolated node
+<code class="docutils literal notranslate"><span class="pre">b</span></code>, which is still in the network:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;b&#39;</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kc">True</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="n">b</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Node</span>
+
+<span class="n">Uid</span><span class="p">:</span>                        <span class="n">ExampleNetwork</span>
+<span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
+<span class="n">Directed</span><span class="p">:</span>           <span class="kc">False</span>
+<span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">True</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span>    <span class="mi">3</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span>    <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Note that we can either remove a specific edge between a pair of nodes
+or all edges between a pair of nodes. To better understand this, let us
+create three different edges between two nodes ‘x’ and ‘y’ and add them
+to a network. To simplify the construction of networks, we can use the
+functions <code class="docutils literal notranslate"><span class="pre">add_nodes</span></code> and <code class="docutils literal notranslate"><span class="pre">add_edges</span></code> which add multiple nodes and
+edges at a time:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">multiedges</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">n3</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">e1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">n3</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n3</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;edge1&#39;</span><span class="p">)</span>
+<span class="n">e2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">n3</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n3</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;edge2&#39;</span><span class="p">)</span>
+<span class="n">e3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">n3</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n3</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;edge3&#39;</span><span class="p">)</span>
+<span class="n">n3</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span> <span class="n">e3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="p">{</span><span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="p">{</span><span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fe50031adf0</span>
+<span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
+<span class="n">Directed</span><span class="p">:</span>           <span class="kc">True</span>
+<span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">True</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span>    <span class="mi">2</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span>    <span class="mi">3</span>
+</pre></div>
+</div>
+<p>If we only remove the single edge with uid <code class="docutils literal notranslate"><span class="pre">edge2</span></code> between <code class="docutils literal notranslate"><span class="pre">x</span></code> and
+<code class="docutils literal notranslate"><span class="pre">y</span></code>, we can call:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n3</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="s1">&#39;edge2&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n3</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">Edge</span> <span class="n">edge3</span><span class="p">,</span> <span class="n">Edge</span> <span class="n">edge1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>At the same time, we can remove all edges between <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> by
+calling:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n3</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n3</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="networks-nodes-and-edges-with-attributes">
+<h2>Networks, Nodes and Edges with attributes<a class="headerlink" href="#networks-nodes-and-edges-with-attributes" title="Permalink to this headline">¶</a></h2>
+<p>You may wonder why <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> stores nodes and edges as objects rather
+than as simple strings or numbers. The reason is that we often want to
+use networks to model relational data that contains additional
+information on nodes, edges, or networks. To support this, all
+<code class="docutils literal notranslate"><span class="pre">pathpy</span></code> objects can store arbitrary key-value data in the form of
+attributes. Let’s explore this in a toy example for a social network:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trolls</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">uid</span><span class="o">=</span><span class="s1">&#39;Trolls&#39;</span><span class="p">)</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;t-b&#39;</span><span class="p">)</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;t-w&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">trolls</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="n">Trolls</span>
+<span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
+<span class="n">Directed</span><span class="p">:</span>           <span class="kc">True</span>
+<span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">False</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span>    <span class="mi">3</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span>    <span class="mi">2</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trolls</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Tom&#39;</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">][</span><span class="s1">&#39;age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">156</span>
+
+<span class="n">trolls</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Bert&#39;</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">][</span><span class="s1">&#39;age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">96</span>
+
+<span class="n">trolls</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;William&#39;</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">][</span><span class="s1">&#39;age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">323</span>
+</pre></div>
+</div>
+<p>Just like nodes, <code class="docutils literal notranslate"><span class="pre">Edge</span></code> objects can store arbitrary attributes that we
+can read and write via the <code class="docutils literal notranslate"><span class="pre">edges</span></code> dictionary in the <code class="docutils literal notranslate"><span class="pre">Network</span></code>
+class. We can store attributes as follows:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trolls</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;t-b&#39;</span><span class="p">][</span><span class="s1">&#39;strength&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;t-b&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;like&#39;</span>
+
+<span class="n">trolls</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;t-w&#39;</span><span class="p">][</span><span class="s1">&#39;strength&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.0</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;t-w&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;dislike&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">trolls</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;t-b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">trolls</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;t-w&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;strength&#39;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;like&#39;</span><span class="p">}</span>
+<span class="p">{</span><span class="s1">&#39;strength&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;dislike&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Numerical properties of edges are often used to store the strength or
+weight of interactions in a system. Such numerical property can also be
+considered in the degree calculation. Above, we have a directed network,
+so we can use the <code class="docutils literal notranslate"><span class="pre">indegrees()</span></code> and <code class="docutils literal notranslate"><span class="pre">outdegrees()</span></code> function to
+access the directed degrees of nodes. In our example, Tom has an
+outdegree of two since there are two directed edges to Bert and William:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trolls</span><span class="o">.</span><span class="n">outdegrees</span><span class="p">()[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trolls</span><span class="o">.</span><span class="n">outdegrees</span><span class="p">()[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span>
+</pre></div>
+</div>
+<p>To additionally consider numerical attributes in the degree calculation,
+we can use the weight parameter of the degrees(), indegrees() or
+outdegrees() functions. To calculate the total strength of all outgoing
+edges from Tom we can write:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trolls</span><span class="o">.</span><span class="n">outdegrees</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="s1">&#39;strength&#39;</span><span class="p">)[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">7.0</span>
+</pre></div>
+</div>
+<p>Finally, apart from node and edge attributes we can also store
+attributes at the network-level:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trolls</span><span class="p">[</span><span class="s1">&#39;chapter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Roast Mutton&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">trolls</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;chapter&#39;</span><span class="p">:</span> <span class="s1">&#39;Roast Mutton&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Apart from using the attribute dictionary, we can directly assign
+attributes when we create nodes, edges, or networks. For this, we simply
+pass key/value parameters to the constuctor of the corresponding objects
+or to the <code class="docutils literal notranslate"><span class="pre">add_node</span></code> and <code class="docutils literal notranslate"><span class="pre">add_edge</span></code> functions. An equivalent way to
+create the network above would thus be:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trolls</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">multiedges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Trolls&#39;</span><span class="p">,</span> <span class="n">chapter</span><span class="o">=</span><span class="s1">&#39;Roast Mutton&#39;</span><span class="p">)</span>
+<span class="n">tom</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">uid</span><span class="o">=</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Tom&#39;</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">156</span><span class="p">)</span>
+<span class="n">bert</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">uid</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Bert&#39;</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">96</span><span class="p">)</span>
+<span class="n">william</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">uid</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;William&#39;</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">323</span><span class="p">)</span>
+<span class="n">e1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">tom</span><span class="p">,</span> <span class="n">bert</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;like&#39;</span><span class="p">,</span> <span class="n">strength</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">e2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">tom</span><span class="p">,</span> <span class="n">william</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;dislike&#39;</span><span class="p">,</span> <span class="n">strength</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">e2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---</span><span class="se">\n</span><span class="s1">Network attributes&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">trolls</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---</span><span class="se">\n</span><span class="s1">Node attributes&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">trolls</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---</span><span class="se">\n</span><span class="s1">Edge attributes&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">trolls</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="n">Network</span> <span class="n">attributes</span>
+<span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Trolls&#39;</span><span class="p">,</span> <span class="s1">&#39;chapter&#39;</span><span class="p">:</span> <span class="s1">&#39;Roast Mutton&#39;</span><span class="p">}</span>
+<span class="o">---</span>
+<span class="n">Node</span> <span class="n">attributes</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="n">t</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Node</span>
+ <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Tom&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">156</span><span class="p">}</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="n">b</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Node</span>
+ <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Bert&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">96</span><span class="p">}</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="n">w</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Node</span>
+ <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;William&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">323</span><span class="p">}</span>
+<span class="o">---</span>
+<span class="n">Edge</span> <span class="n">attributes</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fe50031ab80</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
+<span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">t</span>
+<span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">b</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;like&#39;</span><span class="p">,</span> <span class="s1">&#39;strength&#39;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">}</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fe50031a820</span>
+<span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
+<span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">t</span>
+<span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">w</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;dislike&#39;</span><span class="p">,</span> <span class="s1">&#39;strength&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adjacency-matrices">
+<h2>Adjacency matrices<a class="headerlink" href="#adjacency-matrices" title="Permalink to this headline">¶</a></h2>
+<p>As we will see in more detail next week, adjacency matrices are an
+important mathematical representation of networks. The topology of a
+matrix is represented in terms of a matrix A, where an entry A[i,j]=1
+indicates that an edge exists from the i-th to the j-th node of the
+network. The absendce of edges is encoded by zero entries. The size of
+an adjacency matrix representation of a network with n nodes is
+generally <span class="math notranslate nohighlight">\(n^2\)</span>, which is not suitable for networks with thousands
+or millions of nodes. <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> nevertheless supports efficient
+adjacency matrix calculation for <em>sparse</em> networks, i.e. networks where
+the majority of node pairs are not connected by an edge. Instead of a
+fully populated matrix, a call to <code class="docutils literal notranslate"><span class="pre">Network.adjacency_matrix()</span></code> returns
+a <em>sparse matrix object</em>, i.e. an efficient representation of the
+indices and values of non-zero entries:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">trolls</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>    <span class="mf">1.0</span>
+<span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>    <span class="mf">1.0</span>
+</pre></div>
+</div>
+<p>We use the <code class="docutils literal notranslate"><span class="pre">csr_matrix</span></code> of the sparse linear algebra module in scipy,
+which means we can directly apply matrix algebra operations to sparse
+adjacency matrices. If we instead want a dense matrix that includes zero
+entries, we can write:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">trolls</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">()</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="mf">0.</span> <span class="mf">1.</span> <span class="mf">1.</span><span class="p">]</span>
+ <span class="p">[</span><span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span><span class="p">]</span>
+ <span class="p">[</span><span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>The adjacency matrix entries above shows that two edges from Tom to Bert
+and from Tom to William exist. Moreover, the fact that the matrix is
+assymetric tells us that this is a directed network. By default, a
+binary matrix representation is returned where entries store the
+presence or absence of edges as 0 or 1 entries. If we want to use
+numerical attributes of edges instead, we can again pass the name of a
+numerical attribute that should be used as edge <code class="docutils literal notranslate"><span class="pre">weight</span></code>:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">trolls</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="s1">&#39;strength&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="mf">0.</span> <span class="mf">2.</span> <span class="mf">5.</span><span class="p">]</span>
+ <span class="p">[</span><span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span><span class="p">]</span>
+ <span class="p">[</span><span class="mf">0.</span> <span class="mf">0.</span> <span class="mf">0.</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>How does <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> populate adjaecency matrices if the network contains
+multiple edges between the same pair of nodes? Let’s try this by
+creating another edge between Tom and Bert, and let’s further add a
+strength attribute:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">e3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">tom</span><span class="p">,</span> <span class="n">bert</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;sibling&#39;</span><span class="p">,</span> <span class="n">strength</span><span class="o">=</span><span class="mf">42.0</span><span class="p">)</span>
+<span class="n">trolls</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">e3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">trolls</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fe500339be0</span>
+<span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
+<span class="n">Directed</span><span class="p">:</span>           <span class="kc">True</span>
+<span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">True</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">nodes</span><span class="p">:</span>    <span class="mi">3</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">edges</span><span class="p">:</span>    <span class="mi">3</span>
+
+<span class="n">Network</span> <span class="n">attributes</span>
+<span class="o">------------------</span>
+<span class="n">name</span><span class="p">:</span>       <span class="n">Trolls</span>
+<span class="n">chapter</span><span class="p">:</span>    <span class="n">Roast</span> <span class="n">Mutton</span>
+</pre></div>
+</div>
+<p>If we now generate an adjacency matrix, the entries contain the <em>number
+of different edge objects</em> between pairs of nodes:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trolls</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">()</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">matrix</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>If we use a numerical attribute to calculate the matrix entries in such
+a network, the attributes of all edges between the same pair of nodes is
+automatically summed:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trolls</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="s1">&#39;strength&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">matrix</span><span class="p">([[</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">44.</span><span class="p">,</span>  <span class="mf">5.</span><span class="p">],</span>
+        <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+        <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -153,8 +785,8 @@
       
     </p>
     <p>
-        &copy; Copyright 2016-2020, Pathpy Developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

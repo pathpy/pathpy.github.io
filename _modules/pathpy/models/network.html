@@ -123,21 +123,12 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">cast</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">short</span>
+
 <span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span>
 <span class="kn">from</span> <span class="nn">pathpy.models.classes</span> <span class="kn">import</span> <span class="n">BaseNetwork</span>
 <span class="kn">from</span> <span class="nn">pathpy.core.node</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">NodeCollection</span>
 <span class="kn">from</span> <span class="nn">pathpy.core.edge</span> <span class="kn">import</span> <span class="n">Edge</span><span class="p">,</span> <span class="n">EdgeCollection</span>
-
-<span class="kn">from</span> <span class="nn">pathpy.algorithms</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">matrices</span><span class="p">,</span>
-    <span class="n">centralities</span><span class="p">,</span>
-    <span class="n">shortest_paths</span><span class="p">,</span>
-    <span class="n">components</span>
-<span class="p">)</span>
-
-<span class="kn">from</span> <span class="nn">pathpy.statistics</span> <span class="kn">import</span> <span class="n">degrees</span> <span class="k">as</span> <span class="n">degree_statistics</span>
-<span class="kn">from</span> <span class="nn">pathpy.statistics</span> <span class="kn">import</span> <span class="n">clustering</span>
-<span class="kn">from</span> <span class="nn">pathpy.visualisations.plot</span> <span class="kn">import</span> <span class="n">plot</span> <span class="k">as</span> <span class="n">network_plot</span>
 
 <span class="c1"># create custom types</span>
 <span class="n">Weight</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
@@ -285,37 +276,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># pylint: disable=too-many-instance-attributes</span>
-    <span class="c1"># pylint: disable=too-many-public-methods</span>
-
-    <span class="c1"># load external functions to the network</span>
-    <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">adjacency_matrix</span>  <span class="c1"># type: ignore</span>
-    <span class="n">transition_matrix</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">transition_matrix</span>  <span class="c1"># type: ignore</span>
-    <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">shortest_paths</span><span class="o">.</span><span class="n">distance_matrix</span>  <span class="c1"># type: ignore</span>
-    <span class="n">diameter</span> <span class="o">=</span> <span class="n">shortest_paths</span><span class="o">.</span><span class="n">diameter</span>  <span class="c1"># type: ignore</span>
-    <span class="n">avg_path_length</span> <span class="o">=</span> <span class="n">shortest_paths</span><span class="o">.</span><span class="n">avg_path_length</span>
-
-    <span class="n">betweenness_centrality</span> <span class="o">=</span> <span class="n">centralities</span><span class="o">.</span><span class="n">betweenness_centrality</span>  <span class="c1"># type: ignore</span>
-    <span class="n">closeness_centrality</span> <span class="o">=</span> <span class="n">centralities</span><span class="o">.</span><span class="n">closeness_centrality</span>  <span class="c1"># type: ignore</span>
-
-    <span class="n">find_connected_components</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">find_connected_components</span>  <span class="c1"># type: ignore</span>
-    <span class="n">largest_connected_component</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">largest_connected_component</span>  <span class="c1"># type: ignore</span>
-    <span class="n">largest_component_size</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">largest_component_size</span>  <span class="c1"># type: ignore</span>
-    <span class="n">is_connected</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">is_connected</span>
-
-    <span class="n">mean_degree</span> <span class="o">=</span> <span class="n">degree_statistics</span><span class="o">.</span><span class="n">mean_degree</span>
-    <span class="n">mean_neighbor_degree</span> <span class="o">=</span> <span class="n">degree_statistics</span><span class="o">.</span><span class="n">mean_neighbor_degree</span>
-    <span class="n">degree_sequence</span> <span class="o">=</span> <span class="n">degree_statistics</span><span class="o">.</span><span class="n">degree_sequence</span>
-    <span class="n">degree_assortativity</span> <span class="o">=</span> <span class="n">degree_statistics</span><span class="o">.</span><span class="n">degree_assortativity</span>
-    <span class="n">degree_central_moment</span> <span class="o">=</span> <span class="n">degree_statistics</span><span class="o">.</span><span class="n">degree_central_moment</span>
-    <span class="n">degree_distribution</span> <span class="o">=</span> <span class="n">degree_statistics</span><span class="o">.</span><span class="n">degree_distribution</span>
-    <span class="n">degree_generating_function</span> <span class="o">=</span> <span class="n">degree_statistics</span><span class="o">.</span><span class="n">degree_generating_function</span>
-    <span class="n">degree_raw_moment</span> <span class="o">=</span> <span class="n">degree_statistics</span><span class="o">.</span><span class="n">degree_raw_moment</span>
-    <span class="n">molloy_reed_fraction</span> <span class="o">=</span> <span class="n">degree_statistics</span><span class="o">.</span><span class="n">molloy_reed_fraction</span>
-
-    <span class="n">avg_clustering_coefficient</span> <span class="o">=</span> <span class="n">clustering</span><span class="o">.</span><span class="n">avg_clustering_coefficient</span>
-    <span class="n">local_clustering_coefficient</span> <span class="o">=</span> <span class="n">clustering</span><span class="o">.</span><span class="n">local_clustering_coefficient</span>
-
-    <span class="n">plot</span> <span class="o">=</span> <span class="n">network_plot</span>
+    <span class="c1"># pylint: disable=too-many-public-methods       </span>
 
 <div class="viewcode-block" id="Network.__init__"><a class="viewcode-back" href="../../../generated/pathpy.Network.html#pathpy.Network.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                  <span class="n">multiedges</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>

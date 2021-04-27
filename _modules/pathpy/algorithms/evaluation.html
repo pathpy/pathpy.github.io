@@ -119,29 +119,68 @@
 <span class="c1"># Copyright (c) 2016-2021 Pathpy Developers</span>
 <span class="c1"># =============================================================================</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
-
-<span class="c1"># pseudo load class for type checking</span>
-<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">pathpy.core.network</span> <span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span>
 
 <span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">choice</span>
-<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">tqdm</span>
 
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">edge</span> <span class="k">as</span> <span class="n">edge</span>
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">network</span> <span class="k">as</span> <span class="n">net</span>
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">node</span> <span class="k">as</span> <span class="n">node</span>
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.api</span> <span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.api</span> <span class="kn">import</span> <span class="n">TemporalNetwork</span>
 
 <span class="c1"># create logger</span>
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
+<span class="c1"># def train_test_split(network: Union[Network, TemporalNetwork], test_size: Optional[float]=0.25, train_size: Optional[float]=None, split: Optional[str]=&#39;node&#39;) -&gt; tuple(Union[Network,TemporalNetwork], Union[Network, TemporalNetwork]):</span>
+    
+<span class="c1">#     raise NotImplementedError(&#39;Unsupported type&#39;)</span>
 
-<div class="viewcode-block" id="train_test_split"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.evaluation.train_test_split.html#pathpy.algorithms.evaluation.train_test_split">[docs]</a><span class="k">def</span> <span class="nf">train_test_split</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">test_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">train_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">split</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;node&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">Network</span><span class="p">,</span> <span class="n">Network</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Performs a random split of a network into a training and test network. The split can be performed along nodes or edges</span>
+
+<div class="viewcode-block" id="train_test_split"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.evaluation.train_test_split.html#pathpy.algorithms.evaluation.train_test_split">[docs]</a><span class="nd">@singledispatch</span>
+<span class="k">def</span> <span class="nf">train_test_split</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">test_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">train_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">split</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;node&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">Network</span><span class="p">,</span> <span class="n">Network</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a train/test split of a network object. This method is implemented for instances of Network and TemporalNetwork. The train/test split is non-destructive and based on object references, i.e. the function returns new Network instances that contain references to the same node/edge objects. The original network is not affected.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    network: Union[Network, TemporalNetwork]</span>
+
+<span class="sd">        The network or temporal network for which the train/test split shall be performed.</span>
+
+<span class="sd">    test_size: Optional[float] = 0.25</span>
+
+<span class="sd">        Fraction of the network to include in the test network</span>
+
+<span class="sd">    train_size: Optional[float] = 0.25</span>
+
+<span class="sd">        Fraction of the network to include in the training network</span>
+
+<span class="sd">    split: Optional[&#39;str&#39;] = &#39;node&#39;</span>
+
+<span class="sd">        Specifies how the train/test split shall be performed. For &#39;node&#39; a random subset of nodes is selected, while for &#39;edge&#39; a random subset of edges is selected.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Tuple (n1, n2) where n1 is the test network and n2 is the training network</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; n = pp.Network() </span>
+<span class="sd">    &gt;&gt;&gt; n.add_edge(&#39;a&#39;, &#39;b&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; n.add_edge(&#39;b&#39;, &#39;c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; n.add_edge(&#39;c&#39;, &#39;d&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; n.add_edge(&#39;d&#39;, &#39;a&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; test, train = train_test_split(n, test_size=0.25)</span>
+<span class="sd">    &gt;&gt;&gt; print(test)    </span>
+<span class="sd">    &gt;&gt;&gt; print(train)</span>
+<span class="sd">    Network with one node</span>
+<span class="sd">    Network with three nodes</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">test_network</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">multiedges</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">uid</span><span class="o">+</span><span class="s1">&#39;_test&#39;</span><span class="p">)</span>
-    <span class="n">train_network</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">multiedges</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">uid</span><span class="o">+</span><span class="s1">&#39;_train&#39;</span><span class="p">)</span>
+    <span class="n">test_network</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">multiedges</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">uid</span><span class="o">+</span><span class="s1">&#39;_test&#39;</span><span class="p">)</span>
+    <span class="n">train_network</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">multiedges</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">uid</span><span class="o">+</span><span class="s1">&#39;_train&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">train_size</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">ts</span> <span class="o">=</span> <span class="n">test_size</span>
@@ -170,15 +209,61 @@
             <span class="n">test_network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="n">train_edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">uid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">test_network</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">uids</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">train_edges</span><span class="p">:</span>
-            <span class="n">train_network</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">train_network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Unknown split method &quot;</span><span class="si">{0}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Unsupported split method &quot;</span><span class="si">{0}</span><span class="s1">&quot; for instance of type Network&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">test_network</span><span class="p">,</span> <span class="n">train_network</span></div>
 
 
+<span class="nd">@train_test_split</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">TemporalNetwork</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">TemporalNetwork</span><span class="p">,</span> <span class="n">test_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">train_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">split</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;interactions&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">TemporalNetwork</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs a random split of a temporal network into a training and test network. The split can be performed along nodes, interactions, or time</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">test_network</span> <span class="o">=</span> <span class="n">TemporalNetwork</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">multiedges</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">uid</span><span class="o">+</span><span class="s1">&#39;_test&#39;</span><span class="p">)</span>
+    <span class="n">train_network</span> <span class="o">=</span> <span class="n">TemporalNetwork</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">multiedges</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">uid</span><span class="o">+</span><span class="s1">&#39;_train&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">split</span> <span class="o">==</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+        <span class="n">split_point</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">+</span> <span class="p">(</span><span class="n">end_time</span><span class="o">-</span><span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">test_size</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">uid</span><span class="p">)</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">tedges</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">end</span> <span class="o">&lt;</span> <span class="n">split_point</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">uid</span> <span class="ow">in</span> <span class="n">train_network</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+                    <span class="n">train_network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">train_network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">],</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">train_network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">uid</span> <span class="ow">in</span> <span class="n">test_network</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+                    <span class="n">test_network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">],</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">test_network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">split</span> <span class="o">==</span> <span class="s1">&#39;interactions&#39;</span><span class="p">:</span>
+        <span class="n">split_point</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">tedges</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">test_size</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> 
+        <span class="k">for</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">uid</span><span class="p">)</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">tedges</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">split_point</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">uid</span> <span class="ow">in</span> <span class="n">train_network</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+                    <span class="n">train_network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">train_network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">],</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">train_network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">uid</span> <span class="ow">in</span> <span class="n">test_network</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+                    <span class="n">test_network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">],</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">test_network</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">)</span>
+            <span class="n">i</span><span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Unsupported split method &quot;</span><span class="si">{0}</span><span class="s1">&quot; for instance of type TemporalNetwork&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">test_network</span><span class="p">,</span> <span class="n">train_network</span>
+
+
 <div class="viewcode-block" id="adjusted_mutual_information"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.evaluation.adjusted_mutual_information.html#pathpy.algorithms.evaluation.adjusted_mutual_information">[docs]</a><span class="k">def</span> <span class="nf">adjusted_mutual_information</span><span class="p">(</span><span class="n">clustering_1</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">clustering_2</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Adjusted mutual information is not implemented&#39;</span><span class="p">)</span></div>
 </pre></div>
 
     </div>

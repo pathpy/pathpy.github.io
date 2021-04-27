@@ -114,24 +114,20 @@
 <span class="c1"># =============================================================================</span>
 <span class="c1"># File      : random_graphs.py -- Module to generate random graphs</span>
 <span class="c1"># Author    : Ingo Scholtes &lt;scholtes@uni-wuppertal.de&gt;</span>
-<span class="c1"># Time-stamp: &lt;Mon 2021-03-29 17:09 juergen&gt;</span>
+<span class="c1"># Time-stamp: &lt;Mon 2021-04-27 01:12 ingo&gt;</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (c) 2016-2020 Pathpy Developers</span>
 <span class="c1"># =============================================================================</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
 
 <span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">tqdm</span>
-
-<span class="kn">from</span> <span class="nn">pathpy.core.edge</span> <span class="kn">import</span> <span class="n">Edge</span>
-<span class="kn">from</span> <span class="nn">pathpy.core.node</span> <span class="kn">import</span> <span class="n">Node</span>
-<span class="kn">from</span> <span class="nn">pathpy.models.network</span> <span class="kn">import</span> <span class="n">Network</span>
-
-<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">from</span> <span class="nn">pathpy.core.api</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Edge</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.api</span> <span class="kn">import</span> <span class="n">Network</span>
 
 <span class="c1"># create logger</span>
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
