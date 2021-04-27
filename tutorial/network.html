@@ -122,6 +122,8 @@
       
   <div class="section" id="basic-pathpy-concepts">
 <h1>Basic <code class="docutils literal notranslate"><span class="pre">pathpy</span></code> concepts<a class="headerlink" href="#basic-pathpy-concepts" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://colab.research.google.com/github/pathpy/pathpy/blob/master/doc/tutorial/network.ipynb">Open notebook in Google
+Colab</a></p>
 <p><code class="docutils literal notranslate"><span class="pre">pathpy</span></code> has a user-friendly API that makes it easy to handle directed
 and undirected networks, networks with single and multiple edges,
 multi-layer networks or temporal networks. It also provides interactive
@@ -168,7 +170,7 @@ number of unique nodes and links.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">n1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fe5406f6040</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fa8e1cbd4f0</span>
 <span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
 <span class="n">Directed</span><span class="p">:</span>           <span class="kc">True</span>
 <span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">False</span>
@@ -182,7 +184,7 @@ network by passing the parameter <code class="docutils literal notranslate"><spa
 <span class="nb">print</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fe5406f6250</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fa8e1cbd940</span>
 <span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
 <span class="n">Directed</span><span class="p">:</span>           <span class="kc">False</span>
 <span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">False</span>
@@ -324,7 +326,7 @@ the node object with uid <code class="docutils literal notranslate"><span class=
 <span class="nb">print</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fe5406f6250</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fa8e1cbd940</span>
 <span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
 <span class="n">Directed</span><span class="p">:</span>           <span class="kc">False</span>
 <span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">False</span>
@@ -348,22 +350,22 @@ better understand this:</p>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
-<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fe5002f5760</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fa9001620d0</span>
 <span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
 <span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">a</span>
 <span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">b</span>
 <span class="o">---</span>
-<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fe5002f58b0</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fa900162100</span>
 <span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
 <span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">b</span>
 <span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">c</span>
 <span class="o">---</span>
-<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fe5406f6d60</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fa8e1cbdfd0</span>
 <span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
 <span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">c</span>
 <span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">d</span>
 <span class="o">---</span>
-<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fe5406f6df0</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fa8e1cbdd00</span>
 <span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
 <span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">d</span>
 <span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">a</span>
@@ -426,7 +428,7 @@ different edge objects with different UIDs.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">&lt;</span><span class="n">pathpy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">Edge</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7fe5002f5760</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Edge</span> <span class="n">MyEdge</span><span class="p">}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">Edge</span> <span class="n">MyEdge</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">pathpy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">Edge</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7fa9001620d0</span><span class="o">&gt;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>We can access the degrees of nodes, i.e. the number of other nodes to
@@ -507,7 +509,7 @@ edges at a time:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 <span class="p">{</span><span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 <span class="p">{</span><span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
-<span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fe50031adf0</span>
+<span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fa900184070</span>
 <span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
 <span class="n">Directed</span><span class="p">:</span>           <span class="kc">True</span>
 <span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">True</span>
@@ -521,7 +523,7 @@ edges at a time:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">n3</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">Edge</span> <span class="n">edge3</span><span class="p">,</span> <span class="n">Edge</span> <span class="n">edge1</span><span class="p">}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">Edge</span> <span class="n">edge1</span><span class="p">,</span> <span class="n">Edge</span> <span class="n">edge3</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>At the same time, we can remove all edges between <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> by
@@ -664,11 +666,11 @@ create the network above would thus be:</p>
  <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;William&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">323</span><span class="p">}</span>
 <span class="o">---</span>
 <span class="n">Edge</span> <span class="n">attributes</span>
-<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fe50031ab80</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fa900162d00</span>
 <span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
 <span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">t</span>
 <span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">b</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;like&#39;</span><span class="p">,</span> <span class="s1">&#39;strength&#39;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">}</span>
-<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fe50031a820</span>
+<span class="n">Uid</span><span class="p">:</span>                <span class="mh">0x7fa900162850</span>
 <span class="n">Type</span><span class="p">:</span>               <span class="n">Edge</span>
 <span class="n">Source</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">t</span>
 <span class="n">Target</span> <span class="n">node</span><span class="p">:</span>        <span class="n">Node</span> <span class="n">w</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;dislike&#39;</span><span class="p">,</span> <span class="s1">&#39;strength&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">}</span>
@@ -733,7 +735,7 @@ strength attribute:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">trolls</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fe500339be0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fa90018a190</span>
 <span class="n">Type</span><span class="p">:</span>                       <span class="n">Network</span>
 <span class="n">Directed</span><span class="p">:</span>           <span class="kc">True</span>
 <span class="n">Multi</span><span class="o">-</span><span class="n">Edges</span><span class="p">:</span>                <span class="kc">True</span>

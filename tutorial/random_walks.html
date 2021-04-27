@@ -114,6 +114,8 @@
       
   <div class="section" id="random-walks-in-static-networks">
 <h1>Random Walks in Static Networks<a class="headerlink" href="#random-walks-in-static-networks" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://colab.research.google.com/github/pathpy/pathpy/blob/master/doc/tutorial/random_walks.ipynb">Open notebook in Google
+Colab</a></p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 </pre></div>
@@ -181,12 +183,12 @@ method returns a <code class="docutils literal notranslate"><span class="pre">Pa
 <span class="n">pprint</span><span class="p">([</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span> <span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fdb392f75b0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7f83c8317d90</span>
 <span class="n">Type</span><span class="p">:</span>                       <span class="n">Path</span>
-<span class="n">Number</span> <span class="n">of</span> <span class="n">unique</span> <span class="n">nodes</span><span class="p">:</span>     <span class="mi">3</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">unique</span> <span class="n">nodes</span><span class="p">:</span>     <span class="mi">4</span>
 <span class="n">Number</span> <span class="n">of</span> <span class="n">unique</span> <span class="n">edges</span><span class="p">:</span>     <span class="mi">4</span>
 <span class="n">Path</span> <span class="n">length</span> <span class="p">(</span><span class="c1"># edges):      10</span>
-<span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>If we omit the <code class="docutils literal notranslate"><span class="pre">start_node</span></code> argument, a random node will be chosen as
@@ -196,12 +198,12 @@ start node.</p>
 <span class="n">pprint</span><span class="p">([</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span> <span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7fdb392f78b0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uid</span><span class="p">:</span>                        <span class="mh">0x7f83c8317b80</span>
 <span class="n">Type</span><span class="p">:</span>                       <span class="n">Path</span>
-<span class="n">Number</span> <span class="n">of</span> <span class="n">unique</span> <span class="n">nodes</span><span class="p">:</span>     <span class="mi">4</span>
-<span class="n">Number</span> <span class="n">of</span> <span class="n">unique</span> <span class="n">edges</span><span class="p">:</span>     <span class="mi">5</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">unique</span> <span class="n">nodes</span><span class="p">:</span>     <span class="mi">3</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">unique</span> <span class="n">edges</span><span class="p">:</span>     <span class="mi">4</span>
 <span class="n">Path</span> <span class="n">length</span> <span class="p">(</span><span class="c1"># edges):      10</span>
-<span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>We can generate a <code class="docutils literal notranslate"><span class="pre">PathCollection</span></code> that contains a given number of
@@ -213,8 +215,8 @@ generated, each walk starting from a random node.</p>
     <span class="nb">print</span><span class="p">([</span> <span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span> <span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">]</span>
-<span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>If <code class="docutils literal notranslate"><span class="pre">start_nodes</span></code> is a list of <code class="docutils literal notranslate"><span class="pre">Node</span></code> objects, a single random walk
@@ -225,10 +227,10 @@ starting in each node of the network, we can write:</p>
     <span class="nb">print</span><span class="p">([</span> <span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span> <span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]</span>
-<span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]</span>
-<span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]</span>
-<span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>We can also use an iterator interface to iteratively perform random walk
@@ -240,36 +242,36 @@ at time t.</p>
     <span class="nb">print</span><span class="p">(</span><span class="n">rw</span><span class="o">.</span><span class="n">visitation_frequencies</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">d</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
 <span class="n">Current</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="p">[</span><span class="mf">0.5</span> <span class="mf">0.</span>  <span class="mf">0.</span>  <span class="mf">0.5</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
+<span class="p">[</span><span class="mf">0.5</span> <span class="mf">0.5</span> <span class="mf">0.</span>  <span class="mf">0.</span> <span class="p">]</span>
+<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
 <span class="n">Current</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="p">[</span><span class="mf">0.33333333</span> <span class="mf">0.</span>         <span class="mf">0.33333333</span> <span class="mf">0.33333333</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
+<span class="p">[</span><span class="mf">0.66666667</span> <span class="mf">0.33333333</span> <span class="mf">0.</span>         <span class="mf">0.</span>        <span class="p">]</span>
+<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">d</span>
 <span class="n">Current</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="p">[</span><span class="mf">0.25</span> <span class="mf">0.25</span> <span class="mf">0.25</span> <span class="mf">0.25</span><span class="p">]</span>
+<span class="p">[</span><span class="mf">0.5</span>  <span class="mf">0.25</span> <span class="mf">0.</span>   <span class="mf">0.25</span><span class="p">]</span>
 <span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
 <span class="n">Current</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="p">[</span><span class="mf">0.4</span> <span class="mf">0.2</span> <span class="mf">0.2</span> <span class="mf">0.2</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">d</span>
+<span class="p">[</span><span class="mf">0.6</span> <span class="mf">0.2</span> <span class="mf">0.</span>  <span class="mf">0.2</span><span class="p">]</span>
+<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
 <span class="n">Current</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="p">[</span><span class="mf">0.33333333</span> <span class="mf">0.16666667</span> <span class="mf">0.16666667</span> <span class="mf">0.33333333</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
+<span class="p">[</span><span class="mf">0.5</span>        <span class="mf">0.16666667</span> <span class="mf">0.16666667</span> <span class="mf">0.16666667</span><span class="p">]</span>
+<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
 <span class="n">Current</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">6</span>
-<span class="p">[</span><span class="mf">0.28571429</span> <span class="mf">0.14285714</span> <span class="mf">0.28571429</span> <span class="mf">0.28571429</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="n">Current</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">7</span>
-<span class="p">[</span><span class="mf">0.25</span> <span class="mf">0.25</span> <span class="mf">0.25</span> <span class="mf">0.25</span><span class="p">]</span>
+<span class="p">[</span><span class="mf">0.57142857</span> <span class="mf">0.14285714</span> <span class="mf">0.14285714</span> <span class="mf">0.14285714</span><span class="p">]</span>
 <span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
+<span class="n">Current</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="p">[</span><span class="mf">0.5</span>   <span class="mf">0.125</span> <span class="mf">0.25</span>  <span class="mf">0.125</span><span class="p">]</span>
+<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
 <span class="n">Current</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">8</span>
-<span class="p">[</span><span class="mf">0.22222222</span> <span class="mf">0.22222222</span> <span class="mf">0.33333333</span> <span class="mf">0.22222222</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">d</span>
+<span class="p">[</span><span class="mf">0.55555556</span> <span class="mf">0.11111111</span> <span class="mf">0.22222222</span> <span class="mf">0.11111111</span><span class="p">]</span>
+<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
 <span class="n">Current</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">9</span>
-<span class="p">[</span><span class="mf">0.2</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.3</span><span class="p">]</span>
+<span class="p">[</span><span class="mf">0.5</span> <span class="mf">0.1</span> <span class="mf">0.3</span> <span class="mf">0.1</span><span class="p">]</span>
 <span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
 <span class="n">Current</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="p">[</span><span class="mf">0.27272727</span> <span class="mf">0.18181818</span> <span class="mf">0.27272727</span> <span class="mf">0.27272727</span><span class="p">]</span>
+<span class="p">[</span><span class="mf">0.54545455</span> <span class="mf">0.09090909</span> <span class="mf">0.27272727</span> <span class="mf">0.09090909</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>The visitation probabilities after t steps for a given start node can be
