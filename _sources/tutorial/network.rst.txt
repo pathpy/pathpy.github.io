@@ -1,50 +1,867 @@
-.. _network_tutorial:
+Basic ``pathpy`` concepts
+=========================
 
-.. currentmodule:: pathpy
+`Run notebook in Google
+Colab <https://colab.research.google.com/github/pathpy/pathpy/blob/master/doc/tutorial/network.ipynb>`__
 
-Some standard network functions
-===============================
-.. raw:: html
+``pathpy`` has a user-friendly API that makes it easy to handle directed
+and undirected networks, networks with single and multiple edges,
+multi-layer networks or temporal networks. It also provides interactive
+HTML visualisations that can be directly displayed inside ``jupyter``
+notebooks, which makes it particularly suitable for educational
+settings.
 
-   <div class=col-md-9>
-
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+To get started with ``pathpy`` we first import ``pathpy`` and assign the
+local alias ``pp``:
 
 .. code:: ipython3
 
+    import pathpy as pp
     import numpy as np
 
-.. code:: ipython3
-
-    1+np.sqrt(20)
-
-
-
-
-.. parsed-literal::
-
-    5.47213595499958
-
-
-
-More details
-------------
-
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-
-.. code:: ipython3
-
-    8*8
-
-
-
-
-.. parsed-literal::
-
-    64
-
 
 
 .. raw:: html
 
-   </div>
+    
+    <script charset="utf-8">
+    // Load via requireJS if available (jupyter notebook environment)
+    try {
+    require.config({
+    paths: {
+    d3: "https://d3js.org/d3.v5.min.js".replace(".js", "")
+    }
+    });
+    console.log("OKAY: requireJS was detected");
+    }
+    catch(err){
+    console.log(err);
+    console.log("ERROR: NO requireJS was detected");
+    };
+    require(['d3'], function(d3){
+    console.log("OKAY: d3js was detected");
+    });
+    </script>
+
+
+
+If the ``import`` statement completes without error message, the
+installation was successful and we can now use ``pathpy`` to generate,
+analyse, and visualise networks.
+
+Creating networks
+-----------------
+
+For this purpose ``pathpy`` provides the ``Network`` class. Calling the
+constructor will return an instance that represents an empty network
+with no nodes and no links. By default, networks in ``pathpy`` are
+directed. If you want to create an undirected network you can pass the
+parameter ``directed=False`` in the constructor.
+
+Printing the ``Network`` object will give a short string summary which
+tells whether the network is directed or undirected, as well as the
+number of unique nodes and links.
+
+.. code:: ipython3
+
+    n1 = pp.Network()
+    print(n1)
+
+
+.. parsed-literal::
+
+    Uid:			0x7fb8a984b670
+    Type:			Network
+    Directed:		True
+    Multi-Edges:		False
+    Number of nodes:	0
+    Number of edges:	0
+
+
+A network is directed by default, but we can create an undirected
+network by passing the parameter ``directed=False``.
+
+.. code:: ipython3
+
+    n2 = pp.Network(directed=False)
+    print(n2)
+
+
+.. parsed-literal::
+
+    Uid:			0x7fb8a984bac0
+    Type:			Network
+    Directed:		False
+    Multi-Edges:		False
+    Number of nodes:	0
+    Number of edges:	0
+
+
+The examples above show that each network has a unique identifier. By
+default, this unique ID is derived from the hash value of the underlying
+python object, which allows you to quickly check whether two variables
+actually refer to the same network object. If you prefer to manage your
+own UIDs that are eadsier to remember, you can assign custom IDs by
+explicitly passing a uid property:
+
+.. code:: ipython3
+
+    n = pp.Network(directed=False, uid='MyUndirectedNetwork')
+    print(n)
+
+
+.. parsed-literal::
+
+    Uid:			MyUndirectedNetwork
+    Type:			Network
+    Directed:		False
+    Multi-Edges:		False
+    Number of nodes:	0
+    Number of edges:	0
+
+
+The simplest way to add nodes and edges is to call the functions
+``add_node`` and ``add_edge``. In both cases, we can simply pass unique
+string identifiers of nodes, which will then be used as UIDs of the
+underlying node objects. To create an undirected network with three
+nodes and two edges, we can write:
+
+.. code:: ipython3
+
+    n = pp.Network(directed=False, multiedges=True, uid='ExampleNetwork')
+    n.add_node('a')
+    n.add_node('b')
+    n.add_node('c')
+    n.add_edge('a', 'b')
+    n.add_edge('b', 'c')
+    print(n)
+
+
+.. parsed-literal::
+
+    Uid:			ExampleNetwork
+    Type:			Network
+    Directed:		False
+    Multi-Edges:		True
+    Number of nodes:	3
+    Number of edges:	2
+
+
+Unless we want to explicitly add isolated nodes with no incident edges,
+we can omit the explicit call of the ``add_node`` function. If we add
+edges any node that does not exist already will be created and added
+automatically. If we want to check explicitly whether a node exists
+before creating and edge, we can test this with the ``in`` operator on
+the set of node UIDS available via ``Network.nodes.uids``:
+
+.. code:: ipython3
+
+    print('d' in n.nodes.uids)
+
+
+.. parsed-literal::
+
+    False
+
+
+The following code will automatically add a new node ``d``, along with a
+new edge from ``d`` to ``a``.
+
+.. code:: ipython3
+
+    n.add_edge('c', 'd')
+    n.add_edge('d', 'a')
+    print(n)
+
+
+.. parsed-literal::
+
+    Uid:			ExampleNetwork
+    Type:			Network
+    Directed:		False
+    Multi-Edges:		True
+    Number of nodes:	4
+    Number of edges:	4
+
+
+.. code:: ipython3
+
+    print('d' in n.nodes.uids)
+
+
+.. parsed-literal::
+
+    True
+
+
+To count the number of nodes and edges in a network we can use the
+``number_of_nodes`` and ``number_of_edges`` functions, or we could can
+compute ``len`` of ``Network.nodes`` and ``Network.edges``:
+
+.. code:: ipython3
+
+    print('Network has {0} nodes and {1} edges'.format(n.number_of_nodes(), n.number_of_edges()))
+    print('Number of nodes: {0}'.format(len(n.nodes)))
+    print('Number of edges: {0}'.format(len(n.edges)))
+
+
+.. parsed-literal::
+
+    Network has 4 nodes and 4 edges
+    Number of nodes: 4
+    Number of edges: 4
+
+
+Node and Edge objects
+~~~~~~~~~~~~~~~~~~~~~
+
+In the simple example above, we generated nodes and edges by calling the
+``add_node`` and ``add_edge`` function of the network instance.
+Internally, nodes and edges are represented as objects of type ``Node``
+and ``Edge`` that can be referenced by one or more instances of type
+``Network``. Just like a ``Network``, each instance of a ``Node`` and
+``Edge`` has a UID. In the example above, ``pathpy`` has automatically
+created ``Node`` and ``Edge`` instances and has assigned the UIDs ``a``,
+``b``, ``c``, and ``d`` to those nodes. We can access those node objects
+via the node container ``Network.nodes``. We can iterate through this
+dictionary to print a summary of all node objects referenced with a
+network object:
+
+.. code:: ipython3
+
+    for v in n.nodes:
+        print(v)
+
+
+.. parsed-literal::
+
+    Uid:		a
+    Type:		Node
+    
+    Uid:		b
+    Type:		Node
+    
+    Uid:		c
+    Type:		Node
+    
+    Uid:		d
+    Type:		Node
+    
+
+
+We can also use the uid of a node to access a specific node object in a
+network by using the uid as an index to the ``nodes`` container:
+
+.. code:: ipython3
+
+    print(n.nodes['a'])
+
+
+.. parsed-literal::
+
+    Uid:		a
+    Type:		Node
+    
+
+
+Importantly, the same node object can be added to multiple networks
+(which comes in handy if, for instance, we want to store that the same
+set of nodes is connected via different network topologies). Above, we
+have created a second (so far empty) undirected network. We can now add
+the node object with uid ``a`` to this network as follows:
+
+.. code:: ipython3
+
+    n2.add_node(n.nodes['a'])
+    print(n2)
+
+
+.. parsed-literal::
+
+    Uid:			0x7fb8a984bac0
+    Type:			Network
+    Directed:		False
+    Multi-Edges:		False
+    Number of nodes:	1
+    Number of edges:	0
+
+
+While a node object can be added to multiple network objects, each
+network can contain only a single node with a given uid, so uncommenting
+the following line should raise an exception:
+
+.. code:: ipython3
+
+    # n.add_node('a')
+
+Similar to ``nodes``, the ``edges`` container of the network contains
+all edges of a network and each edge is actually stored as an ``Edge``
+object. Let us iterate through the edges container of network ``n`` to
+better understand this:
+
+.. code:: ipython3
+
+    for e in n.edges:
+        print('---')
+        print(e)
+
+
+.. parsed-literal::
+
+    ---
+    Uid:		0x7fb8a986a2b0
+    Type:		Edge
+    Source node:	Node a
+    Target node:	Node b
+    ---
+    Uid:		0x7fb8a986a2e0
+    Type:		Edge
+    Source node:	Node b
+    Target node:	Node c
+    ---
+    Uid:		0x7fb8a984bdc0
+    Type:		Edge
+    Source node:	Node c
+    Target node:	Node d
+    ---
+    Uid:		0x7fb8a984beb0
+    Type:		Edge
+    Source node:	Node d
+    Target node:	Node a
+
+
+We see that the edge container contains one ``Edge`` object instance for
+each edge that we added before. Each ``Edge`` has again a unique
+identifier, which has been automatically created in our example above.
+Just like for ``Node`` or ``Network`` objects, we can manually create an
+edge object with a custom UID that connects the two nodes ``a`` and
+``b`` as follows:
+
+.. code:: ipython3
+
+    edge = pp.Edge(v=n.nodes['a'], w=n.nodes['b'], uid='MyEdge')
+    print(edge)
+
+
+.. parsed-literal::
+
+    Uid:		MyEdge
+    Type:		Edge
+    Source node:	Node a
+    Target node:	Node b
+
+
+This ``Edge`` object has a different UID than the existing edge betwee
+node ``a`` and ``b``, which is why we can add it to network ``n`` even
+though this network already contains an edge (with a different UID)
+between nodes ``a`` and ``b``:
+
+.. code:: ipython3
+
+    n.add_edge(edge)
+    print(n)
+
+
+.. parsed-literal::
+
+    Uid:			ExampleNetwork
+    Type:			Network
+    Directed:		False
+    Multi-Edges:		True
+    Number of nodes:	4
+    Number of edges:	5
+
+
+The summary of the network confirms that the network now contains five
+edges (between four pairs of nodes). This native support for multi-edge
+networks is an important feature of ``pathpy``. It also means that every
+pair of nodes can be connected by more than one edge. We can access
+those edges via the ``Network.edges`` container in multiple ways. First,
+we can simply iterate through the edge objects as shown before. Second,
+we can directly access an ``Edge`` with a given UID as follows:
+
+.. code:: ipython3
+
+    print(n.edges['MyEdge'])
+
+
+.. parsed-literal::
+
+    Uid:		MyEdge
+    Type:		Edge
+    Source node:	Node a
+    Target node:	Node b
+
+
+Finally, we often want to access those edges that connect a specific
+pair of nodes. We can thus alternatively pass a pair of node uids as
+index to ``Network.edges``. Since multiple edges between the same pair
+of nodes are possible, this generally returns a list of Edge objects,
+which - in the case of the node pair ``a`` and ``b`` - contains two
+different edge objects with different UIDs.
+
+.. code:: ipython3
+
+    print(n.edges['b', 'a'])
+
+
+.. parsed-literal::
+
+    {<pathpy.core.edge.Edge object at 0x7fb8a986a2b0>, Edge MyEdge}
+
+
+We can access the degrees of nodes, i.e. the number of other nodes to
+which a node is connected, via the ``degrees()`` function of the
+Network. The degrees() function gives the undirected degree
+(i.e. irrespective of the directionality of an edge), while the
+``indegrees()`` and ``outdegrees()`` functions give the degrees in a
+directed network (i.e. to how many other nodes the edges of a node point
+of from how many other nodes edges point to the given node).
+
+All of those functions return a dictionary that can be indexed via the
+unique node ids. In the case of a multi-edge network, the degree counts
+multiple edges to the same neighbor, which is why the degree of node
+``a`` in the network above is 3:
+
+.. code:: ipython3
+
+    n.degrees()['a']
+
+
+
+
+.. parsed-literal::
+
+    3
+
+
+
+We can also remove nodes or edges. A network can contain isolated nodes
+(i.e. nodes with no incident edges), while it can (obviously) only
+contain edges between nodes that exist in the network.
+
+To ensure this constraint, a call to ``remove_node`` will also remove
+all edges that are incident to the removed node, i.e. if we remove node
+``a`` the ``Edge`` object with uid ``MyEdge`` will be removed from the
+network (along with two additional edges (a,b) and (a,d)):
+
+.. code:: ipython3
+
+    n.remove_node('a')
+    print('MyEdge' in n.edges.uids)
+    print(n)
+
+
+.. parsed-literal::
+
+    False
+    Uid:			ExampleNetwork
+    Type:			Network
+    Directed:		False
+    Multi-Edges:		True
+    Number of nodes:	3
+    Number of edges:	2
+
+
+A call to ``remove_edge`` on the other hand does not remove the nodes
+incident to the removed edge, thus possibly leaving isolated nodes. If
+we remove the edge from ``b`` to ``c`` this will leave an isolated node
+``b``, which is still in the network:
+
+.. code:: ipython3
+
+    n.remove_edge('b', 'c')
+    print('b' in n.nodes.uids)
+    print(n.nodes['b'])
+    print(n)
+
+
+.. parsed-literal::
+
+    True
+    Uid:		b
+    Type:		Node
+    
+    Uid:			ExampleNetwork
+    Type:			Network
+    Directed:		False
+    Multi-Edges:		True
+    Number of nodes:	3
+    Number of edges:	1
+
+
+Note that we can either remove a specific edge between a pair of nodes
+or all edges between a pair of nodes. To better understand this, let us
+create three different edges between two nodes ‘x’ and ‘y’ and add them
+to a network. To simplify the construction of networks, we can use the
+functions ``add_nodes`` and ``add_edges`` which add multiple nodes and
+edges at a time:
+
+.. code:: ipython3
+
+    n3 = pp.Network(multiedges=True)
+    n3.add_nodes('x', 'y')
+    e1 = pp.Edge(n3.nodes['x'], n3.nodes['y'], uid='edge1')
+    e2 = pp.Edge(n3.nodes['x'], n3.nodes['y'], uid='edge2')
+    e3 = pp.Edge(n3.nodes['x'], n3.nodes['y'], uid='edge3')
+    n3.add_edges(e1, e2, e3)
+    print(n3)
+
+
+.. parsed-literal::
+
+    {'nodes': True}
+    {'nodes': True}
+    {'nodes': True}
+    Uid:			0x7fb8c875d1c0
+    Type:			Network
+    Directed:		True
+    Multi-Edges:		True
+    Number of nodes:	2
+    Number of edges:	3
+
+
+If we only remove the single edge with uid ``edge2`` between ``x`` and
+``y``, we can call:
+
+.. code:: ipython3
+
+    n3.remove_edge('edge2')
+    print(n3.edges['x', 'y'])
+
+
+.. parsed-literal::
+
+    {Edge edge1, Edge edge3}
+
+
+At the same time, we can remove all edges between ``x`` and ``y`` by
+calling:
+
+.. code:: ipython3
+
+    n3.remove_edge('x', 'y')
+    print(n3.edges['x', 'y'])
+
+
+.. parsed-literal::
+
+    set()
+
+
+Networks, Nodes and Edges with attributes
+-----------------------------------------
+
+You may wonder why ``pathpy`` stores nodes and edges as objects rather
+than as simple strings or numbers. The reason is that we often want to
+use networks to model relational data that contains additional
+information on nodes, edges, or networks. To support this, all
+``pathpy`` objects can store arbitrary key-value data in the form of
+attributes. Let’s explore this in a toy example for a social network:
+
+.. code:: ipython3
+
+    trolls = pp.Network(uid='Trolls')
+    trolls.add_node('t')
+    trolls.add_node('b')
+    trolls.add_node('w')
+    trolls.add_edge('t', 'b', uid='t-b')
+    trolls.add_edge('t', 'w', uid='t-w')
+    print(trolls)
+
+
+.. parsed-literal::
+
+    Uid:			Trolls
+    Type:			Network
+    Directed:		True
+    Multi-Edges:		False
+    Number of nodes:	3
+    Number of edges:	2
+
+
+
+
+.. code:: ipython3
+
+    trolls.nodes['t']['name'] = 'Tom'
+    trolls.nodes['t']['age'] = 156
+    
+    trolls.nodes['b']['name'] = 'Bert'
+    trolls.nodes['b']['age'] = 96
+    
+    trolls.nodes['w']['name'] = 'William'
+    trolls.nodes['w']['age'] = 323
+
+Just like nodes, ``Edge`` objects can store arbitrary attributes that we
+can read and write via the ``edges`` dictionary in the ``Network``
+class. We can store attributes as follows:
+
+.. code:: ipython3
+
+    trolls.edges['t-b']['strength'] = 2.0
+    trolls.edges['t-b']['type'] = 'like'
+    
+    trolls.edges['t-w']['strength'] = 5.0
+    trolls.edges['t-w']['type'] = 'dislike'
+
+.. code:: ipython3
+
+    print(trolls.edges['t-b'].attributes)
+    print(trolls.edges['t-w'].attributes)
+
+
+.. parsed-literal::
+
+    {'strength': 2.0, 'type': 'like'}
+    {'strength': 5.0, 'type': 'dislike'}
+
+
+Numerical properties of edges are often used to store the strength or
+weight of interactions in a system. Such numerical property can also be
+considered in the degree calculation. Above, we have a directed network,
+so we can use the ``indegrees()`` and ``outdegrees()`` function to
+access the directed degrees of nodes. In our example, Tom has an
+outdegree of two since there are two directed edges to Bert and William:
+
+.. code:: ipython3
+
+    trolls.outdegrees()['t']
+
+
+
+
+.. parsed-literal::
+
+    2
+
+
+
+.. code:: ipython3
+
+    trolls.outdegrees()['b']
+
+
+
+
+.. parsed-literal::
+
+    0
+
+
+
+To additionally consider numerical attributes in the degree calculation,
+we can use the weight parameter of the degrees(), indegrees() or
+outdegrees() functions. To calculate the total strength of all outgoing
+edges from Tom we can write:
+
+.. code:: ipython3
+
+    trolls.outdegrees(weight='strength')['t']
+
+
+
+
+.. parsed-literal::
+
+    7.0
+
+
+
+Finally, apart from node and edge attributes we can also store
+attributes at the network-level:
+
+.. code:: ipython3
+
+    trolls['chapter'] = 'Roast Mutton'
+    print(trolls.attributes)
+
+
+.. parsed-literal::
+
+    {'chapter': 'Roast Mutton'}
+
+
+Apart from using the attribute dictionary, we can directly assign
+attributes when we create nodes, edges, or networks. For this, we simply
+pass key/value parameters to the constuctor of the corresponding objects
+or to the ``add_node`` and ``add_edge`` functions. An equivalent way to
+create the network above would thus be:
+
+.. code:: ipython3
+
+    trolls = pp.Network(multiedges=True,name='Trolls', chapter='Roast Mutton')
+    tom = pp.Node(uid='t', name='Tom', age=156)
+    bert = pp.Node(uid='b', name='Bert', age=96)
+    william = pp.Node(uid='w', name='William', age=323)
+    e1 = pp.Edge(tom, bert, type='like', strength=2.0)
+    e2 = pp.Edge(tom, william, type='dislike', strength=5.0)
+    trolls.add_edge(e1)
+    trolls.add_edge(e2)
+    print('---\nNetwork attributes')
+    print(trolls.attributes)
+    print('---\nNode attributes')
+    for v in trolls.nodes:
+        print(v, v.attributes)
+    print('---\nEdge attributes')
+    for e in trolls.edges:
+        print(e, e.attributes)
+
+
+.. parsed-literal::
+
+    ---
+    Network attributes
+    {'name': 'Trolls', 'chapter': 'Roast Mutton'}
+    ---
+    Node attributes
+    Uid:		b
+    Type:		Node
+     {'name': 'Bert', 'age': 96}
+    Uid:		t
+    Type:		Node
+     {'name': 'Tom', 'age': 156}
+    Uid:		w
+    Type:		Node
+     {'name': 'William', 'age': 323}
+    ---
+    Edge attributes
+    Uid:		0x7fb8a986a910
+    Type:		Edge
+    Source node:	Node t
+    Target node:	Node b {'type': 'like', 'strength': 2.0}
+    Uid:		0x7fb8a986af40
+    Type:		Edge
+    Source node:	Node t
+    Target node:	Node w {'type': 'dislike', 'strength': 5.0}
+
+
+Adjacency matrices
+------------------
+
+As we will see in more detail next week, adjacency matrices are an
+important mathematical representation of networks. The topology of a
+matrix is represented in terms of a matrix A, where an entry A[i,j]=1
+indicates that an edge exists from the i-th to the j-th node of the
+network. The absendce of edges is encoded by zero entries. The size of
+an adjacency matrix representation of a network with n nodes is
+generally :math:`n^2`, which is not suitable for networks with thousands
+or millions of nodes. ``pathpy`` nevertheless supports efficient
+adjacency matrix calculation for *sparse* networks, i.e. networks where
+the majority of node pairs are not connected by an edge. Instead of a
+fully populated matrix, a call to ``Network.adjacency_matrix()`` returns
+a *sparse matrix object*, i.e. an efficient representation of the
+indices and values of non-zero entries:
+
+.. code:: ipython3
+
+    print(trolls.adjacency_matrix())
+
+
+.. parsed-literal::
+
+      (1, 0)	1.0
+      (1, 2)	1.0
+
+
+We use the ``csr_matrix`` of the sparse linear algebra module in scipy,
+which means we can directly apply matrix algebra operations to sparse
+adjacency matrices. If we instead want a dense matrix that includes zero
+entries, we can write:
+
+.. code:: ipython3
+
+    print(trolls.adjacency_matrix().todense())
+
+
+.. parsed-literal::
+
+    [[0. 0. 0.]
+     [1. 0. 1.]
+     [0. 0. 0.]]
+
+
+The adjacency matrix entries above shows that two edges from Tom to Bert
+and from Tom to William exist. Moreover, the fact that the matrix is
+assymetric tells us that this is a directed network. By default, a
+binary matrix representation is returned where entries store the
+presence or absence of edges as 0 or 1 entries. If we want to use
+numerical attributes of edges instead, we can again pass the name of a
+numerical attribute that should be used as edge ``weight``:
+
+.. code:: ipython3
+
+    print(trolls.adjacency_matrix(weight='strength').todense())
+
+
+.. parsed-literal::
+
+    [[0. 0. 0.]
+     [2. 0. 5.]
+     [0. 0. 0.]]
+
+
+How does ``pathpy`` populate adjaecency matrices if the network contains
+multiple edges between the same pair of nodes? Let’s try this by
+creating another edge between Tom and Bert, and let’s further add a
+strength attribute:
+
+.. code:: ipython3
+
+    e3 = pp.Edge(tom, bert, type='sibling', strength=42.0)
+    trolls.add_edge(e3)
+    print(trolls)
+
+
+.. parsed-literal::
+
+    Uid:			0x7fb8c87682e0
+    Type:			Network
+    Directed:		True
+    Multi-Edges:		True
+    Number of nodes:	3
+    Number of edges:	3
+    
+    Network attributes
+    ------------------
+    name:	Trolls
+    chapter:	Roast Mutton
+    
+
+
+If we now generate an adjacency matrix, the entries contain the *number
+of different edge objects* between pairs of nodes:
+
+.. code:: ipython3
+
+    trolls.adjacency_matrix().todense()
+
+
+
+
+.. parsed-literal::
+
+    matrix([[0., 0., 0.],
+            [2., 0., 1.],
+            [0., 0., 0.]])
+
+
+
+If we use a numerical attribute to calculate the matrix entries in such
+a network, the attributes of all edges between the same pair of nodes is
+automatically summed:
+
+.. code:: ipython3
+
+    trolls.adjacency_matrix(weight='strength').todense()
+
+
+
+
+.. parsed-literal::
+
+    matrix([[ 0.,  0.,  0.],
+            [44.,  0.,  5.],
+            [ 0.,  0.,  0.]])
+
+

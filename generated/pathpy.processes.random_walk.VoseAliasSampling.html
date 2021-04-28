@@ -18,8 +18,6 @@
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Contributing to pathpy" href="../contribution.html" />
-    <link rel="prev" title="pathpy.processes.random_walk.RandomWalk" href="pathpy.processes.random_walk.RandomWalk.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -61,13 +59,13 @@
      href="../index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
+      aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Example gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contributing</a></li>
 </ul>
 </ul>
@@ -116,7 +114,7 @@
 <h1>pathpy.processes.random_walk.VoseAliasSampling<a class="headerlink" href="#pathpy-processes-random-walk-vosealiassampling" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="pathpy.processes.random_walk.VoseAliasSampling">
-<em class="property">class </em><code class="sig-prename descclassname">pathpy.processes.random_walk.</code><code class="sig-name descname">VoseAliasSampling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">weights</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>numpy.array<span class="p">, </span>list<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#VoseAliasSampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.VoseAliasSampling" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pathpy.processes.random_walk.</code><code class="sig-name descname">VoseAliasSampling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">weights</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>numpy.array<span class="p">, </span>list<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/processes/sampling.html#VoseAliasSampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.VoseAliasSampling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Implementation of fast biased sampling from a discrete distribution
 of values [0, …, n]</p>
@@ -141,7 +139,7 @@ will be from range(n).</p>
 </div>
 <p class="rubric">Examples</p>
 <p>Create a VoseAliasSampling instance</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy.processes.RandomWalk</span> <span class="kn">import</span> <span class="n">VoseAliasSampling</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathpy.processes</span> <span class="kn">import</span> <span class="n">VoseAliasSampling</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">VoseAliasSampling</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -152,7 +150,7 @@ will be from range(n).</p>
 </div>
 <dl class="py method">
 <dt id="pathpy.processes.random_walk.VoseAliasSampling.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">weights</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>numpy.array<span class="p">, </span>list<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#VoseAliasSampling.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.VoseAliasSampling.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">weights</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>numpy.array<span class="p">, </span>list<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pathpy/processes/sampling.html#VoseAliasSampling.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.VoseAliasSampling.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes probability and alias tables</p>
 </dd></dl>
 
@@ -173,7 +171,7 @@ will be from range(n).</p>
 </table>
 <dl class="py method">
 <dt id="pathpy.processes.random_walk.VoseAliasSampling.sample">
-<code class="sig-name descname">sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#VoseAliasSampling.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.VoseAliasSampling.sample" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../_modules/pathpy/processes/sampling.html#VoseAliasSampling.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.VoseAliasSampling.sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Biased sampling of discrete value in O(1)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>

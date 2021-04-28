@@ -406,13 +406,16 @@ network at once. Attributes are assigned to all nodes.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.summary.html#pathpy.Network.summary" title="pathpy.Network.summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summary</span></code></a>()</p></td>
 <td><p>Returns a summary of the network.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.transition_matrix.html#pathpy.Network.transition_matrix" title="pathpy.Network.transition_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix</span></code></a>([weight, transposed])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.to_weighted_network.html#pathpy.Network.to_weighted_network" title="pathpy.Network.to_weighted_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_weighted_network</span></code></a>(network, **kwargs)</p></td>
+<td><p>Discards all multiple edges and adds a weight property that counts the number of  edges between node pairs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.transition_matrix.html#pathpy.Network.transition_matrix" title="pathpy.Network.transition_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix</span></code></a>([weight, transposed])</p></td>
 <td><p>Returns a transition matrix of the network.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.update.html#pathpy.Network.update" title="pathpy.Network.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(**kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.update.html#pathpy.Network.update" title="pathpy.Network.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(**kwargs)</p></td>
 <td><p>Update the attributes of the object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pathpy.Network.weight.html#pathpy.Network.weight" title="pathpy.Network.weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">weight</span></code></a>([weight, default])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pathpy.Network.weight.html#pathpy.Network.weight" title="pathpy.Network.weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">weight</span></code></a>([weight, default])</p></td>
 <td><p>Returns the weight of the object.</p></td>
 </tr>
 </tbody>

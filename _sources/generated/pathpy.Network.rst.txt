@@ -80,6 +80,7 @@ pathpy.Network
       ~Network.remove_node
       ~Network.remove_nodes
       ~Network.summary
+      ~Network.to_weighted_network
       ~Network.transition_matrix
       ~Network.update
       ~Network.weight

@@ -253,7 +253,7 @@
         <span class="k">raise</span> <span class="n">FileFormatError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="parse_graphtool_format"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.parse_graphtool_format.html#pathpy.io.graphtool.parse_graphtool_format">[docs]</a><span class="k">def</span> <span class="nf">parse_graphtool_format</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">ignore_temporal</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]:</span>
+<div class="viewcode-block" id="parse_graphtool_format"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.parse_graphtool_format.html#pathpy.io.graphtool.parse_graphtool_format">[docs]</a><span class="k">def</span> <span class="nf">parse_graphtool_format</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">ignore_temporal</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">multiedges</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Decodes data in graphtool binary format and returns a pathpy network. For a documentation of </span>
 <span class="sd">    hte graphtool binary format, see see doc at https://graph-tool.skewed.de/static/doc/gt_format.html</span>
@@ -271,8 +271,8 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-
-<span class="sd">    An instance of Network or TemporalNetwork</span>
+<span class="sd">    Network or TemporalNetwork</span>
+<span class="sd">        a static or temporal network object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># check magic bytes</span>
@@ -400,7 +400,7 @@
     <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="n">edge_attribute_names</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ignore_temporal</span><span class="p">:</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">to_temporal_network</span><span class="p">(</span><span class="n">network_data</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="o">**</span><span class="n">network_attributes</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">to_network</span><span class="p">(</span><span class="n">network_data</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="o">**</span><span class="n">network_attributes</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">to_network</span><span class="p">(</span><span class="n">network_data</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="n">multiedges</span><span class="p">,</span> <span class="o">**</span><span class="n">network_attributes</span><span class="p">)</span>
     
     <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">node_attributes</span><span class="p">:</span>        
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">node_attributes</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
@@ -410,7 +410,7 @@
     <span class="k">return</span> <span class="n">n</span></div>
 
 
-<div class="viewcode-block" id="read_graphtool"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.read_graphtool.html#pathpy.io.graphtool.read_graphtool">[docs]</a><span class="k">def</span> <span class="nf">read_graphtool</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]]:</span> 
+<div class="viewcode-block" id="read_graphtool"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.read_graphtool.html#pathpy.io.graphtool.read_graphtool">[docs]</a><span class="k">def</span> <span class="nf">read_graphtool</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ignore_temporal</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">multiedges</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]]:</span> 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a file in graphtool binary format</span>
 
@@ -428,11 +428,11 @@
                 <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
                 <span class="k">return</span> <span class="n">parse_graphtool_format</span><span class="p">(</span><span class="n">dctx</span><span class="o">.</span><span class="n">decompress</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">max_output_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
             <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Package zstandard is needed to decode graphtool files. Please install module, e.g., using &quot;pip install zstandard&quot;.&#39;</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Package zstandard is required to decompress graphtool files. Please install module, e.g., using &quot;pip install zstandard&quot;.&#39;</span>
                 <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>                
                 <span class="k">raise</span> <span class="n">MissingModuleError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>    
-            <span class="k">return</span> <span class="n">parse_graphtool_format</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
+            <span class="k">return</span> <span class="n">parse_graphtool_format</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">ignore_temporal</span><span class="p">,</span> <span class="n">multiedges</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="write_graphtool"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.write_graphtool.html#pathpy.io.graphtool.write_graphtool">[docs]</a><span class="k">def</span> <span class="nf">write_graphtool</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -537,7 +537,7 @@
 
 
 <div class="viewcode-block" id="read_netzschleuder_network"><a class="viewcode-back" href="../../../generated/pathpy.io.graphtool.read_netzschleuder_network.html#pathpy.io.graphtool.read_netzschleuder_network">[docs]</a><span class="k">def</span> <span class="nf">read_netzschleuder_network</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">net</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
-        <span class="n">ignore_temporal</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+        <span class="n">ignore_temporal</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">multiedges</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;https://networks.skewed.de&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Network</span><span class="p">,</span> <span class="n">TemporalNetwork</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;Reads a pathpy network record from the netzschleuder repository.</span>
 
@@ -621,7 +621,7 @@
         <span class="n">decompressed</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">readall</span><span class="p">()</span>
 
         <span class="c1"># parse graphtool binary format</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">parse_graphtool_format</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">decompressed</span><span class="p">),</span> <span class="n">ignore_temporal</span><span class="o">=</span><span class="n">ignore_temporal</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">parse_graphtool_format</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">decompressed</span><span class="p">),</span> <span class="n">ignore_temporal</span><span class="o">=</span><span class="n">ignore_temporal</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="n">multiedges</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">n</span><span class="p">:</span>
             <span class="c1"># store network attributes</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">properties</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -629,7 +629,7 @@
 
         <span class="k">return</span> <span class="n">n</span>
     <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Package zstandard is needed to decode graphtool files. Please install module, e.g., using &quot;pip install zstandard.&#39;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Package zstandard is required to decompress graphtool files. Please install module, e.g., using &quot;pip install zstandard.&#39;</span>
         <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">raise</span> <span class="n">MissingModuleError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 </pre></div>
