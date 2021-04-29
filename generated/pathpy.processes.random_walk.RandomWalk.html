@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Contributing to pathpy" href="../contribution.html" />
-    <link rel="prev" title="pathpy.processes.random_walk.BaseWalk" href="pathpy.processes.random_walk.BaseWalk.html" />
+    <link rel="prev" title="pathpy.processes.random_walk" href="pathpy.processes.random_walk.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -117,8 +117,13 @@
 <dl class="py class">
 <dt id="pathpy.processes.random_walk.RandomWalk">
 <em class="property">class </em><code class="sig-prename descclassname">pathpy.processes.random_walk.</code><code class="sig-name descname">RandomWalk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">pathpy.models.network.Network</span></em>, <em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>str<span class="p">, </span>bool<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">restart_prob</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pathpy.processes.random_walk.BaseWalk.html#pathpy.processes.random_walk.BaseWalk" title="pathpy.processes.random_walk.BaseWalk"><code class="xref py py-class docutils literal notranslate"><span class="pre">pathpy.processes.random_walk.BaseWalk</span></code></a></p>
-<p>Implements a (biased) random walk process in a network or higher-order 
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pathpy.processes.process.BaseProcess</span></code></p>
+<p>Class implementing a biased random walk process in a network or higher-order 
+network.</p>
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">pathpy.models.network.Network</span></em>, <em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>str<span class="p">, </span>bool<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">restart_prob</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a biased random walk process in a network or higher-order 
 network.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -141,7 +146,7 @@ the random walk transition probabilities.</p>
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<p>Create a Network an RandomWalk instance</p>
+<p>Generate and visualize a single random walk on a network</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;a-b&#39;</span><span class="p">)</span>
@@ -149,23 +154,37 @@ the random walk transition probabilities.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;c-a&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;c-d&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;d-a&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rw</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">RandomWalk</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;weight&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">rw</span><span class="o">.</span><span class="n">run_experiment</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rw</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">[interactive visualization]</span>
 </pre></div>
 </div>
-<p>Generate a random walk with 10 steps starting from node ‘a’</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rw</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">RandomWalk</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;weight&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">rw</span><span class="o">.</span><span class="n">generate_walk</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">start_node</span><span class="o">=</span><span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">])</span>
+<p>Generate a single random walk with 10 steps starting from node ‘a’ and 
+return a Path instance</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">rw</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">rw</span><span class="o">.</span><span class="n">run_experiment</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">([</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span> <span class="p">])</span> 
+<span class="go">[ &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;]</span>
+</pre></div>
+</div>
+<p>Generate a single random walk with 10 steps starting from each node and 
+returns a PathCollection instance</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pc</span> <span class="o">=</span> <span class="n">rw</span><span class="o">.</span><span class="n">get_paths</span><span class="p">(</span><span class="n">rw</span><span class="o">.</span><span class="n">run_experiment</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">runs</span><span class="o">=</span><span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">([</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span> <span class="p">])</span> 
 <span class="go">[ &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;] </span>
+<span class="go">[ &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39; ]</span>
+<span class="go">[ &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39; ]</span>
+<span class="go">[ &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39; ]</span>
 </pre></div>
 </div>
-<p>Random walk using iterator interface</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rw</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">start_node</span><span class="o">=</span><span class="n">n</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]):</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Current node = </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">rw</span><span class="o">.</span><span class="n">visitation_probabilities</span><span class="p">())</span>
+<p>Generte a random walk using the iterator interface</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">time</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">rw</span><span class="o">.</span><span class="n">simulation_run</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Current node = </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rw</span><span class="o">.</span><span class="n">current_node</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">rw</span><span class="o">.</span><span class="n">visitation_frequencies</span><span class="p">)</span>
 <span class="go">Current node = b</span>
 <span class="go">[0.5 0.5 0.  0. ]</span>
 <span class="go">Current node = c</span>
-<span class="go">[0.33333333 0.33333333 0.33333333 0.        ]</span>
+<span class="go">[0.33333333 0.33333333 0.33333333 0. ]</span>
 <span class="go">Current node = d</span>
 <span class="go">[0.25 0.25 0.25 0.25]</span>
 <span class="go">Current node = a</span>
@@ -184,10 +203,6 @@ the random walk transition probabilities.</p>
 <span class="go">[0.45454545 0.27272727 0.18181818 0.09090909]</span>
 </pre></div>
 </div>
-<dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">pathpy.models.network.Network</span></em>, <em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>str<span class="p">, </span>bool<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">restart_prob</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialises a random walk process.</p>
 </dd></dl>
 
 <p class="rubric">Methods</p>
@@ -197,44 +212,59 @@ the random walk transition probabilities.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TVD</span></code>(a, b)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.TVD" title="pathpy.processes.random_walk.RandomWalk.TVD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TVD</span></code></a>(a, b)</p></td>
+<td><p>Calculates the total variation distance between two probability vectors</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.__init__" title="pathpy.processes.random_walk.RandomWalk.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(network[, weight, restart_prob])</p></td>
-<td><p>Initialises a random walk process.</p></td>
+<td><p>Creates a biased random walk process in a network or higher-order  network.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.generate_walk" title="pathpy.processes.random_walk.RandomWalk.generate_walk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_walk</span></code></a>([steps, start_node])</p></td>
-<td><p>Returns a path that represents the sequence of nodes traversed  by a single random walk with a given number of steps  (and an optional given start node)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.compute_transition_matrix" title="pathpy.processes.random_walk.RandomWalk.compute_transition_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_transition_matrix</span></code></a>(network[, weight, …])</p></td>
+<td><p>Returns the transition matrix of a (biased) random walk in the given network.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.generate_walks" title="pathpy.processes.random_walk.RandomWalk.generate_walks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_walks</span></code></a>(steps_per_walk, start_nodes)</p></td>
-<td><p>Returns a PathCollection generated by a number of random walkers starting in different (random) nodes.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.get_path" title="pathpy.processes.random_walk.RandomWalk.get_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_path</span></code></a>(data[, run_id, first_order])</p></td>
+<td><p>Returns a path that represents the sequence of (first-order) nodes traversed  by a single random walk.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.matrix_pd" title="pathpy.processes.random_walk.RandomWalk.matrix_pd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matrix_pd</span></code></a>()</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.get_paths" title="pathpy.processes.random_walk.RandomWalk.get_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_paths</span></code></a>(data[, run_ids, first_order])</p></td>
+<td><p>Returns a PathCollection where each</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.plot" title="pathpy.processes.random_walk.RandomWalk.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(**kwargs)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.init" title="pathpy.processes.random_walk.RandomWalk.init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code></a>(seed)</p></td>
+<td><p>Initializes the random walk state with a given seed/source node</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.stationary_probabilities" title="pathpy.processes.random_walk.RandomWalk.stationary_probabilities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stationary_probabilities</span></code></a>(**kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.node_state" title="pathpy.processes.random_walk.RandomWalk.node_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_state</span></code></a>(v)</p></td>
+<td><p>Returns a boolean variable indicating whether the walker is currently  visiting (first-order) node v</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.plot" title="pathpy.processes.random_walk.RandomWalk.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(data[, run_id, timescale])</p></td>
+<td><p>Display an interactive plot of the evolution of a process based on a recorded simulation experiment</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.plot_first_order" title="pathpy.processes.random_walk.RandomWalk.plot_first_order"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_first_order</span></code></a>(data, network[, run_id, …])</p></td>
+<td><p>Display an interactive plot of the random walk in a first-order network based on a recorded simulation experiment</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.random_seed" title="pathpy.processes.random_walk.RandomWalk.random_seed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_seed</span></code></a>()</p></td>
+<td><p>Returns a random node from the network, chosen uniformly at random</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.run_experiment" title="pathpy.processes.random_walk.RandomWalk.run_experiment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_experiment</span></code></a>(steps[, runs])</p></td>
+<td><p>Perform one or more simulation runs of the process with a given number of steps.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.simulation_run" title="pathpy.processes.random_walk.RandomWalk.simulation_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulation_run</span></code></a>(steps[, seed])</p></td>
+<td><p>Abstract generator method that initializes the process, runs a number of steps and yields a tuple consisting of the current time and the set of nodes whose state has changed in each step.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.state_to_color" title="pathpy.processes.random_walk.RandomWalk.state_to_color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_to_color</span></code></a>(state)</p></td>
+<td><p>Maps the current (visitation) state of nodes to colors for visualization.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.stationary_state" title="pathpy.processes.random_walk.RandomWalk.stationary_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stationary_state</span></code></a>(**kwargs)</p></td>
 <td><p>Computes stationary visitation probabilities.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.transition_matrix" title="pathpy.processes.random_walk.RandomWalk.transition_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix</span></code></a>(network[, weight, …])</p></td>
-<td><p>Returns the transition matrix of a (biased) random walk in the given network.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.step" title="pathpy.processes.random_walk.RandomWalk.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>()</p></td>
+<td><p>Function that will be called for each step of the random walk.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.transition_matrix_pd" title="pathpy.processes.random_walk.RandomWalk.transition_matrix_pd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix_pd</span></code></a>()</p></td>
+<td><p>Returns the transition matrix as pandas DataFrame with proper row/column labels.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.transition_probabilities" title="pathpy.processes.random_walk.RandomWalk.transition_probabilities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_probabilities</span></code></a>(node)</p></td>
 <td><p>Returns a vector that contains transition probabilities.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.visitation_frequencies" title="pathpy.processes.random_walk.RandomWalk.visitation_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visitation_frequencies</span></code></a>()</p></td>
-<td><p>Returns current normalized visitation frequencies of nodes based on the history of the random walk.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.visitation_probabilities" title="pathpy.processes.random_walk.RandomWalk.visitation_probabilities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visitation_probabilities</span></code></a>(t, start_node)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.visitation_probabilities" title="pathpy.processes.random_walk.RandomWalk.visitation_probabilities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visitation_probabilities</span></code></a>(t, seed)</p></td>
 <td><p>Calculates visitation probabilities of nodes after t steps for a given start node</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.walk" title="pathpy.processes.random_walk.RandomWalk.walk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">walk</span></code></a>([steps, start_node])</p></td>
-<td><p>Generator object which yields a configurable number of nodes visited by a random walker.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.walk_step" title="pathpy.processes.random_walk.RandomWalk.walk_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">walk_step</span></code></a>()</p></td>
-<td><p>Abstract walk step method.</p></td>
 </tr>
 </tbody>
 </table>
@@ -245,141 +275,35 @@ the random walk transition probabilities.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.matrix" title="pathpy.processes.random_walk.RandomWalk.matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matrix</span></code></a></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">current_node</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">network</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.time" title="pathpy.processes.random_walk.RandomWalk.time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time</span></code></a></p></td>
+<td><p>The current time of the random walk process, i.e. the number of steps taken since the start node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.total_variation_distance" title="pathpy.processes.random_walk.RandomWalk.total_variation_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">total_variation_distance</span></code></a></p></td>
+<td><p>Returns the total variation distance between stationary  visitation probabilities and the current visitation frequencies</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.transition_matrix" title="pathpy.processes.random_walk.RandomWalk.transition_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix</span></code></a></p></td>
 <td><p>Returns the transition matrix of the random walk</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.network" title="pathpy.processes.random_walk.RandomWalk.network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">network</span></code></a></p></td>
-<td><p>Returns the network in which the random walk is performed</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.state" title="pathpy.processes.random_walk.RandomWalk.state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state</span></code></a></p></td>
-<td><p>Returns the current state of the random walker</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.t" title="pathpy.processes.random_walk.RandomWalk.t"><code class="xref py py-obj docutils literal notranslate"><span class="pre">t</span></code></a></p></td>
-<td><p>Returns the current <cite>time</cite> of the random walker, i.e. the number of random walk steps since the initial state.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.total_variation_distance" title="pathpy.processes.random_walk.RandomWalk.total_variation_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">total_variation_distance</span></code></a></p></td>
-<td><p>Returns the total variation distance between stationary  visitation probabilities and the current visitation frequencies</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.RandomWalk.visitation_frequencies" title="pathpy.processes.random_walk.RandomWalk.visitation_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visitation_frequencies</span></code></a></p></td>
+<td><p>Returns current normalized visitation frequencies of nodes based on the history of the random walk.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.generate_walk">
-<code class="sig-name descname">generate_walk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">steps</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">start_node</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>pathpy.core.node.Node<span class="p">, </span>pathpy.models.higher_order_network.HigherOrderNode<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; pathpy.core.path.Path<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.generate_walk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.generate_walk" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a path that represents the sequence of nodes traversed 
-by a single random walk with a given number of steps 
-(and an optional given start node)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>steps: int = 1</strong></dt><dd><p>The number of steps of the random walk</p>
-</dd>
-<dt><strong>start_node: Optional[Node] = None</strong></dt><dd><p>If specified, the random walk will start from the given node. If not given, 
-a random start node will be chosen uniformly.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>A Path object containing the sequence of traversed nodes</dt><dd></dd>
-</dl>
-</dd>
-</dl>
+<dt id="pathpy.processes.random_walk.RandomWalk.TVD">
+<em class="property">static </em><code class="sig-name descname">TVD</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">a</span><span class="p">:</span> <span class="n">numpy.array</span></em>, <em class="sig-param"><span class="n">b</span><span class="p">:</span> <span class="n">numpy.array</span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.TVD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.TVD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the total variation distance between two probability vectors</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.generate_walks">
-<code class="sig-name descname">generate_walks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">steps_per_walk</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">start_nodes</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>int<span class="p">, </span>Iterable<span class="p">[</span>pathpy.core.node.Node<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; pathpy.core.path.PathCollection<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.generate_walks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.generate_walks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a PathCollection generated by a number of random walkers starting in different (random) nodes.</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>steps_per_walk: int</strong></dt><dd><blockquote>
-<div><p>The number of steps to be performed for each random walk</p>
-</div></blockquote>
-<dl class="simple">
-<dt>start_nodes: Union[int, NodeCollection]</dt><dd><p>The (number of) start nodes to use for the generated random walks. If an integer k is given, 
-k random walks will be generated for start nodes chosen uniformly at random. If a list of Node
-objects is given, a single random walk will be started for each entry in the list.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>A PathCollection instance. Each random walk is represented by one Path instance in this collection.</dt><dd></dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.matrix">
-<em class="property">property </em><code class="sig-name descname">matrix</code><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the transition matrix of the random walk</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.matrix_pd">
-<code class="sig-name descname">matrix_pd</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.matrix_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.matrix_pd" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.network">
-<em class="property">property </em><code class="sig-name descname">network</code><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.network" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the network in which the random walk is performed</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.state">
-<em class="property">property </em><code class="sig-name descname">state</code><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.state" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the current state of the random walker</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.stationary_probabilities">
-<code class="sig-name descname">stationary_probabilities</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; numpy.array<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.stationary_probabilities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.stationary_probabilities" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes stationary visitation probabilities.</p>
-<p>Computes stationary visitation probabilities of nodes based on the
-leading eigenvector of the transition matrix.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>**kwargs: Any</strong></dt><dd><p>Arbitrary key-value pairs to bee passed to the
-scipy.sparse.linalg.eigs function.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.t">
-<em class="property">property </em><code class="sig-name descname">t</code><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.t" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the current <cite>time</cite> of the random walker, i.e. the number of random
-walk steps since the initial state. The initial time is zero and the initial 
-state does not count as a step.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.total_variation_distance">
-<em class="property">property </em><code class="sig-name descname">total_variation_distance</code><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.total_variation_distance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the total variation distance between stationary 
-visitation probabilities and the current visitation frequencies</p>
-<p>Computes the total variation distance between the current visitation
-probabilities and the stationary probabilities. This quantity converges
-to zero for RandomWalk.t -&gt; np.infty and its magnitude indicates the
-current relaxation of the random walk process.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.transition_matrix">
-<em class="property">static </em><code class="sig-name descname">transition_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">pathpy.models.network.Network</span></em>, <em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>str<span class="p">, </span>bool<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">restart_prob</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; scipy.sparse.csr.csr_matrix<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.transition_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.transition_matrix" title="Permalink to this definition">¶</a></dt>
+<dt id="pathpy.processes.random_walk.RandomWalk.compute_transition_matrix">
+<em class="property">static </em><code class="sig-name descname">compute_transition_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">pathpy.models.network.Network</span></em>, <em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>str<span class="p">, </span>bool<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">restart_prob</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; scipy.sparse.csr.csr_matrix<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.compute_transition_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.compute_transition_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the transition matrix of a (biased) random walk in the given network.</p>
 <p>Returns a transition matrix that describes a random walk process in the
 given network.</p>
@@ -397,6 +321,169 @@ transition probabilities of the random walk.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.get_path">
+<code class="sig-name descname">get_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">run_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">first_order</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; pathpy.core.path.Path<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.get_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.get_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a path that represents the sequence of (first-order) nodes traversed 
+by a single random walk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data: DataFrame</strong></dt><dd><p>Pandas data frame containing the trajectory of one or more (higher-order) random walks, generated by a call of <cite>run_experiment</cite></p>
+</dd>
+<dt><strong>run_uid: Optional[int]=0</strong></dt><dd><p>Uid of the random walk simulation to be returns as Path (default: 0).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Path</dt><dd><p>Path object containing the sequence of nodes traversed by the random walk</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.get_paths">
+<code class="sig-name descname">get_paths</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">run_ids</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Iterable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">first_order</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; pathpy.core.path.PathCollection<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.get_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.get_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a PathCollection where each</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data: DataFrame</strong></dt><dd><p>Pandas data frame containing the trajectory of one or more random walks, generated by 
+<cite>run_experiment</cite></p>
+</dd>
+<dt><strong>run_uids: Optional[Iterable]=None</strong></dt><dd><p>Uids of the random walk simulations to be included in the PathCollection instance. If None (default), all random walk simulations will be included.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>PathCollection</dt><dd><p>PathCollection object where each random walk is represented by one Path instance in the collection.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.init">
+<code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">seed</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the random walk state with a given seed/source node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>seed: str</strong></dt><dd><p>uid of the node in which the random walk will start</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.node_state">
+<code class="sig-name descname">node_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">v</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.node_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.node_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a boolean variable indicating whether the walker is currently 
+visiting (first-order) node v</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">run_id</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">timescale</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">100</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display an interactive plot of the evolution of a process based on a recorded simulation experiment</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.plot_first_order">
+<code class="sig-name descname">plot_first_order</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">pathpy.models.network.Network</span></em>, <em class="sig-param"><span class="n">run_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">timescale</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">100</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.plot_first_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.plot_first_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display an interactive plot of the random walk in a first-order network based on a recorded simulation experiment</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.random_seed">
+<code class="sig-name descname">random_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.random_seed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.random_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a random node from the network, chosen uniformly at random</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.run_experiment">
+<code class="sig-name descname">run_experiment</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">steps</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">runs</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>int<span class="p">, </span>Iterable<span class="p">[</span>Any<span class="p">]</span><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.run_experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform one or more simulation runs of the process with a given number of steps.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.simulation_run">
+<code class="sig-name descname">simulation_run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">steps</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">seed</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Any<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>int<span class="p">, </span>Set<span class="p">[</span>str<span class="p">]</span><span class="p">]</span><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.simulation_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract generator method that initializes the process, runs a number of steps and yields a tuple consisting of the current time and the set of nodes whose state has changed in each step.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.state_to_color">
+<code class="sig-name descname">state_to_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.state_to_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.state_to_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maps the current (visitation) state of nodes to colors for visualization. The state is True for the currently visited node and False for all other nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>state: bool</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.stationary_state">
+<code class="sig-name descname">stationary_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span> &#x2192; numpy.array<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.stationary_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.stationary_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes stationary visitation probabilities.</p>
+<p>Computes stationary visitation probabilities of nodes based on the
+leading eigenvector of the transition matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**kwargs: Any</strong></dt><dd><p>Arbitrary key-value pairs to bee passed to the
+scipy.sparse.linalg.eigs function.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span>str<span class="p">]</span><a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that will be called for each step of the random walk. This function 
+returns a tuple, where the first entry is the uids of the currently visited node and the second entry is the uid of the previously visited node.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.time">
+<em class="property">property </em><code class="sig-name descname">time</code><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current time of the random walk process, i.e. the number of steps taken since the start node.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.total_variation_distance">
+<em class="property">property </em><code class="sig-name descname">total_variation_distance</code><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.total_variation_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the total variation distance between stationary 
+visitation probabilities and the current visitation frequencies</p>
+<p>Computes the total variation distance between the current visitation
+probabilities and the stationary probabilities. This quantity converges
+to zero for RandomWalk.t -&gt; np.infty and its magnitude indicates the
+current relaxation of the random walk process.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.transition_matrix">
+<em class="property">property </em><code class="sig-name descname">transition_matrix</code><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.transition_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the transition matrix of the random walk</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.RandomWalk.transition_matrix_pd">
+<code class="sig-name descname">transition_matrix_pd</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.transition_matrix_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.transition_matrix_pd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the transition matrix as pandas DataFrame with proper row/column labels.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="pathpy.processes.random_walk.RandomWalk.transition_probabilities">
 <code class="sig-name descname">transition_probabilities</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; numpy.array<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.transition_probabilities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.transition_probabilities" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a vector that contains transition probabilities.</p>
@@ -406,38 +493,16 @@ node to all other nodes in the network.</p>
 
 <dl class="py method">
 <dt id="pathpy.processes.random_walk.RandomWalk.visitation_frequencies">
-<code class="sig-name descname">visitation_frequencies</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; numpy.array<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.visitation_frequencies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.visitation_frequencies" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">visitation_frequencies</code><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.visitation_frequencies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns current normalized visitation frequencies of nodes based on the history of
 the random walk. Initially, all visitation probabilities are zero except for the start node.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="pathpy.processes.random_walk.RandomWalk.visitation_probabilities">
-<code class="sig-name descname">visitation_probabilities</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">start_node</span><span class="p">:</span> <span class="n">pathpy.core.node.Node</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a><a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.visitation_probabilities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.visitation_probabilities" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">visitation_probabilities</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">seed</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a><a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.visitation_probabilities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.visitation_probabilities" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates visitation probabilities of nodes after t steps for a given start node</p>
 <p>Initially, all visitation probabilities are zero except for the start node.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.walk">
-<code class="sig-name descname">walk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">steps</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">start_node</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>pathpy.core.node.Node<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#RandomWalk.walk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.walk" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generator object which yields a configurable number of nodes visited by a random walker.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>steps: int</strong></dt><dd><p>The number of random walk steps to simulate</p>
-</dd>
-<dt><strong>start_node: str</strong></dt><dd><p>Where to start the random walk</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pathpy.processes.random_walk.RandomWalk.walk_step">
-<em class="property">abstract </em><code class="sig-name descname">walk_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pathpy.processes.random_walk.RandomWalk.walk_step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract walk step method.</p>
 </dd></dl>
 
 </dd></dl>
