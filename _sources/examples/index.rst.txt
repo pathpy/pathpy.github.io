@@ -74,11 +74,26 @@ Example gallery
 .. toctree::
    :hidden:
 
+   ./lotr
+
    ./pyplot_text
 
    ./simple_plot
 
 
+
+
+
+.. raw:: html
+
+    <div class='figure align-center'>
+    <a href=./lotr.html>
+    <img src=../_static/lotr_thumb.png>
+    <span class='figure-label'>
+    <p></p>
+    </span>
+    </a>
+    </div>
 
 
 

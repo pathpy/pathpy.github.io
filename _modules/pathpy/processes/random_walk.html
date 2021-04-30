@@ -155,92 +155,109 @@
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <div class="viewcode-block" id="RandomWalk"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.RandomWalk.html#pathpy.processes.random_walk.RandomWalk">[docs]</a><span class="k">class</span> <span class="nc">RandomWalk</span><span class="p">(</span><span class="n">BaseProcess</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Class implementing a biased random walk process in a network or higher-order </span>
-<span class="sd">    network.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Class that implements a biased random walk process in a network.</span>
+<span class="sd">    </span>
+<span class="sd">    Instances of this class can be used to simulate random walk processes in any instance</span>
+<span class="sd">    of the class Network. The random walk process can include weighted edges as well as a </span>
+<span class="sd">    restart probability, i.e. a per-step probability to teleport to a</span>
+<span class="sd">    randomly chosen node.</span>
+
+<span class="sd">    Since any instance of HigherOrderNetwork is also an instance of Network, this class</span>
+<span class="sd">    can be directly be applied to simulate random walks in higher-order networks. However, </span>
+<span class="sd">    the state space of such a random walk is given by the higher-order nodes. If you wish to</span>
+<span class="sd">    simulate a higher-order random walk while projecting states to the corresponding first-order </span>
+<span class="sd">    network, you should use the class HigherOrderRandomWalk instead.</span>
+
+<span class="sd">    The implementation follows the general concept to simulate discrete-time (stochastic) processes</span>
+<span class="sd">    as implemented in the base class BaseProcess. Hence, the user can either use the iterator interface</span>
+<span class="sd">    to iterate through the steps of a single random walk process, or use the `run_experiment` function</span>
+<span class="sd">    to simulate multiple runs of a random walk with different start nodes (i.e. seeds).</span>
+
+<span class="sd">    The `run_experiment` function returns a pandas DataFrame object that contains all node state changes </span>
+<span class="sd">    during the process&#39; evolution. This data frame can be converted to Path and PathCollection objects </span>
+<span class="sd">    and it can be visualized using the plot function.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Generate and visualize a single biased random walk with 10 steps on a network</span>
+
+<span class="sd">    &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">    &gt;&gt;&gt; n = pp.Network(directed=False)</span>
+<span class="sd">    &gt;&gt;&gt; n.add_edge(&#39;a&#39;, &#39;b&#39;, weight=1, uid=&#39;a-b&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; n.add_edge(&#39;b&#39;, &#39;c&#39;, weight=1, uid=&#39;b-c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; n.add_edge(&#39;c&#39;, &#39;a&#39;, weight=2, uid=&#39;c-a&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; n.add_edge(&#39;c&#39;, &#39;d&#39;, weight=1, uid=&#39;c-d&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; n.add_edge(&#39;d&#39;, &#39;a&#39;, weight=1, uid=&#39;d-a&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; rw = pp.processes.RandomWalk(n, weight=&#39;weight&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; data = rw.run_experiment(steps=10, seed=&#39;a&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; rw.plot(data)</span>
+<span class="sd">    [interactive visualization]</span>
+
+<span class="sd">    Generate a single random walk with 10 steps starting from node &#39;a&#39; and </span>
+<span class="sd">    return a Path instance</span>
+
+<span class="sd">    &gt;&gt;&gt; p = rw.get_path(rw.run_experiment(steps=10, runs=[&#39;a&#39;]))</span>
+<span class="sd">    &gt;&gt;&gt; pprint([v.uid for v in p.nodes ]) </span>
+<span class="sd">    [ &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;]</span>
+
+<span class="sd">    Generate one random walk with 10 steps starting from each node and </span>
+<span class="sd">    return a PathCollection instance</span>
+
+<span class="sd">    &gt;&gt;&gt; pc = rw.get_paths(rw.run_experiment(steps=10, runs=n.nodes.uids))</span>
+<span class="sd">    &gt;&gt;&gt; pprint([v.uid for v in p.nodes ]) </span>
+<span class="sd">    [ &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;] </span>
+<span class="sd">    [ &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39; ]</span>
+<span class="sd">    [ &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39; ]</span>
+<span class="sd">    [ &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39; ]</span>
+
+<span class="sd">    Simulate a random walk using the iterator interface, which provides full access </span>
+<span class="sd">    to the state after each simulation step</span>
+
+<span class="sd">    &gt;&gt;&gt; for time, _ in rw.simulation_run(steps=5, seed=&#39;a&#39;):</span>
+<span class="sd">    &gt;&gt;&gt;     print(&#39;Current node = {0}&#39;.format(rw.current_node))</span>
+<span class="sd">    &gt;&gt;&gt;     print(rw.visitation_frequencies)</span>
+<span class="sd">    Current node = b</span>
+<span class="sd">    [0.5 0.5 0.  0. ]</span>
+<span class="sd">    Current node = c</span>
+<span class="sd">    [0.33333333 0.33333333 0.33333333 0. ]</span>
+<span class="sd">    Current node = d</span>
+<span class="sd">    [0.25 0.25 0.25 0.25]</span>
+<span class="sd">    Current node = a</span>
+<span class="sd">    [0.4 0.2 0.2 0.2]</span>
+<span class="sd">    Current node = b</span>
+<span class="sd">    [0.33333333 0.33333333 0.16666667 0.16666667]</span>
+<span class="sd">    Current node = a</span>
+<span class="sd">    [0.42857143 0.28571429 0.14285714 0.14285714]</span>
+<span class="sd">    Current node = c</span>
+<span class="sd">    [0.375 0.25  0.25  0.125]</span>
+<span class="sd">    Current node = a</span>
+<span class="sd">    [0.44444444 0.22222222 0.22222222 0.11111111]</span>
+<span class="sd">    Current node = b</span>
+<span class="sd">    [0.4 0.3 0.2 0.1]</span>
+<span class="sd">    Current node = a</span>
+<span class="sd">    [0.45454545 0.27272727 0.18181818 0.09090909]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="RandomWalk.__init__"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.RandomWalk.html#pathpy.processes.random_walk.RandomWalk.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Weight</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">restart_prob</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Creates a biased random walk process in a network or higher-order </span>
-<span class="sd">        network.</span>
+        <span class="sd">&quot;&quot;&quot;Creates a biased random walk process in a network.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        network: Network</span>
-
 <span class="sd">            The network instance on which to perform the random walk process. Can also </span>
 <span class="sd">            be an instance of HigherOrderNetwork.</span>
 
 <span class="sd">        weight: Weight = None</span>
-
 <span class="sd">            If specified, the given numerical edge attribute will be used to bias</span>
 <span class="sd">            the random walk transition probabilities.</span>
 
 <span class="sd">        restart_probability: float = 0</span>
-
 <span class="sd">            The per-step probability that a random walker restarts in a random node</span>
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
-<span class="sd">        VoseAliasSampling</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        Generate and visualize a single random walk on a network</span>
-
-<span class="sd">        &gt;&gt;&gt; import pathpy as pp</span>
-<span class="sd">        &gt;&gt;&gt; n = pp.Network(directed=False)</span>
-<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;a&#39;, &#39;b&#39;, weight=1, uid=&#39;a-b&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;b&#39;, &#39;c&#39;, weight=1, uid=&#39;b-c&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;c&#39;, &#39;a&#39;, weight=2, uid=&#39;c-a&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;c&#39;, &#39;d&#39;, weight=1, uid=&#39;c-d&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;d&#39;, &#39;a&#39;, weight=1, uid=&#39;d-a&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; rw = pp.processes.RandomWalk(n, weight=&#39;weight&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; data = rw.run_experiment(steps=10, seed=&#39;a&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; rw.plot(data)</span>
-<span class="sd">        [interactive visualization]</span>
-
-<span class="sd">        Generate a single random walk with 10 steps starting from node &#39;a&#39; and </span>
-<span class="sd">        return a Path instance</span>
-
-<span class="sd">        &gt;&gt;&gt; p = rw.get_path(rw.run_experiment(steps=10, seed=&#39;a&#39;))</span>
-<span class="sd">        &gt;&gt;&gt; pprint([v.uid for v in p.nodes ]) </span>
-<span class="sd">        [ &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;]</span>
-
-<span class="sd">        Generate a single random walk with 10 steps starting from each node and </span>
-<span class="sd">        returns a PathCollection instance</span>
-
-<span class="sd">        &gt;&gt;&gt; pc = rw.get_paths(rw.run_experiment(steps=10, runs=n.nodes.uids))</span>
-<span class="sd">        &gt;&gt;&gt; pprint([v.uid for v in p.nodes ]) </span>
-<span class="sd">        [ &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;] </span>
-<span class="sd">        [ &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39; ]</span>
-<span class="sd">        [ &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39; ]</span>
-<span class="sd">        [ &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39; ]</span>
-
-<span class="sd">        Generte a random walk using the iterator interface</span>
-
-<span class="sd">        &gt;&gt;&gt; for time, _ in rw.simulation_run(steps=5, seed=&#39;a&#39;):</span>
-<span class="sd">        &gt;&gt;&gt;     print(&#39;Current node = {0}&#39;.format(rw.current_node))</span>
-<span class="sd">        &gt;&gt;&gt;     print(rw.visitation_frequencies)</span>
-<span class="sd">        Current node = b</span>
-<span class="sd">        [0.5 0.5 0.  0. ]</span>
-<span class="sd">        Current node = c</span>
-<span class="sd">        [0.33333333 0.33333333 0.33333333 0. ]</span>
-<span class="sd">        Current node = d</span>
-<span class="sd">        [0.25 0.25 0.25 0.25]</span>
-<span class="sd">        Current node = a</span>
-<span class="sd">        [0.4 0.2 0.2 0.2]</span>
-<span class="sd">        Current node = b</span>
-<span class="sd">        [0.33333333 0.33333333 0.16666667 0.16666667]</span>
-<span class="sd">        Current node = a</span>
-<span class="sd">        [0.42857143 0.28571429 0.14285714 0.14285714]</span>
-<span class="sd">        Current node = c</span>
-<span class="sd">        [0.375 0.25  0.25  0.125]</span>
-<span class="sd">        Current node = a</span>
-<span class="sd">        [0.44444444 0.22222222 0.22222222 0.11111111]</span>
-<span class="sd">        Current node = b</span>
-<span class="sd">        [0.4 0.3 0.2 0.1]</span>
-<span class="sd">        Current node = a</span>
-<span class="sd">        [0.45454545 0.27272727 0.18181818 0.09090909]</span>
+<span class="sd">        VoseAliasSampling, HigherOrderRandomWalk, BaseProcess</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># transition matrix of random walk</span>
@@ -301,27 +318,20 @@
 <span class="sd">        Function that will be called for each step of the random walk. This function </span>
 <span class="sd">        returns a tuple, where the first entry is the uids of the currently visited node and the second entry is the uid of the previously visited node.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># determine next node</span>
         <span class="n">next_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">samplers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_node</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">()]</span>
-        <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_node</span><span class="p">,</span> <span class="n">next_node</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">edges</span><span class="p">,</span> <span class="s1">&#39;Assertion Error: </span><span class="si">{0}</span><span class="s1"> not in edge list&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_node</span><span class="p">,</span> <span class="n">next_node</span><span class="p">))</span>        
-        <span class="c1"># if type(self._network) == Network:</span>
-        <span class="c1">#     # walk._path.append(traversed_edge)</span>
-        <span class="c1"># elif type(self._network) == HigherOrderNetwork:</span>
-        <span class="c1">#     # map to first-order edge</span>
-        <span class="c1">#     walk._path.append(traversed_edge.w.edges[-1])</span>
-        <span class="c1"># else:</span>
-        <span class="c1">#     raise NotImplementedError(&#39;Random walk not implemented for network of type {0}&#39;.format(type(self._network)))     </span>
+        <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_node</span><span class="p">,</span> <span class="n">next_node</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">edges</span><span class="p">,</span> <span class="s1">&#39;Assertion Error: </span><span class="si">{0}</span><span class="s1"> not in edge list&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_node</span><span class="p">,</span> <span class="n">next_node</span><span class="p">))</span>
+        
         <span class="n">previous_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_node</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_current_node</span> <span class="o">=</span> <span class="n">next_node</span>
+
+        <span class="c1"># increment visitations and current time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_visitations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_node</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_t</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="c1"># print(&#39;{0} -&gt; {1}&#39;.format(previous_node, self._current_node))</span>
-        <span class="c1"># if type(self._network) == Network:</span>
+
+        <span class="c1"># return tuple of changed nodes, where the first node is the currently visited node</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_current_node</span><span class="p">,</span> <span class="n">previous_node</span><span class="p">)</span></div>
-        <span class="c1"># elif type(self._network) == HigherOrderNetwork:</span>
-        <span class="c1">#     traversed_edge: HigherOrderEdge = self._network.edges[(previous_node, self._current_node)].w.edges[-1]</span>
-        <span class="c1">#     return (traversed_edge.w.uid, traversed_edge.v.uid)</span>
-        <span class="c1"># else:</span>
-        <span class="c1">#     raise NotImplementedError(&#39;Random walk not implemented for network of type {0}&#39;.format(type(self._network)))    </span>
 
 <div class="viewcode-block" id="RandomWalk.node_state"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.RandomWalk.html#pathpy.processes.random_walk.RandomWalk.node_state">[docs]</a>    <span class="k">def</span> <span class="nf">node_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -456,39 +466,25 @@
 <span class="sd">        Path</span>
 <span class="sd">            Path object containing the sequence of nodes traversed by the random walk</span>
 
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Path</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># list of traversed nodes starting with seed node</span>
         <span class="n">walk_steps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;run_id&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">run_id</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span><span class="o">==</span><span class="kc">True</span><span class="p">)][</span><span class="s1">&#39;node&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>        
 
         <span class="c1"># generate Path</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="p">)</span> <span class="o">==</span> <span class="n">Network</span> <span class="ow">or</span> <span class="n">first_order</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span>
-            <span class="n">walk</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">walk_steps</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">walk_steps</span><span class="p">)):</span>
-                <span class="n">v</span> <span class="o">=</span> <span class="n">walk_steps</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">w</span> <span class="o">=</span> <span class="n">walk_steps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">traversed_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">]</span>            
-                <span class="n">walk</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">traversed_edge</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">walk</span>
-        <span class="k">else</span><span class="p">:</span> <span class="c1"># map higher-order path to first-order network</span>
-
-            <span class="c1"># for higher-order random walk, seed node is a higher-order node</span>
-            <span class="c1"># consisting of one or more edges</span>
-            <span class="n">seed</span><span class="p">:</span> <span class="n">HigherOrderNode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">walk_steps</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-            <span class="n">walk</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">seed</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">seed</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
-                <span class="n">walk</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-
-            <span class="c1"># map higher-order nodes to first-order nodes</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">walk_steps</span><span class="p">)):</span>
-                <span class="n">v</span> <span class="o">=</span> <span class="n">walk_steps</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">w</span> <span class="o">=</span> <span class="n">walk_steps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">traversed_higher_order_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">]</span>
-                <span class="n">traversed_edge</span> <span class="o">=</span> <span class="n">traversed_higher_order_edge</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">walk</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">traversed_edge</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">walk</span></div>
+        <span class="n">walk</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">walk_steps</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">walk_steps</span><span class="p">)):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">walk_steps</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">walk_steps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">traversed_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">]</span>            
+            <span class="n">walk</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">traversed_edge</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">walk</span>        </div>
 
 
-<div class="viewcode-block" id="RandomWalk.get_paths"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.RandomWalk.html#pathpy.processes.random_walk.RandomWalk.get_paths">[docs]</a>    <span class="k">def</span> <span class="nf">get_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">run_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">first_order</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PathCollection</span><span class="p">:</span>
+<div class="viewcode-block" id="RandomWalk.get_paths"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.RandomWalk.html#pathpy.processes.random_walk.RandomWalk.get_paths">[docs]</a>    <span class="k">def</span> <span class="nf">get_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">run_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PathCollection</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a PathCollection where each </span>
 
 <span class="sd">        Parameters</span>
@@ -507,6 +503,10 @@
 <span class="sd">        PathCollection</span>
 <span class="sd">            PathCollection object where each random walk is represented by one Path instance in the collection.</span>
 
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        PathCollection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="k">if</span> <span class="ow">not</span> <span class="n">run_ids</span><span class="p">:</span> <span class="c1"># generate paths for all run_ids in the data frame</span>
@@ -516,36 +516,9 @@
 
         <span class="n">pc</span> <span class="o">=</span> <span class="n">PathCollection</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
-            <span class="n">pc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">first_order</span><span class="p">))</span>
+            <span class="n">pc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">pc</span></div>
-
-
-<div class="viewcode-block" id="RandomWalk.plot_first_order"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.RandomWalk.html#pathpy.processes.random_walk.RandomWalk.plot_first_order">[docs]</a>    <span class="k">def</span> <span class="nf">plot_first_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">timescale</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Display an interactive plot of the random walk in a first-order network based on a recorded simulation experiment</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">evolution</span><span class="p">:</span> <span class="n">DataFrame</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;run_id&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">run_id</span><span class="p">]</span>
-        <span class="n">steps</span> <span class="o">=</span> <span class="n">evolution</span><span class="o">.</span><span class="n">max</span><span class="p">()[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-        
-        <span class="c1"># create network with temporal attributes</span>
-        <span class="n">tn</span> <span class="o">=</span> <span class="n">TemporalNetwork</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">)</span>        
-        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
-            <span class="n">tn</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">TemporalNode</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
-            <span class="n">tn</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">steps</span><span class="o">*</span><span class="n">timescale</span><span class="p">)</span>
-
-        <span class="c1"># set initial state</span>
-        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tn</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">:</span>
-            <span class="n">tn</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_to_color</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-
-        <span class="c1"># update state</span>
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">evolution</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-            <span class="n">higher_order_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;node&#39;</span><span class="p">]]</span>
-            <span class="n">first_order_node</span> <span class="o">=</span> <span class="n">higher_order_node</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">tn</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">first_order_node</span><span class="o">.</span><span class="n">uid</span><span class="p">][</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">timescale</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_to_color</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">tn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="RandomWalk.stationary_state"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.RandomWalk.html#pathpy.processes.random_walk.RandomWalk.stationary_state">[docs]</a>    <span class="k">def</span> <span class="nf">stationary_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
@@ -595,6 +568,325 @@
         <span class="sd">&quot;&quot;&quot;Calculates the total variation distance between two probability vectors</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="mf">2.0</span></div></div>
+
+
+<div class="viewcode-block" id="HigherOrderRandomWalk"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk">[docs]</a><span class="k">class</span> <span class="nc">HigherOrderRandomWalk</span><span class="p">(</span><span class="n">RandomWalk</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class that implements a biased random walk process in a higher-order network.</span>
+<span class="sd">        </span>
+<span class="sd">        Instances of this class can be used to simulate random walk processes in higher-order networks for </span>
+<span class="sd">        arbitrary orders k. The random walk process can include weighted edges as well as a </span>
+<span class="sd">        restart probability, i.e. a per-step probability to teleport to a</span>
+<span class="sd">        randomly chosen higher-order node.</span>
+
+<span class="sd">        Different from the class RandomWalk, instances of class HigherOrderRandomWalk automatically project states to the corresponding first-order network, i.e. paths and visualisations are given </span>
+<span class="sd">        in terms of the nodes in the first-order network, while the dynamics of the random walk is governed by the underlying higher-order network.</span>
+
+<span class="sd">        The implementation follows the general concept to simulate discrete-time (stochastic) processes</span>
+<span class="sd">        as implemented in the base class BaseProcess. Hence, the user can either use the iterator interface</span>
+<span class="sd">        to iterate through the steps of a single random walk process, or use the `run_experiment` function</span>
+<span class="sd">        to simulate multiple runs of a random walk with different start nodes (i.e. seeds).</span>
+
+<span class="sd">        The `run_experiment` function returns a pandas DataFrame object that contains all node state changes </span>
+<span class="sd">        during the process&#39; evolution. This data frame can be converted to Path and PathCollection objects </span>
+<span class="sd">        and it can be visualized using the plot function.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Generate and visualize a single random walk with 10 steps on a higher-order network</span>
+
+<span class="sd">        &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">        &gt;&gt;&gt; n = pp.Network(directed=False)</span>
+<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;a&#39;, &#39;b&#39;, weight=1, uid=&#39;a-b&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;b&#39;, &#39;c&#39;, weight=1, uid=&#39;b-c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;c&#39;, &#39;a&#39;, weight=2, uid=&#39;c-a&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;c&#39;, &#39;d&#39;, weight=1, uid=&#39;c-d&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;d&#39;, &#39;a&#39;, weight=1, uid=&#39;d-a&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v1 = pp.HigherOrderNode(n.edges[&#39;a-b&#39;], uid=&#39;a-b&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v2 = pp.HigherOrderNode(n.edges[&#39;b-c&#39;], uid=&#39;b-c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v3 = pp.HigherOrderNode(n.edges[&#39;c-a&#39;], uid=&#39;c-a&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v4 = pp.HigherOrderNode(n.edges[&#39;c-d&#39;], uid=&#39;c-d&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v5 = pp.HigherOrderNode(n.edges[&#39;d-a&#39;], uid=&#39;d-a&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; n2.add_edge(v1, v2, uid=&#39;a-b-c&#39;, weight=1)</span>
+<span class="sd">        &gt;&gt;&gt; n2.add_edge(v2, v3, uid=&#39;b-c-a&#39;, weight=1)</span>
+<span class="sd">        &gt;&gt;&gt; n2.add_edge(v2, v4, uid=&#39;b-c-d&#39;, weight=0.2)</span>
+<span class="sd">        &gt;&gt;&gt; n2.add_edge(v3, v1, uid=&#39;c-a-b&#39;, weight=1)</span>
+<span class="sd">        &gt;&gt;&gt; n2.add_edge(v4, v5, uid=&#39;c-d-a&#39;, weight=0.2)</span>
+<span class="sd">        &gt;&gt;&gt; n2.add_edge(v5, v1, uid=&#39;d-a-b&#39;, weight=1)</span>
+<span class="sd">        &gt;&gt;&gt; rw = pp.processes.HigherOrderRandomWalk(n2, weight=&#39;weight&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; data = rw.run_experiment(steps=10, runs=[&#39;b-c&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; rw.plot(data)</span>
+<span class="sd">        [interactive visualization in first-order network]</span>
+
+<span class="sd">        Use `plot` function of base class to visualize random walk in second-order network</span>
+
+<span class="sd">        &gt;&gt;&gt; pp.processes.RandomWalk.plot(rw, data)</span>
+<span class="sd">        [interactive visualization in second-order network]</span>
+
+<span class="sd">        Generate a single random walk with 10 steps starting from node &#39;b-c&#39; and </span>
+<span class="sd">        return a first-order path</span>
+
+<span class="sd">        &gt;&gt;&gt; p = rw.get_path(rw.run_experiment(steps=10, runs=[&#39;b-c&#39;]))</span>
+<span class="sd">        &gt;&gt;&gt; pprint([v.uid for v in p.nodes ]) </span>
+<span class="sd">        [ &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;]</span>
+
+<span class="sd">        Use `get_path` function of base class to return path with second-order nodes</span>
+
+<span class="sd">        &gt;&gt;&gt; p = pp.processes.RandomWalk.get_path(rw2, data)</span>
+<span class="sd">        &gt;&gt;&gt; print([ v.uid for v in p.nodes ])</span>
+
+<span class="sd">        Generate one random walk with 10 steps starting from each node and </span>
+<span class="sd">        return a PathCollection instance with first-order paths</span>
+
+<span class="sd">        &gt;&gt;&gt; pc = rw.get_paths(rw.run_experiment(steps=10, runs=n.nodes.uids))</span>
+<span class="sd">        &gt;&gt;&gt; pprint([v.uid for v in p.nodes ]) </span>
+<span class="sd">        [ &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;] </span>
+<span class="sd">        [ &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39; ]</span>
+<span class="sd">        [ &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39; ]</span>
+<span class="sd">        [ &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;, &#39;b&#39; ]</span>
+
+<span class="sd">        Simulate a random walk using the iterator interface, which provides full access </span>
+<span class="sd">        to the state after each simulation step</span>
+
+<span class="sd">        &gt;&gt;&gt; for time, _ in rw2.simulation_run(steps=50, seed=&#39;b-c&#39;):</span>
+<span class="sd">        &gt;&gt;&gt;     print(&#39;Current node = {0}&#39;.format(rw2.first_order_node(rw2.current_node)))</span>
+<span class="sd">        &gt;&gt;&gt;     print(rw2._first_order_visitation_frequencies)</span>
+<span class="sd">        Current node = b</span>
+<span class="sd">        [0.33333333 0.33333333 0.33333333 0.        ]</span>
+<span class="sd">        Current node = c</span>
+<span class="sd">        [0.32142857 0.32142857 0.35714286 0.        ]</span>
+<span class="sd">        Current node = a</span>
+<span class="sd">        [0.34482759 0.31034483 0.34482759 0.        ]</span>
+<span class="sd">        Current node = b</span>
+<span class="sd">        [0.33333333 0.33333333 0.33333333 0.        ]</span>
+<span class="sd">        Current node = c</span>
+<span class="sd">        [0.32258065 0.32258065 0.35483871 0.        ]</span>
+<span class="sd">        Current node = a</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        VoseAliasSampling, RandomWalk, BaseProcess</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="HigherOrderRandomWalk.__init__"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">higher_order_network</span><span class="p">:</span> <span class="n">HigherOrderNetwork</span><span class="p">,</span> <span class="n">first_order_network</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Weight</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">restart_prob</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first_order_network</span> <span class="o">=</span> <span class="n">first_order_network</span>
+        <span class="n">RandomWalk</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">higher_order_network</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">restart_prob</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HigherOrderRandomWalk.init"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Creates a biased random walk process in a network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        higher_order_network: HigherOrderNetwork</span>
+<span class="sd">            The higher-order network instance on which to perform the random walk process.</span>
+
+<span class="sd">        first_order_network: Network</span>
+<span class="sd">            The first-order network instance to be used for mapping the process to first-order nodes</span>
+
+<span class="sd">        weight: Weight = None</span>
+<span class="sd">            If specified, the given numerical edge attribute will be used to bias</span>
+<span class="sd">            the random walk transition probabilities.</span>
+
+<span class="sd">        restart_probability: float = 0</span>
+<span class="sd">            The per-step probability that a random walker restarts in a random (higher-order) node</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        RandomWalk, BaseProcess</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># set number of times each first-order node has been visited</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first_order_visitations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first_order_network</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">())))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first_order_visitations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_first_order_network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">seed</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">RandomWalk</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">first_order_visitation_frequencies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns current normalized visitation frequencies of first-order nodes based on the history of</span>
+<span class="sd">        the higher-order random walk. Initially, all visitation probabilities are zero except for the last node of the higher-order seed node.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_first_order_visitations</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="HigherOrderRandomWalk.first_order_node"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_node">[docs]</a>    <span class="k">def</span> <span class="nf">first_order_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">higher_order_node</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Maps a given uid of a node in the higher-order network to the corresponding </span>
+<span class="sd">        first-order node.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        higher_order_node: str</span>
+<span class="sd">            The string uid of the higher-order node</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            uid of the corresponding first-order node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">higher_order_node</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span></div>
+
+
+<div class="viewcode-block" id="HigherOrderRandomWalk.step"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function that will be called for each step of the random walk. This function </span>
+<span class="sd">        returns a tuple, where the first entry is the uids of the currently visited higher-order node and the second entry is the uid of the previously visited higher-order node.</span>
+
+<span class="sd">        Use the `first_order_node` function to map those nodes to nodes in the first-order network</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="n">previous_node</span><span class="p">)</span> <span class="o">=</span> <span class="n">RandomWalk</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first_order_visitations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_first_order_network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">current_node</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="n">previous_node</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HigherOrderRandomWalk.plot"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">timescale</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Displays an interactive plot of the random walk dynamics, projected to a first-order network based on a recorded simulation experiment</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: DataFrame</span>
+<span class="sd">            A pandas dataframe containing the state changes recorded in a simulation of the process, as generated by function `run_experiment`</span>
+<span class="sd">        </span>
+<span class="sd">        run_id: Optional[int]=0</span>
+<span class="sd">            The integer identifier of the simulation run contained in `data` that shall be visualized. </span>
+<span class="sd">            If omitted, a default value of zero is used, i.e. the first simulation run in `data` will </span>
+<span class="sd">            be visualized. </span>
+
+<span class="sd">        timescale: Optional[int]=100</span>
+<span class="sd">            Determines the speed of the visualisation. For the default value of 100, each simulation step</span>
+<span class="sd">            will be displayed for 100 timesteps in the visualisation.</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            Optional keyword-arguments that will be passed to the plot function of the underlying instance </span>
+<span class="sd">            of TemporalNetwork</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Generate 10 higher-order random walks and visualize the walk dynamics of the run with id 3</span>
+
+<span class="sd">        &gt;&gt;&gt; import pathpy as pp</span>
+<span class="sd">        &gt;&gt;&gt; n = pp.Network(directed=False)</span>
+<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;a&#39;, &#39;b&#39;, weight=1, uid=&#39;a-b&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;b&#39;, &#39;c&#39;, weight=1, uid=&#39;b-c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;c&#39;, &#39;a&#39;, weight=2, uid=&#39;c-a&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;c&#39;, &#39;d&#39;, weight=1, uid=&#39;c-d&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; n.add_edge(&#39;d&#39;, &#39;a&#39;, weight=1, uid=&#39;d-a&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v1 = pp.HigherOrderNode(n.edges[&#39;a-b&#39;], uid=&#39;a-b&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v2 = pp.HigherOrderNode(n.edges[&#39;b-c&#39;], uid=&#39;b-c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v3 = pp.HigherOrderNode(n.edges[&#39;c-a&#39;], uid=&#39;c-a&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v4 = pp.HigherOrderNode(n.edges[&#39;c-d&#39;], uid=&#39;c-d&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; v5 = pp.HigherOrderNode(n.edges[&#39;d-a&#39;], uid=&#39;d-a&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; n2.add_edge(v1, v2, uid=&#39;a-b-c&#39;, weight=1)</span>
+<span class="sd">        &gt;&gt;&gt; n2.add_edge(v2, v3, uid=&#39;b-c-a&#39;, weight=1)</span>
+<span class="sd">        &gt;&gt;&gt; n2.add_edge(v2, v4, uid=&#39;b-c-d&#39;, weight=0.2)</span>
+<span class="sd">        &gt;&gt;&gt; n2.add_edge(v3, v1, uid=&#39;c-a-b&#39;, weight=1)</span>
+<span class="sd">        &gt;&gt;&gt; n2.add_edge(v4, v5, uid=&#39;c-d-a&#39;, weight=0.2)</span>
+<span class="sd">        &gt;&gt;&gt; n2.add_edge(v5, v1, uid=&#39;d-a-b&#39;, weight=1)</span>
+<span class="sd">        &gt;&gt;&gt; rw = pp.processes.HigherOrderRandomWalk(n2, weight=&#39;weight&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; data = rw.run_experiment(steps=10, runs=10)</span>
+<span class="sd">        &gt;&gt;&gt; rw.plot(data, run_id=3)</span>
+<span class="sd">        [interactive visualization in first-order network]</span>
+
+<span class="sd">        See Also:</span>
+<span class="sd">        ---------</span>
+<span class="sd">        TemporalNetwork, plot, RandomWalk, HigherOrderRandomWalk, EpidemicSIR</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">evolution</span><span class="p">:</span> <span class="n">DataFrame</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;run_id&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">run_id</span><span class="p">]</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="n">evolution</span><span class="o">.</span><span class="n">max</span><span class="p">()[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
+        
+        <span class="c1"># create network with temporal attributes</span>
+        <span class="n">tn</span> <span class="o">=</span> <span class="n">TemporalNetwork</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">directed</span><span class="p">)</span>        
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first_order_network</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="n">tn</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">TemporalNode</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first_order_network</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+            <span class="n">tn</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">steps</span><span class="o">*</span><span class="n">timescale</span><span class="p">)</span>
+
+        <span class="c1"># set initial state</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tn</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">:</span>
+            <span class="n">tn</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_to_color</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># update state</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">evolution</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">higher_order_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;node&#39;</span><span class="p">]]</span>
+            <span class="n">first_order_node</span> <span class="o">=</span> <span class="n">higher_order_node</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">tn</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">first_order_node</span><span class="o">.</span><span class="n">uid</span><span class="p">][</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">timescale</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_to_color</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">tn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HigherOrderRandomWalk.get_path"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.get_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a path that represents the sequence of (first-order) nodes traversed </span>
+<span class="sd">        by a single random walk.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        data: DataFrame</span>
+<span class="sd">            Pandas data frame containing the trajectory of one or more (higher-order) random walks, generated by a call of `run_experiment`</span>
+
+<span class="sd">        run_uid: Optional[int]=0</span>
+<span class="sd">               Uid of the random walk simulation to be returns as Path (default: 0).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        Path</span>
+<span class="sd">            Path object containing the sequence of nodes traversed by the random walk</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># list of traversed nodes starting with seed node</span>
+        <span class="n">walk_steps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;run_id&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">run_id</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span><span class="o">==</span><span class="kc">True</span><span class="p">)][</span><span class="s1">&#39;node&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>        
+
+        <span class="c1"># for higher-order random walk, seed node is a higher-order node</span>
+        <span class="c1"># consisting of one or more edges</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="n">HigherOrderNode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">walk_steps</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">walk</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">seed</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">seed</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+            <span class="n">walk</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="c1"># map higher-order nodes to first-order nodes</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">walk_steps</span><span class="p">)):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">walk_steps</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">walk_steps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">traversed_higher_order_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">]</span>
+            <span class="n">traversed_edge</span> <span class="o">=</span> <span class="n">traversed_higher_order_edge</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">walk</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">traversed_edge</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">walk</span></div>
+
+
+<div class="viewcode-block" id="HigherOrderRandomWalk.get_paths"><a class="viewcode-back" href="../../../generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.get_paths">[docs]</a>    <span class="k">def</span> <span class="nf">get_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">run_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PathCollection</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a PathCollection where each </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        data: DataFrame</span>
+<span class="sd">            Pandas data frame containing the trajectory of one or more random walks, generated by </span>
+<span class="sd">            `run_experiment`</span>
+
+<span class="sd">        run_uids: Optional[Iterable]=None</span>
+<span class="sd">            Uids of the random walk simulations to be included in the PathCollection instance. If None (default), all random walk simulations will be included.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        PathCollection</span>
+<span class="sd">            PathCollection object where each random walk is represented by one Path instance in the collection.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">run_ids</span><span class="p">:</span> <span class="c1"># generate paths for all run_ids in the data frame</span>
+            <span class="n">runs</span> <span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;run_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">runs</span> <span class="o">=</span> <span class="n">run_ids</span>
+
+        <span class="n">pc</span> <span class="o">=</span> <span class="n">PathCollection</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
+            <span class="n">pc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">pc</span></div></div>
 </pre></div>
 
     </div>
