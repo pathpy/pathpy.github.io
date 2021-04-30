@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.processes.epidemic_spreading.EpidemicSIR &#8212; pathpy 3.0.0a2 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pathpy.processes.sampling" href="pathpy.processes.sampling.html" />
+    <link rel="prev" title="pathpy.processes.epidemic_spreading" href="pathpy.processes.epidemic_spreading.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../examples/index.html">Gallery</a></li>
+                <li><a href="../tutorial.html">Tutorial</a></li>
+                <li><a href="../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">pathpy.processes.epidemic_spreading.EpidemicSIR</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="pathpy-processes-epidemic-spreading-epidemicsir">
+<h1>pathpy.processes.epidemic_spreading.EpidemicSIR<a class="headerlink" href="#pathpy-processes-epidemic-spreading-epidemicsir" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="pathpy.processes.epidemic_spreading.EpidemicSIR">
+<em class="property">class </em><code class="sig-prename descclassname">pathpy.processes.epidemic_spreading.</code><code class="sig-name descname">EpidemicSIR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">pathpy.models.network.Network</span></em>, <em class="sig-param"><span class="n">recovery_time</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">infection_prob</span><span class="p">:</span> <span class="n">float</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/processes/epidemic_spreading.html#EpidemicSIR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.epidemic_spreading.EpidemicSIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pathpy.processes.process.BaseProcess.html#pathpy.processes.process.BaseProcess" title="pathpy.processes.process.BaseProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">pathpy.processes.process.BaseProcess</span></code></a></p>
+<p>Implementation of Susceptible-Infected-Removed (SIR) model for epidemic spreading.</p>
+<p>The SIR model is an epidemiological compartment model, in which the nodes are assigned to three 
+compartments <cite>susceptible</cite> (those nodes that have not been infected but can potentially be infected), 
+<cite>infected</cite> (those nodes that are currently infected and can infect others), and <cite>recovered</cite> (those who
+have been infected in the past but are not infectious anymore).</p>
+<p>Once a node is infected, it will remain infectious for a time span that is governed by the recovery time. In each time step, each node connected to an infectious node is infected with probability infection_prob.</p>
+<p>The basic reproduction number R0 of the process is given by the product of the recovery time and the infection probability.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>network: Network</strong></dt><dd><p>The network on which to simulate the SIR process</p>
+</dd>
+<dt><strong>recovery_time: int</strong></dt><dd><p>number of steps after which a newly infected node will recover</p>
+</dd>
+<dt><strong>infection_prob: float</strong></dt><dd><p>probability that a susceptible node connected to an infected node is infected</p>
+</dd>
+<dt><strong>source: Optional[Node]</strong></dt><dd><p>source node that is initially infected</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create an SIR process on a network</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">generators</span><span class="o">.</span><span class="n">ER_np</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sir</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">EpidemicSIR</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sir</span><span class="o">.</span><span class="n">R0</span><span class="p">)</span>
+<span class="go">2.5</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="pathpy.processes.epidemic_spreading.EpidemicSIR.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span><span class="p">:</span> <span class="n">pathpy.models.network.Network</span></em>, <em class="sig-param"><span class="n">recovery_time</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">infection_prob</span><span class="p">:</span> <span class="n">float</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pathpy/processes/epidemic_spreading.html#EpidemicSIR.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.__init__" title="pathpy.processes.epidemic_spreading.EpidemicSIR.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(network, recovery_time, infection_prob)</p></td>
+<td><p>Constructor</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.init" title="pathpy.processes.epidemic_spreading.EpidemicSIR.init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code></a>(seed)</p></td>
+<td><p>Abstract method to initialize the process with a given seed state.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.node_state" title="pathpy.processes.epidemic_spreading.EpidemicSIR.node_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_state</span></code></a>(v)</p></td>
+<td><p>Abstract method returning the current state of a given node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.plot" title="pathpy.processes.epidemic_spreading.EpidemicSIR.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(data[, run_id, timescale])</p></td>
+<td><p>Display an interactive plot of the evolution of a process based on a recorded simulation experiment</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.random_seed" title="pathpy.processes.epidemic_spreading.EpidemicSIR.random_seed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_seed</span></code></a>()</p></td>
+<td><p>Abstract method to generate a random seed state for the process.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.run_experiment" title="pathpy.processes.epidemic_spreading.EpidemicSIR.run_experiment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_experiment</span></code></a>(steps[, runs])</p></td>
+<td><p>Perform one or more simulation runs of the process with a given number of steps.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.simulation_run" title="pathpy.processes.epidemic_spreading.EpidemicSIR.simulation_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulation_run</span></code></a>(steps[, seed])</p></td>
+<td><p>Abstract generator method that initializes the process, runs a number of steps and yields a tuple consisting of the current time and the set of nodes whose state has changed in each step.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.state_to_color" title="pathpy.processes.epidemic_spreading.EpidemicSIR.state_to_color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_to_color</span></code></a>(state)</p></td>
+<td><p>Abstract method mapping node states to RGB colors or color names.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.step" title="pathpy.processes.epidemic_spreading.EpidemicSIR.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">R0</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">network</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.time" title="pathpy.processes.epidemic_spreading.EpidemicSIR.time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time</span></code></a></p></td>
+<td><p>Abstract property returning the current time.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="pathpy.processes.epidemic_spreading.EpidemicSIR.init">
+<code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">seed</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/processes/epidemic_spreading.html#EpidemicSIR.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to initialize the process with a given seed state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.epidemic_spreading.EpidemicSIR.node_state">
+<code class="sig-name descname">node_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">v</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../_modules/pathpy/processes/epidemic_spreading.html#EpidemicSIR.node_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.node_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method returning the current state of a given node.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.epidemic_spreading.EpidemicSIR.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">run_id</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">timescale</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">100</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display an interactive plot of the evolution of a process based on a recorded simulation experiment</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.epidemic_spreading.EpidemicSIR.random_seed">
+<code class="sig-name descname">random_seed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathpy/processes/epidemic_spreading.html#EpidemicSIR.random_seed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.random_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to generate a random seed state for the process.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.epidemic_spreading.EpidemicSIR.run_experiment">
+<code class="sig-name descname">run_experiment</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">steps</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">runs</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>int<span class="p">, </span>Iterable<span class="p">[</span>Any<span class="p">]</span><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.run_experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform one or more simulation runs of the process with a given number of steps.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.epidemic_spreading.EpidemicSIR.simulation_run">
+<code class="sig-name descname">simulation_run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">steps</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">seed</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Any<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>int<span class="p">, </span>Set<span class="p">[</span>str<span class="p">]</span><span class="p">]</span><a class="headerlink" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.simulation_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract generator method that initializes the process, runs a number of steps and yields a tuple consisting of the current time and the set of nodes whose state has changed in each step.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.epidemic_spreading.EpidemicSIR.state_to_color">
+<code class="sig-name descname">state_to_color</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/pathpy/processes/epidemic_spreading.html#EpidemicSIR.state_to_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.state_to_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method mapping node states to RGB colors or color names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.epidemic_spreading.EpidemicSIR.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Set<span class="p">[</span>str<span class="p">]</span><a class="reference internal" href="../_modules/pathpy/processes/epidemic_spreading.html#EpidemicSIR.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.step" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.epidemic_spreading.EpidemicSIR.time">
+<em class="property">property </em><code class="sig-name descname">time</code><a class="headerlink" href="#pathpy.processes.epidemic_spreading.EpidemicSIR.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract property returning the current time.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

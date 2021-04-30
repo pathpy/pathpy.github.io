@@ -114,8 +114,12 @@
       
   <div class="section" id="reading-and-writing-network-data-with-pandas">
 <h1>Reading and writing network data with <code class="docutils literal notranslate"><span class="pre">pandas</span></code><a class="headerlink" href="#reading-and-writing-network-data-with-pandas" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="https://colab.research.google.com/github/pathpy/pathpy/blob/master/doc/tutorial/pandas.ipynb">Run notebook in Google
-Colab</a></p>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://colab.research.google.com/github/pathpy/pathpy/blob/master/doc/tutorial/pandas.ipynb">Run notebook in Google
+Colab</a></div>
+<div class="line"><a class="reference external" href="https://github.com/pathpy/pathpy/raw/master/doc/tutorial/pandas.ipynb">Download
+notebook</a></div>
+</div>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;v&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="s1">&#39;w&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">]})</span>
@@ -360,15 +364,15 @@ hr.tooltip-hr {
 }
 
 </style>
-<div id="x58b53ea1aa4a43ff9ac8ecda3aa2c741"></div>
-<div id="x56f8d89e99d24a2b9b788e9cd723cd32"></div>
+<div id="x8f3e8dc064004a4a88148ba66fa0a13d"></div>
+<div id="x4e4998865c11421abb453f790ff268e2"></div>
 <script charset="utf-8">
 
  var d3 = require("d3");
 
  var config = {"width": 800.0, "height": 550.0, "unit": "px", "dpi": 96, "margin": null, "layout": "force", "temporal": false, "coordinates": false, "euclidean": false, "min_max_node_size": null, "min_max_edge_size": null, "keep_aspect_ratio": true, "forceCharge": -20, "forceRepel": -300, "forceAlpha": 0.1, "restartAlpha": 1, "alphaMin": 0.001, "targetAlpha": 0, "chargeDistance": 800, "repelDistance": 200, "velocityDecay": 0.4, "lookoutStrokeWidth": 1, "lookoutOpacity": 0.5, "lookoutWeight": 0.0, "radiusMinSize": 4, "radiusMaxSize": 16, "nodeTransitionDuration": 100, "defaultEdgeWeight": 1, "targetAlphaDragStarted": 0.3, "targetAlphaDragEnd": 0.0, "linkStrengthMin": 0.0, "linkStrengthMax": 0.45, "template": null, "css": null, "backend": ["tikz"], "fileformat": ["tex"], "latex_class_options": "", "interactiv": {"backend": ["d3js"], "fileformat": ["html"]}, "animation": {"enabled": false, "start": null, "end": null, "steps": 20, "speed": 100, "unit": "seconds"}, "label": {"centered": true, "enabled": true, "color": "white"}, "label_centered": true, "label_enabled": true, "label_color": "white", "curved": true, "directed": true, "widgets": {"tooltip": {"enabled": false, "size": "100px"}, "save": {"title": "Save", "enabled": true, "tooltip": "Save the network as [svg] or [png]."}, "zoom": {"title": "Zoom", "enabled": true, "tooltip": "Zoom-in with [+] <br> zoom-out with [-] <br> or reset zoom with [Reset]. <br> Furthermore, with [Shift+mouse wheel] you can also zoom."}, "filter": {"title": "Filter", "enabled": false, "tooltip": "Filter the nodes base on given groups.", "groups": ["all"]}, "search": {"title": "Search", "enabled": true, "tooltip": "Search for a node in the network."}, "layout": {"title": "Layout", "enabled": false, "tooltip": "Change the layout of the Network. Per default a [Force] directed layout is used. If x and y coordinates are given, an [Coord] layout can be used."}, "animation": {"title": "Animation", "enabled": true, "tooltip": "Play and pause animation of the temproal network."}, "aggregation": {"title": "Aggregation", "enabled": true, "tooltip": "Aggregate time steps.", "past": 2, "future": 2, "aggregation": 1}}}
 
- var data = {"nodes": [{"uid": "c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "links": [{"uid": "0x7fea49086e50", "size": 2.0, "color": "red", "opacity": 1, "source": "a", "target": "b", "directed": true, "curved": 0.5}, {"uid": "0x7fea49086e20", "size": 2.0, "color": "green", "opacity": 1, "source": "b", "target": "c", "directed": true, "curved": 0.5}, {"uid": "0x7fea49086df0", "size": 2.0, "color": "blue", "opacity": 1, "source": "c", "target": "a", "directed": true, "curved": 0.5}]}
+ var data = {"nodes": [{"uid": "c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "links": [{"uid": "0x7f9391888580", "size": 2.0, "color": "red", "opacity": 1, "source": "a", "target": "b", "directed": true, "curved": 0.5}, {"uid": "0x7f9391888550", "size": 2.0, "color": "green", "opacity": 1, "source": "b", "target": "c", "directed": true, "curved": 0.5}, {"uid": "0x7f9391888520", "size": 2.0, "color": "blue", "opacity": 1, "source": "c", "target": "a", "directed": true, "curved": 0.5}]}
 
  function tooltip(tooltipId, width){
    // Local variable to hold tooltip div for
@@ -1536,7 +1540,7 @@ hr.tooltip-hr {
 
 
  var myNetwork = network(config);
- myNetwork("#x56f8d89e99d24a2b9b788e9cd723cd32", data);
+ myNetwork("#x4e4998865c11421abb453f790ff268e2", data);
 
  /* function widgets(container,config,network){ */
 
@@ -1843,7 +1847,7 @@ hr.tooltip-hr {
     }; */
 
 
- setupMenu("#x58b53ea1aa4a43ff9ac8ecda3aa2c741",config,myNetwork);
+ setupMenu("#x8f3e8dc064004a4a88148ba66fa0a13d",config,myNetwork);
 
 
  function sliderMenu(container,config,network){
@@ -2299,7 +2303,7 @@ hr.tooltip-hr {
  }; // End of sliderMenu
 
  if (config.temporal === true){
-   sliderMenu("#x58b53ea1aa4a43ff9ac8ecda3aa2c741",config,myNetwork);};
+   sliderMenu("#x8f3e8dc064004a4a88148ba66fa0a13d",config,myNetwork);};
 
 </script><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -2531,15 +2535,15 @@ hr.tooltip-hr {
 }
 
 </style>
-<div id="x0249b3f51a154f6db48004a88aa28ce8"></div>
-<div id="xfde74d04320a4de68ca8d0d39b9f26e7"></div>
+<div id="x2bbf90155199424f90541c92e85ace85"></div>
+<div id="xa72eafa589984998b2147606fc4b982e"></div>
 <script charset="utf-8">
 
  var d3 = require("d3");
 
  var config = {"width": 800.0, "height": 550.0, "unit": "px", "dpi": 96, "margin": null, "layout": "force", "temporal": true, "coordinates": false, "euclidean": false, "min_max_node_size": null, "min_max_edge_size": null, "keep_aspect_ratio": true, "forceCharge": -20, "forceRepel": -300, "forceAlpha": 0.1, "restartAlpha": 1, "alphaMin": 0.001, "targetAlpha": 0, "chargeDistance": 800, "repelDistance": 200, "velocityDecay": 0.4, "lookoutStrokeWidth": 1, "lookoutOpacity": 0.5, "lookoutWeight": 0.0, "radiusMinSize": 4, "radiusMaxSize": 16, "nodeTransitionDuration": 100, "defaultEdgeWeight": 1, "targetAlphaDragStarted": 0.3, "targetAlphaDragEnd": 0.0, "linkStrengthMin": 0.0, "linkStrengthMax": 0.45, "template": null, "css": null, "backend": ["tikz"], "fileformat": ["tex"], "latex_class_options": "", "interactiv": {"backend": ["d3js"], "fileformat": ["html"]}, "animation": {"enabled": false, "start": "1970-01-01T00:00:01", "end": "1970-01-01T00:00:04", "steps": 20, "speed": 100, "unit": "seconds"}, "label": {"centered": true, "enabled": true, "color": "white"}, "label_centered": true, "label_enabled": true, "label_color": "white", "curved": true, "directed": true, "widgets": {"tooltip": {"enabled": false, "size": "100px"}, "save": {"title": "Save", "enabled": true, "tooltip": "Save the network as [svg] or [png]."}, "zoom": {"title": "Zoom", "enabled": true, "tooltip": "Zoom-in with [+] <br> zoom-out with [-] <br> or reset zoom with [Reset]. <br> Furthermore, with [Shift+mouse wheel] you can also zoom."}, "filter": {"title": "Filter", "enabled": false, "tooltip": "Filter the nodes base on given groups.", "groups": ["all"]}, "search": {"title": "Search", "enabled": true, "tooltip": "Search for a node in the network."}, "layout": {"title": "Layout", "enabled": false, "tooltip": "Change the layout of the Network. Per default a [Force] directed layout is used. If x and y coordinates are given, an [Coord] layout can be used."}, "animation": {"title": "Animation", "enabled": true, "tooltip": "Play and pause animation of the temproal network."}, "aggregation": {"title": "Aggregation", "enabled": true, "tooltip": "Aggregate time steps.", "past": 2, "future": 2, "aggregation": 1}}}
 
- var data = {"nodes": [{"uid": "c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "changes": [], "tedges": [{"uid": "0x7fea58e74310", "startTime": 0, "endTime": 6, "active": true}, {"uid": "0x7fea58e742e0", "startTime": 6, "endTime": 13, "active": true}, {"uid": "0x7fea58e745b0", "startTime": 13, "endTime": 19, "active": true}], "tnodes": [], "links": [{"uid": "0x7fea58e74310", "size": 2.0, "color": "black", "opacity": 1, "source": "a", "target": "b", "directed": true, "curved": 0.5}, {"uid": "0x7fea58e742e0", "size": 2.0, "color": "black", "opacity": 1, "source": "b", "target": "c", "directed": true, "curved": 0.5}, {"uid": "0x7fea58e745b0", "size": 2.0, "color": "black", "opacity": 1, "source": "c", "target": "a", "directed": true, "curved": 0.5}]}
+ var data = {"nodes": [{"uid": "c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "changes": [], "tedges": [{"uid": "0x7f937057b9a0", "startTime": 0, "endTime": 6, "active": true}, {"uid": "0x7f937057b970", "startTime": 6, "endTime": 13, "active": true}, {"uid": "0x7f937057bc10", "startTime": 13, "endTime": 19, "active": true}], "tnodes": [], "links": [{"uid": "0x7f937057b9a0", "size": 2.0, "color": "black", "opacity": 1, "source": "a", "target": "b", "directed": true, "curved": 0.5}, {"uid": "0x7f937057b970", "size": 2.0, "color": "black", "opacity": 1, "source": "b", "target": "c", "directed": true, "curved": 0.5}, {"uid": "0x7f937057bc10", "size": 2.0, "color": "black", "opacity": 1, "source": "c", "target": "a", "directed": true, "curved": 0.5}]}
 
  function tooltip(tooltipId, width){
    // Local variable to hold tooltip div for
@@ -3707,7 +3711,7 @@ hr.tooltip-hr {
 
 
  var myNetwork = network(config);
- myNetwork("#xfde74d04320a4de68ca8d0d39b9f26e7", data);
+ myNetwork("#xa72eafa589984998b2147606fc4b982e", data);
 
  /* function widgets(container,config,network){ */
 
@@ -4014,7 +4018,7 @@ hr.tooltip-hr {
     }; */
 
 
- setupMenu("#x0249b3f51a154f6db48004a88aa28ce8",config,myNetwork);
+ setupMenu("#x2bbf90155199424f90541c92e85ace85",config,myNetwork);
 
 
  function sliderMenu(container,config,network){
@@ -4470,7 +4474,7 @@ hr.tooltip-hr {
  }; // End of sliderMenu
 
  if (config.temporal === true){
-   sliderMenu("#x0249b3f51a154f6db48004a88aa28ce8",config,myNetwork);};
+   sliderMenu("#x2bbf90155199424f90541c92e85ace85",config,myNetwork);};
 
 </script><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -4702,15 +4706,15 @@ hr.tooltip-hr {
 }
 
 </style>
-<div id="xf231b0cb2e4846e29f0ab263117dd427"></div>
-<div id="x8d80fbc8079b4a36a40ce462f6308f90"></div>
+<div id="x7c3c10cab1f24892b5063a12ec912b8c"></div>
+<div id="xb37533ed285c4ad9966e0a7f488d6031"></div>
 <script charset="utf-8">
 
  var d3 = require("d3");
 
  var config = {"width": 800.0, "height": 550.0, "unit": "px", "dpi": 96, "margin": null, "layout": "force", "temporal": true, "coordinates": false, "euclidean": false, "min_max_node_size": null, "min_max_edge_size": null, "keep_aspect_ratio": true, "forceCharge": -20, "forceRepel": -300, "forceAlpha": 0.1, "restartAlpha": 1, "alphaMin": 0.001, "targetAlpha": 0, "chargeDistance": 800, "repelDistance": 200, "velocityDecay": 0.4, "lookoutStrokeWidth": 1, "lookoutOpacity": 0.5, "lookoutWeight": 0.0, "radiusMinSize": 4, "radiusMaxSize": 16, "nodeTransitionDuration": 100, "defaultEdgeWeight": 1, "targetAlphaDragStarted": 0.3, "targetAlphaDragEnd": 0.0, "linkStrengthMin": 0.0, "linkStrengthMax": 0.45, "template": null, "css": null, "backend": ["tikz"], "fileformat": ["tex"], "latex_class_options": "", "interactiv": {"backend": ["d3js"], "fileformat": ["html"]}, "animation": {"enabled": false, "start": "1970-01-01T00:00:01", "end": "1970-01-01T00:00:05", "steps": 20, "speed": 100, "unit": "seconds"}, "label": {"centered": true, "enabled": true, "color": "white"}, "label_centered": true, "label_enabled": true, "label_color": "white", "curved": true, "directed": true, "widgets": {"tooltip": {"enabled": false, "size": "100px"}, "save": {"title": "Save", "enabled": true, "tooltip": "Save the network as [svg] or [png]."}, "zoom": {"title": "Zoom", "enabled": true, "tooltip": "Zoom-in with [+] <br> zoom-out with [-] <br> or reset zoom with [Reset]. <br> Furthermore, with [Shift+mouse wheel] you can also zoom."}, "filter": {"title": "Filter", "enabled": false, "tooltip": "Filter the nodes base on given groups.", "groups": ["all"]}, "search": {"title": "Search", "enabled": true, "tooltip": "Search for a node in the network."}, "layout": {"title": "Layout", "enabled": false, "tooltip": "Change the layout of the Network. Per default a [Force] directed layout is used. If x and y coordinates are given, an [Coord] layout can be used."}, "animation": {"title": "Animation", "enabled": true, "tooltip": "Play and pause animation of the temproal network."}, "aggregation": {"title": "Aggregation", "enabled": true, "tooltip": "Aggregate time steps.", "past": 2, "future": 2, "aggregation": 1}}}
 
- var data = {"nodes": [{"uid": "c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "changes": [], "tedges": [{"uid": "0x7fea58e62c70", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fea58e62c10", "startTime": 5, "endTime": 19, "active": true}, {"uid": "0x7fea58e62f40", "startTime": 10, "endTime": 19, "active": true}], "tnodes": [], "links": [{"uid": "0x7fea58e62c70", "size": 2.0, "color": "black", "opacity": 1, "source": "a", "target": "b", "directed": true, "curved": 0.5}, {"uid": "0x7fea58e62c10", "size": 2.0, "color": "black", "opacity": 1, "source": "b", "target": "c", "directed": true, "curved": 0.5}, {"uid": "0x7fea58e62f40", "size": 2.0, "color": "black", "opacity": 1, "source": "c", "target": "a", "directed": true, "curved": 0.5}]}
+ var data = {"nodes": [{"uid": "c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "changes": [], "tedges": [{"uid": "0x7f9370586340", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7f9370586310", "startTime": 5, "endTime": 19, "active": true}, {"uid": "0x7f9370586640", "startTime": 10, "endTime": 19, "active": true}], "tnodes": [], "links": [{"uid": "0x7f9370586340", "size": 2.0, "color": "black", "opacity": 1, "source": "a", "target": "b", "directed": true, "curved": 0.5}, {"uid": "0x7f9370586310", "size": 2.0, "color": "black", "opacity": 1, "source": "b", "target": "c", "directed": true, "curved": 0.5}, {"uid": "0x7f9370586640", "size": 2.0, "color": "black", "opacity": 1, "source": "c", "target": "a", "directed": true, "curved": 0.5}]}
 
  function tooltip(tooltipId, width){
    // Local variable to hold tooltip div for
@@ -5878,7 +5882,7 @@ hr.tooltip-hr {
 
 
  var myNetwork = network(config);
- myNetwork("#x8d80fbc8079b4a36a40ce462f6308f90", data);
+ myNetwork("#xb37533ed285c4ad9966e0a7f488d6031", data);
 
  /* function widgets(container,config,network){ */
 
@@ -6185,7 +6189,7 @@ hr.tooltip-hr {
     }; */
 
 
- setupMenu("#xf231b0cb2e4846e29f0ab263117dd427",config,myNetwork);
+ setupMenu("#x7c3c10cab1f24892b5063a12ec912b8c",config,myNetwork);
 
 
  function sliderMenu(container,config,network){
@@ -6641,7 +6645,7 @@ hr.tooltip-hr {
  }; // End of sliderMenu
 
  if (config.temporal === true){
-   sliderMenu("#xf231b0cb2e4846e29f0ab263117dd427",config,myNetwork);};
+   sliderMenu("#x7c3c10cab1f24892b5063a12ec912b8c",config,myNetwork);};
 
 </script><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -6873,15 +6877,15 @@ hr.tooltip-hr {
 }
 
 </style>
-<div id="x5db0f2e0657948f2bd5d45106e44d1a9"></div>
-<div id="x97a724d27201480b983489a6bf27e819"></div>
+<div id="x15a11e04a776442b970580cd60cb69cd"></div>
+<div id="xda091bc4641640a2a269d21c84bbcf9c"></div>
 <script charset="utf-8">
 
  var d3 = require("d3");
 
  var config = {"width": 800.0, "height": 550.0, "unit": "px", "dpi": 96, "margin": null, "layout": "force", "temporal": true, "coordinates": false, "euclidean": false, "min_max_node_size": null, "min_max_edge_size": null, "keep_aspect_ratio": true, "forceCharge": -20, "forceRepel": -300, "forceAlpha": 0.1, "restartAlpha": 1, "alphaMin": 0.001, "targetAlpha": 0, "chargeDistance": 800, "repelDistance": 200, "velocityDecay": 0.4, "lookoutStrokeWidth": 1, "lookoutOpacity": 0.5, "lookoutWeight": 0.0, "radiusMinSize": 4, "radiusMaxSize": 16, "nodeTransitionDuration": 100, "defaultEdgeWeight": 1, "targetAlphaDragStarted": 0.3, "targetAlphaDragEnd": 0.0, "linkStrengthMin": 0.0, "linkStrengthMax": 0.45, "template": null, "css": null, "backend": ["tikz"], "fileformat": ["tex"], "latex_class_options": "", "interactiv": {"backend": ["d3js"], "fileformat": ["html"]}, "animation": {"enabled": false, "start": "1970-01-01T00:00:01", "end": "1970-01-01T00:00:05", "steps": 20, "speed": 100, "unit": "seconds"}, "label": {"centered": true, "enabled": true, "color": "white"}, "label_centered": true, "label_enabled": true, "label_color": "white", "curved": true, "directed": true, "widgets": {"tooltip": {"enabled": false, "size": "100px"}, "save": {"title": "Save", "enabled": true, "tooltip": "Save the network as [svg] or [png]."}, "zoom": {"title": "Zoom", "enabled": true, "tooltip": "Zoom-in with [+] <br> zoom-out with [-] <br> or reset zoom with [Reset]. <br> Furthermore, with [Shift+mouse wheel] you can also zoom."}, "filter": {"title": "Filter", "enabled": false, "tooltip": "Filter the nodes base on given groups.", "groups": ["all"]}, "search": {"title": "Search", "enabled": true, "tooltip": "Search for a node in the network."}, "layout": {"title": "Layout", "enabled": false, "tooltip": "Change the layout of the Network. Per default a [Force] directed layout is used. If x and y coordinates are given, an [Coord] layout can be used."}, "animation": {"title": "Animation", "enabled": true, "tooltip": "Play and pause animation of the temproal network."}, "aggregation": {"title": "Aggregation", "enabled": true, "tooltip": "Aggregate time steps.", "past": 2, "future": 2, "aggregation": 1}}}
 
- var data = {"nodes": [{"uid": "c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "changes": [], "tedges": [{"uid": "0x7fea58e7e490", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fea58e7e430", "startTime": 5, "endTime": 10, "active": true}, {"uid": "0x7fea58e7e760", "startTime": 10, "endTime": 14, "active": true}], "tnodes": [], "links": [{"uid": "0x7fea58e7e490", "size": 2.0, "color": "black", "opacity": 1, "source": "a", "target": "b", "directed": true, "curved": 0.5}, {"uid": "0x7fea58e7e430", "size": 2.0, "color": "black", "opacity": 1, "source": "b", "target": "c", "directed": true, "curved": 0.5}, {"uid": "0x7fea58e7e760", "size": 2.0, "color": "black", "opacity": 1, "source": "c", "target": "a", "directed": true, "curved": 0.5}]}
+ var data = {"nodes": [{"uid": "c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "changes": [], "tedges": [{"uid": "0x7f9370586b20", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7f9370586af0", "startTime": 5, "endTime": 10, "active": true}, {"uid": "0x7f9370586a90", "startTime": 10, "endTime": 14, "active": true}], "tnodes": [], "links": [{"uid": "0x7f9370586b20", "size": 2.0, "color": "black", "opacity": 1, "source": "a", "target": "b", "directed": true, "curved": 0.5}, {"uid": "0x7f9370586af0", "size": 2.0, "color": "black", "opacity": 1, "source": "b", "target": "c", "directed": true, "curved": 0.5}, {"uid": "0x7f9370586a90", "size": 2.0, "color": "black", "opacity": 1, "source": "c", "target": "a", "directed": true, "curved": 0.5}]}
 
  function tooltip(tooltipId, width){
    // Local variable to hold tooltip div for
@@ -8049,7 +8053,7 @@ hr.tooltip-hr {
 
 
  var myNetwork = network(config);
- myNetwork("#x97a724d27201480b983489a6bf27e819", data);
+ myNetwork("#xda091bc4641640a2a269d21c84bbcf9c", data);
 
  /* function widgets(container,config,network){ */
 
@@ -8356,7 +8360,7 @@ hr.tooltip-hr {
     }; */
 
 
- setupMenu("#x5db0f2e0657948f2bd5d45106e44d1a9",config,myNetwork);
+ setupMenu("#x15a11e04a776442b970580cd60cb69cd",config,myNetwork);
 
 
  function sliderMenu(container,config,network){
@@ -8812,7 +8816,7 @@ hr.tooltip-hr {
  }; // End of sliderMenu
 
  if (config.temporal === true){
-   sliderMenu("#x5db0f2e0657948f2bd5d45106e44d1a9",config,myNetwork);};
+   sliderMenu("#x15a11e04a776442b970580cd60cb69cd",config,myNetwork);};
 
 </script><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">n</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
@@ -8837,9 +8841,9 @@ hr.tooltip-hr {
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="n">v</span>  <span class="n">w</span>             <span class="n">uid</span>  <span class="n">color</span>
-<span class="mi">0</span>  <span class="mi">2</span>  <span class="mi">0</span>  <span class="mh">0x7fea58e626a0</span>   <span class="n">blue</span>
-<span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">2</span>  <span class="mh">0x7fea58e62520</span>  <span class="n">green</span>
-<span class="mi">2</span>  <span class="mi">0</span>  <span class="mi">1</span>  <span class="mh">0x7fea490866d0</span>    <span class="n">red</span>
+<span class="mi">0</span>  <span class="mi">2</span>  <span class="mi">0</span>  <span class="mh">0x7f9370586fd0</span>   <span class="n">blue</span>
+<span class="mi">1</span>  <span class="mi">1</span>  <span class="mi">2</span>  <span class="mh">0x7f9370586790</span>  <span class="n">green</span>
+<span class="mi">2</span>  <span class="mi">0</span>  <span class="mi">1</span>  <span class="mh">0x7f93918884c0</span>    <span class="n">red</span>
 </pre></div>
 </div>
 </div>

@@ -1,8 +1,10 @@
 Basic ``pathpy`` concepts
 =========================
 
-`Run notebook in Google
-Colab <https://colab.research.google.com/github/pathpy/pathpy/blob/master/doc/tutorial/network.ipynb>`__
+| `Run notebook in Google
+  Colab <https://colab.research.google.com/github/pathpy/pathpy/blob/master/doc/tutorial/network.ipynb>`__
+| `Download
+  notebook <https://github.com/pathpy/pathpy/raw/master/doc/tutorial/network.ipynb>`__
 
 ``pathpy`` has a user-friendly API that makes it easy to handle directed
 and undirected networks, networks with single and multiple edges,
@@ -70,7 +72,7 @@ number of unique nodes and links.
 
 .. parsed-literal::
 
-    Uid:			0x7fb8a984b670
+    Uid:			0x7fb8e031ad60
     Type:			Network
     Directed:		True
     Multi-Edges:		False
@@ -89,7 +91,7 @@ network by passing the parameter ``directed=False``.
 
 .. parsed-literal::
 
-    Uid:			0x7fb8a984bac0
+    Uid:			0x7fb8c078de50
     Type:			Network
     Directed:		False
     Multi-Edges:		False
@@ -278,7 +280,7 @@ the node object with uid ``a`` to this network as follows:
 
 .. parsed-literal::
 
-    Uid:			0x7fb8a984bac0
+    Uid:			0x7fb8c078de50
     Type:			Network
     Directed:		False
     Multi-Edges:		False
@@ -309,22 +311,22 @@ better understand this:
 .. parsed-literal::
 
     ---
-    Uid:		0x7fb8a986a2b0
+    Uid:		0x7fb8e03438b0
     Type:		Edge
     Source node:	Node a
     Target node:	Node b
     ---
-    Uid:		0x7fb8a986a2e0
+    Uid:		0x7fb8e03438e0
     Type:		Edge
     Source node:	Node b
     Target node:	Node c
     ---
-    Uid:		0x7fb8a984bdc0
+    Uid:		0x7fb8e0343610
     Type:		Edge
     Source node:	Node c
     Target node:	Node d
     ---
-    Uid:		0x7fb8a984beb0
+    Uid:		0x7fb8e0343b20
     Type:		Edge
     Source node:	Node d
     Target node:	Node a
@@ -407,7 +409,7 @@ different edge objects with different UIDs.
 
 .. parsed-literal::
 
-    {<pathpy.core.edge.Edge object at 0x7fb8a986a2b0>, Edge MyEdge}
+    {Edge MyEdge, <pathpy.core.edge.Edge object at 0x7fb8e03438b0>}
 
 
 We can access the degrees of nodes, i.e. the number of other nodes to
@@ -513,7 +515,7 @@ edges at a time:
     {'nodes': True}
     {'nodes': True}
     {'nodes': True}
-    Uid:			0x7fb8c875d1c0
+    Uid:			0x7fb8e0361850
     Type:			Network
     Directed:		True
     Multi-Edges:		True
@@ -715,22 +717,22 @@ create the network above would thus be:
     {'name': 'Trolls', 'chapter': 'Roast Mutton'}
     ---
     Node attributes
-    Uid:		b
-    Type:		Node
-     {'name': 'Bert', 'age': 96}
     Uid:		t
     Type:		Node
      {'name': 'Tom', 'age': 156}
+    Uid:		b
+    Type:		Node
+     {'name': 'Bert', 'age': 96}
     Uid:		w
     Type:		Node
      {'name': 'William', 'age': 323}
     ---
     Edge attributes
-    Uid:		0x7fb8a986a910
+    Uid:		0x7fb8e0361b50
     Type:		Edge
     Source node:	Node t
     Target node:	Node b {'type': 'like', 'strength': 2.0}
-    Uid:		0x7fb8a986af40
+    Uid:		0x7fb8e0361b20
     Type:		Edge
     Source node:	Node t
     Target node:	Node w {'type': 'dislike', 'strength': 5.0}
@@ -760,8 +762,8 @@ indices and values of non-zero entries:
 
 .. parsed-literal::
 
-      (1, 0)	1.0
-      (1, 2)	1.0
+      (0, 1)	1.0
+      (0, 2)	1.0
 
 
 We use the ``csr_matrix`` of the sparse linear algebra module in scipy,
@@ -776,8 +778,8 @@ entries, we can write:
 
 .. parsed-literal::
 
-    [[0. 0. 0.]
-     [1. 0. 1.]
+    [[0. 1. 1.]
+     [0. 0. 0.]
      [0. 0. 0.]]
 
 
@@ -796,8 +798,8 @@ numerical attribute that should be used as edge ``weight``:
 
 .. parsed-literal::
 
-    [[0. 0. 0.]
-     [2. 0. 5.]
+    [[0. 2. 5.]
+     [0. 0. 0.]
      [0. 0. 0.]]
 
 
@@ -815,7 +817,7 @@ strength attribute:
 
 .. parsed-literal::
 
-    Uid:			0x7fb8c87682e0
+    Uid:			0x7fb8e036c6d0
     Type:			Network
     Directed:		True
     Multi-Edges:		True
@@ -841,8 +843,8 @@ of different edge objects* between pairs of nodes:
 
 .. parsed-literal::
 
-    matrix([[0., 0., 0.],
-            [2., 0., 1.],
+    matrix([[0., 2., 1.],
+            [0., 0., 0.],
             [0., 0., 0.]])
 
 
@@ -860,8 +862,8 @@ automatically summed:
 
 .. parsed-literal::
 
-    matrix([[ 0.,  0.,  0.],
-            [44.,  0.,  5.],
+    matrix([[ 0., 44.,  5.],
+            [ 0.,  0.,  0.],
             [ 0.,  0.,  0.]])
 
 
