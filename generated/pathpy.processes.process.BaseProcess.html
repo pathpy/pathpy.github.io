@@ -159,6 +159,9 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.process.BaseProcess.step" title="pathpy.processes.process.BaseProcess.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>()</p></td>
 <td><p>Abstract method to simulate a single step of the process.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.process.BaseProcess.to_directed_acylic_graph" title="pathpy.processes.process.BaseProcess.to_directed_acylic_graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_directed_acylic_graph</span></code></a>(data[, run_id, …])</p></td>
+<td><p>Returns a directed acyclic graph representation of all state changes over time.</p></td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Attributes</p>
@@ -256,6 +259,30 @@ an iterable of node uids whose state has been changed in this step.</p>
 <dt id="pathpy.processes.process.BaseProcess.time">
 <em class="property">abstract property </em><code class="sig-name descname">time</code><a class="headerlink" href="#pathpy.processes.process.BaseProcess.time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract property returning the current time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.process.BaseProcess.to_directed_acylic_graph">
+<code class="sig-name descname">to_directed_acylic_graph</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">run_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">states</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Iterable<span class="p">[</span>Any<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; pathpy.models.directed_acyclic_graph.DirectedAcyclicGraph<a class="reference internal" href="../_modules/pathpy/processes/process.html#BaseProcess.to_directed_acylic_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.process.BaseProcess.to_directed_acylic_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a directed acyclic graph representation of all state changes over time.
+In this graph an edge (v_t’ -&gt; w_t) indicates that node w changed to state x at time t after a 
+connected node v previously changed its state to x at time t’ &lt; t (i.e. (v,w) exists in the network).</p>
+<p>A link (v-t’) -&gt; (w-t) in the directed acyclic graph indicates that node v may have causally influenced node w at time t. As an example, for a an SIR epidemic spreading process, the DAG representation captures possible transmission routes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data: DataFrame</strong></dt><dd><p>recorded state changes of nodes, as returned by <cite>run_experiment</cite></p>
+</dd>
+<dt><strong>run_id: Optional[int]=0</strong></dt><dd><p>identifier of simulation run to turn into DAG</p>
+</dd>
+<dt><strong>time_delta: Optional[int]=None</strong></dt><dd><p>maximum time difference of possible influence, i.e. if set to delta, any state changes between connected nodes that are apart further than delta time steps are not considered. If None (default) the last prior state change of any connected node is considered, independent of the 
+time distance</p>
+</dd>
+<dt><strong>states: Optional[Iterable[Any]]=None</strong></dt><dd><p>Only changes to states in this set will be considered. If None (default) all state changes will be considered</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

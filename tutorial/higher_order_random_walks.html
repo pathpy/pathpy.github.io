@@ -125,6 +125,7 @@ visualisation of random walk processes in higher-order networks. In the
 following we demonstrate this in a small toy example.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 </pre></div>
 </div>
 <script charset="utf-8">
@@ -366,8 +367,8 @@ hr.tooltip-hr {
 }
 
 </style>
-<div id="x35ca1eedd23243b2a762032fa967aaaf"></div>
-<div id="x51871d7fd96343619132aea0b37f5c97"></div>
+<div id="x597383ae1171470496e36d7d523cb6f7"></div>
+<div id="x02b6a6b9c8c34ea5bf3fd481c19cdc7f"></div>
 <script charset="utf-8">
 
  var d3 = require("d3");
@@ -1542,7 +1543,7 @@ hr.tooltip-hr {
 
 
  var myNetwork = network(config);
- myNetwork("#x51871d7fd96343619132aea0b37f5c97", data);
+ myNetwork("#x02b6a6b9c8c34ea5bf3fd481c19cdc7f", data);
 
  /* function widgets(container,config,network){ */
 
@@ -1849,7 +1850,7 @@ hr.tooltip-hr {
     }; */
 
 
- setupMenu("#x35ca1eedd23243b2a762032fa967aaaf",config,myNetwork);
+ setupMenu("#x597383ae1171470496e36d7d523cb6f7",config,myNetwork);
 
 
  function sliderMenu(container,config,network){
@@ -2305,7 +2306,7 @@ hr.tooltip-hr {
  }; // End of sliderMenu
 
  if (config.temporal === true){
-   sliderMenu("#x35ca1eedd23243b2a762032fa967aaaf",config,myNetwork);};
+   sliderMenu("#x597383ae1171470496e36d7d523cb6f7",config,myNetwork);};
 
 </script><p>We now create a higher-order network with order two, which corresponds
 to paths in the first-order network above. We further assign weights to
@@ -2536,8 +2537,8 @@ hr.tooltip-hr {
 }
 
 </style>
-<div id="x9196061406e54fb79bfbd1e042f98aa4"></div>
-<div id="xa157781fc8044f9b8e88693b5eb28ba6"></div>
+<div id="x4bd48dd4fa604ec7ba5b4dd94bbb8d78"></div>
+<div id="x4686899657a248b4846cebd8d8db1058"></div>
 <script charset="utf-8">
 
  var d3 = require("d3");
@@ -3712,7 +3713,7 @@ hr.tooltip-hr {
 
 
  var myNetwork = network(config);
- myNetwork("#xa157781fc8044f9b8e88693b5eb28ba6", data);
+ myNetwork("#x4686899657a248b4846cebd8d8db1058", data);
 
  /* function widgets(container,config,network){ */
 
@@ -4019,7 +4020,7 @@ hr.tooltip-hr {
     }; */
 
 
- setupMenu("#x9196061406e54fb79bfbd1e042f98aa4",config,myNetwork);
+ setupMenu("#x4bd48dd4fa604ec7ba5b4dd94bbb8d78",config,myNetwork);
 
 
  function sliderMenu(container,config,network){
@@ -4475,7 +4476,7 @@ hr.tooltip-hr {
  }; // End of sliderMenu
 
  if (config.temporal === true){
-   sliderMenu("#x9196061406e54fb79bfbd1e042f98aa4",config,myNetwork);};
+   sliderMenu("#x4bd48dd4fa604ec7ba5b4dd94bbb8d78",config,myNetwork);};
 
 </script><p>Since the class <code class="docutils literal notranslate"><span class="pre">RandomWalk</span></code>, which we covered in the previous unit,
 works for any instance of the class <code class="docutils literal notranslate"><span class="pre">Network</span></code> we can simulate and
@@ -4491,32 +4492,32 @@ second-order network above, we can write:</p>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">run_id</span> <span class="n">seed</span>  <span class="n">time</span> <span class="n">node</span>  <span class="n">state</span>
-<span class="mi">0</span>        <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>   <span class="kc">True</span>
-<span class="mi">1</span>        <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">0</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>  <span class="kc">False</span>
-<span class="mi">2</span>        <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>  <span class="kc">False</span>
-<span class="mi">3</span>        <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>  <span class="kc">False</span>
-<span class="mi">4</span>        <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">0</span>  <span class="n">d</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
-<span class="mi">5</span>        <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">1</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>   <span class="kc">True</span>
-<span class="mi">6</span>        <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">1</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
-<span class="mi">7</span>        <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">2</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>   <span class="kc">True</span>
-<span class="mi">8</span>        <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">2</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>  <span class="kc">False</span>
-<span class="mi">9</span>        <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">3</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>   <span class="kc">True</span>
-<span class="mi">10</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">3</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>  <span class="kc">False</span>
-<span class="mi">11</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">4</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>   <span class="kc">True</span>
-<span class="mi">12</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">4</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
-<span class="mi">13</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">5</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>   <span class="kc">True</span>
-<span class="mi">14</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">5</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>  <span class="kc">False</span>
-<span class="mi">15</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">6</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>   <span class="kc">True</span>
-<span class="mi">16</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">6</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>  <span class="kc">False</span>
-<span class="mi">17</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">7</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>   <span class="kc">True</span>
-<span class="mi">18</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">7</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
-<span class="mi">19</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">8</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>   <span class="kc">True</span>
-<span class="mi">20</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">8</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>  <span class="kc">False</span>
-<span class="mi">21</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">9</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>   <span class="kc">True</span>
-<span class="mi">22</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>     <span class="mi">9</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>  <span class="kc">False</span>
-<span class="mi">23</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>    <span class="mi">10</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>   <span class="kc">True</span>
-<span class="mi">24</span>       <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>    <span class="mi">10</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
-<span class="s1">&#39;c-a -&gt; a-b -&gt; b-c -&gt; c-a -&gt; a-b -&gt; b-c -&gt; c-a -&gt; a-b -&gt; b-c -&gt; c-a -&gt; a-b&#39;</span>
+<span class="mi">0</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>  <span class="kc">False</span>
+<span class="mi">1</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>  <span class="kc">False</span>
+<span class="mi">2</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
+<span class="mi">3</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">d</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
+<span class="mi">4</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>   <span class="kc">True</span>
+<span class="mi">5</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">1</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>   <span class="kc">True</span>
+<span class="mi">6</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">1</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>  <span class="kc">False</span>
+<span class="mi">7</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">2</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>   <span class="kc">True</span>
+<span class="mi">8</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">2</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
+<span class="mi">9</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">3</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>   <span class="kc">True</span>
+<span class="mi">10</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">3</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>  <span class="kc">False</span>
+<span class="mi">11</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">4</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>   <span class="kc">True</span>
+<span class="mi">12</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">4</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>  <span class="kc">False</span>
+<span class="mi">13</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">5</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>   <span class="kc">True</span>
+<span class="mi">14</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">5</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
+<span class="mi">15</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">6</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>   <span class="kc">True</span>
+<span class="mi">16</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">6</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>  <span class="kc">False</span>
+<span class="mi">17</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">7</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>   <span class="kc">True</span>
+<span class="mi">18</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">7</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>  <span class="kc">False</span>
+<span class="mi">19</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">8</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>   <span class="kc">True</span>
+<span class="mi">20</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">8</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
+<span class="mi">21</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">9</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>   <span class="kc">True</span>
+<span class="mi">22</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">9</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>  <span class="kc">False</span>
+<span class="mi">23</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>    <span class="mi">10</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>   <span class="kc">True</span>
+<span class="mi">24</span>       <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>    <span class="mi">10</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>  <span class="kc">False</span>
+<span class="s1">&#39;b-c -&gt; c-a -&gt; a-b -&gt; b-c -&gt; c-a -&gt; a-b -&gt; b-c -&gt; c-a -&gt; a-b -&gt; b-c -&gt; c-a&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rw2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -4731,15 +4732,15 @@ hr.tooltip-hr {
 }
 
 </style>
-<div id="x222370b488e846b5a144b9ca3e9728c5"></div>
-<div id="x3788929d69d5443b891466c2872fb0aa"></div>
+<div id="x187fed3ac06c4e078ed74e5c724b7ef8"></div>
+<div id="x086e3352cdaa45a8880ba8e375f6a71b"></div>
 <script charset="utf-8">
 
  var d3 = require("d3");
 
  var config = {"width": 800.0, "height": 550.0, "unit": "px", "dpi": 96, "margin": null, "layout": "force", "temporal": true, "coordinates": false, "euclidean": false, "min_max_node_size": null, "min_max_edge_size": null, "keep_aspect_ratio": true, "forceCharge": -20, "forceRepel": -300, "forceAlpha": 0.1, "restartAlpha": 1, "alphaMin": 0.001, "targetAlpha": 0, "chargeDistance": 800, "repelDistance": 200, "velocityDecay": 0.4, "lookoutStrokeWidth": 1, "lookoutOpacity": 0.5, "lookoutWeight": 0.0, "radiusMinSize": 4, "radiusMaxSize": 16, "nodeTransitionDuration": 100, "defaultEdgeWeight": 1, "targetAlphaDragStarted": 0.3, "targetAlphaDragEnd": 0.0, "linkStrengthMin": 0.0, "linkStrengthMax": 0.45, "template": null, "css": null, "backend": ["tikz"], "fileformat": ["tex"], "latex_class_options": "", "interactiv": {"backend": ["d3js"], "fileformat": ["html"]}, "animation": {"enabled": false, "start": "1970-01-01T00:00:00", "end": "1970-01-01T00:16:40", "steps": 20, "speed": 100, "unit": "seconds"}, "label": {"centered": true, "enabled": true, "color": "white"}, "label_centered": true, "label_enabled": true, "label_color": "white", "curved": true, "directed": true, "widgets": {"tooltip": {"enabled": false, "size": "100px"}, "save": {"title": "Save", "enabled": true, "tooltip": "Save the network as [svg] or [png]."}, "zoom": {"title": "Zoom", "enabled": true, "tooltip": "Zoom-in with [+] <br> zoom-out with [-] <br> or reset zoom with [Reset]. <br> Furthermore, with [Shift+mouse wheel] you can also zoom."}, "filter": {"title": "Filter", "enabled": false, "tooltip": "Filter the nodes base on given groups.", "groups": ["all"]}, "search": {"title": "Search", "enabled": true, "tooltip": "Search for a node in the network."}, "layout": {"title": "Layout", "enabled": false, "tooltip": "Change the layout of the Network. Per default a [Force] directed layout is used. If x and y coordinates are given, an [Coord] layout can be used."}, "animation": {"title": "Animation", "enabled": true, "tooltip": "Play and pause animation of the temproal network."}, "aggregation": {"title": "Aggregation", "enabled": true, "tooltip": "Aggregate time steps.", "past": 2, "future": 2, "aggregation": 1}}}
 
- var data = {"nodes": [{"uid": "a-b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b-c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "c-a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "c-d", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "d-a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "changes": [], "tedges": [{"uid": "0x7fa0600f5e50", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa0600f5e80", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa0600f5fa0", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa091497130", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa091497280", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa0914973d0", "startTime": 0, "endTime": 19, "active": true}], "tnodes": [{"uid": "a-b", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "a-b", "startTime": 2, "endTime": 2, "color": "red"}, {"uid": "a-b", "startTime": 4, "endTime": 4, "color": "blue"}, {"uid": "a-b", "startTime": 8, "endTime": 8, "color": "red"}, {"uid": "a-b", "startTime": 10, "endTime": 10, "color": "blue"}, {"uid": "a-b", "startTime": 13, "endTime": 13, "color": "red"}, {"uid": "a-b", "startTime": 15, "endTime": 15, "color": "blue"}, {"uid": "a-b", "startTime": 19, "endTime": 19, "color": "red"}, {"uid": "b-c", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "b-c", "startTime": 4, "endTime": 4, "color": "red"}, {"uid": "b-c", "startTime": 6, "endTime": 6, "color": "blue"}, {"uid": "b-c", "startTime": 10, "endTime": 10, "color": "red"}, {"uid": "b-c", "startTime": 11, "endTime": 11, "color": "blue"}, {"uid": "b-c", "startTime": 15, "endTime": 15, "color": "red"}, {"uid": "b-c", "startTime": 17, "endTime": 17, "color": "blue"}, {"uid": "c-a", "startTime": 0, "endTime": 0, "color": "red"}, {"uid": "c-a", "startTime": 2, "endTime": 2, "color": "blue"}, {"uid": "c-a", "startTime": 6, "endTime": 6, "color": "red"}, {"uid": "c-a", "startTime": 8, "endTime": 8, "color": "blue"}, {"uid": "c-a", "startTime": 11, "endTime": 11, "color": "red"}, {"uid": "c-a", "startTime": 13, "endTime": 13, "color": "blue"}, {"uid": "c-a", "startTime": 17, "endTime": 17, "color": "red"}, {"uid": "c-a", "startTime": 19, "endTime": 19, "color": "blue"}, {"uid": "c-d", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "d-a", "startTime": 0, "endTime": 0, "color": "blue"}], "links": [{"uid": "0x7fa0600f5e50", "size": 2.0, "color": "black", "opacity": 1, "source": "a-b", "target": "b-c", "directed": true, "curved": 0.5}, {"uid": "0x7fa0600f5e80", "size": 2.0, "color": "black", "opacity": 1, "source": "b-c", "target": "c-a", "directed": true, "curved": 0.5}, {"uid": "0x7fa0600f5fa0", "size": 2.0, "color": "black", "opacity": 1, "source": "b-c", "target": "c-d", "directed": true, "curved": 0.5}, {"uid": "0x7fa091497130", "size": 2.0, "color": "black", "opacity": 1, "source": "c-a", "target": "a-b", "directed": true, "curved": 0.5}, {"uid": "0x7fa091497280", "size": 2.0, "color": "black", "opacity": 1, "source": "c-d", "target": "d-a", "directed": true, "curved": 0.5}, {"uid": "0x7fa0914973d0", "size": 2.0, "color": "black", "opacity": 1, "source": "d-a", "target": "a-b", "directed": true, "curved": 0.5}]}
+ var data = {"nodes": [{"uid": "a-b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b-c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "c-a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "c-d", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "d-a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "changes": [], "tedges": [{"uid": "0x7fb6c12fad60", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6c12fad90", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6c12faf10", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6c1326190", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6c13262b0", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6e066d910", "startTime": 0, "endTime": 19, "active": true}], "tnodes": [{"uid": "a-b", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "a-b", "startTime": 4, "endTime": 4, "color": "red"}, {"uid": "a-b", "startTime": 6, "endTime": 6, "color": "blue"}, {"uid": "a-b", "startTime": 10, "endTime": 10, "color": "red"}, {"uid": "a-b", "startTime": 11, "endTime": 11, "color": "blue"}, {"uid": "a-b", "startTime": 15, "endTime": 15, "color": "red"}, {"uid": "a-b", "startTime": 17, "endTime": 17, "color": "blue"}, {"uid": "b-c", "startTime": 0, "endTime": 0, "color": "red"}, {"uid": "b-c", "startTime": 2, "endTime": 2, "color": "blue"}, {"uid": "b-c", "startTime": 6, "endTime": 6, "color": "red"}, {"uid": "b-c", "startTime": 8, "endTime": 8, "color": "blue"}, {"uid": "b-c", "startTime": 11, "endTime": 11, "color": "red"}, {"uid": "b-c", "startTime": 13, "endTime": 13, "color": "blue"}, {"uid": "b-c", "startTime": 17, "endTime": 17, "color": "red"}, {"uid": "b-c", "startTime": 19, "endTime": 19, "color": "blue"}, {"uid": "c-a", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "c-a", "startTime": 2, "endTime": 2, "color": "red"}, {"uid": "c-a", "startTime": 4, "endTime": 4, "color": "blue"}, {"uid": "c-a", "startTime": 8, "endTime": 8, "color": "red"}, {"uid": "c-a", "startTime": 10, "endTime": 10, "color": "blue"}, {"uid": "c-a", "startTime": 13, "endTime": 13, "color": "red"}, {"uid": "c-a", "startTime": 15, "endTime": 15, "color": "blue"}, {"uid": "c-a", "startTime": 19, "endTime": 19, "color": "red"}, {"uid": "c-d", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "d-a", "startTime": 0, "endTime": 0, "color": "blue"}], "links": [{"uid": "0x7fb6c12fad60", "size": 2.0, "color": "black", "opacity": 1, "source": "a-b", "target": "b-c", "directed": true, "curved": 0.5}, {"uid": "0x7fb6c12fad90", "size": 2.0, "color": "black", "opacity": 1, "source": "b-c", "target": "c-a", "directed": true, "curved": 0.5}, {"uid": "0x7fb6c12faf10", "size": 2.0, "color": "black", "opacity": 1, "source": "b-c", "target": "c-d", "directed": true, "curved": 0.5}, {"uid": "0x7fb6e066d910", "size": 2.0, "color": "black", "opacity": 1, "source": "c-a", "target": "a-b", "directed": true, "curved": 0.5}, {"uid": "0x7fb6c1326190", "size": 2.0, "color": "black", "opacity": 1, "source": "c-d", "target": "d-a", "directed": true, "curved": 0.5}, {"uid": "0x7fb6c13262b0", "size": 2.0, "color": "black", "opacity": 1, "source": "d-a", "target": "a-b", "directed": true, "curved": 0.5}]}
 
  function tooltip(tooltipId, width){
    // Local variable to hold tooltip div for
@@ -5907,7 +5908,7 @@ hr.tooltip-hr {
 
 
  var myNetwork = network(config);
- myNetwork("#x3788929d69d5443b891466c2872fb0aa", data);
+ myNetwork("#x086e3352cdaa45a8880ba8e375f6a71b", data);
 
  /* function widgets(container,config,network){ */
 
@@ -6214,7 +6215,7 @@ hr.tooltip-hr {
     }; */
 
 
- setupMenu("#x222370b488e846b5a144b9ca3e9728c5",config,myNetwork);
+ setupMenu("#x187fed3ac06c4e078ed74e5c724b7ef8",config,myNetwork);
 
 
  function sliderMenu(container,config,network){
@@ -6670,7 +6671,7 @@ hr.tooltip-hr {
  }; // End of sliderMenu
 
  if (config.temporal === true){
-   sliderMenu("#x222370b488e846b5a144b9ca3e9728c5",config,myNetwork);};
+   sliderMenu("#x187fed3ac06c4e078ed74e5c724b7ef8",config,myNetwork);};
 
 </script><p>Clearly, since the higher-order network is just another network with
 special node and edge semantics, everything works just like before: the
@@ -6686,11 +6687,94 @@ in a higher-order network while projecting the dynamics to a first-order
 state space. To perform this projection we need to pass the first-order
 network in addition to the higher-order network to the constructor:</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rw2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">HigherOrderRandomWalk</span><span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;weight&#39;</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">rw2</span><span class="o">.</span><span class="n">run_experiment</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">runs</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">rw2</span><span class="o">.</span><span class="n">transition_matrix_pd</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a-b</th>
+      <th>b-c</th>
+      <th>c-a</th>
+      <th>c-d</th>
+      <th>d-a</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a-b</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>b-c</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.833333</td>
+      <td>0.166667</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>c-a</th>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>c-d</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>d-a</th>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rw2</span><span class="o">.</span><span class="n">stationary_state</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">0.31578947</span><span class="p">,</span> <span class="mf">0.31578947</span><span class="p">,</span> <span class="mf">0.26315789</span><span class="p">,</span> <span class="mf">0.05263158</span><span class="p">,</span> <span class="mf">0.05263158</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rw2</span><span class="o">.</span><span class="n">first_order_stationary_state</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">0.31578947</span><span class="p">,</span> <span class="mf">0.31578947</span><span class="p">,</span> <span class="mf">0.31578947</span><span class="p">,</span> <span class="mf">0.05263158</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">rw2</span><span class="o">.</span><span class="n">run_experiment</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">runs</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">pprint</span><span class="p">(</span><span class="s1">&#39; -&gt; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;c-a -&gt; a-b -&gt; b-c -&gt; c-a -&gt; a-b -&gt; b-c -&gt; c-a -&gt; a-b -&gt; b-c -&gt; c-a -&gt; a-b&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;b-c -&gt; c-a -&gt; a-b -&gt; b-c -&gt; c-a -&gt; a-b -&gt; b-c -&gt; c-a -&gt; a-b -&gt; b-c -&gt; c-a&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rw2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -6905,15 +6989,15 @@ hr.tooltip-hr {
 }
 
 </style>
-<div id="xadb0886602294535be2b9c88bd9b730e"></div>
-<div id="x8b9dc95dce6f4a19911ae21876901e82"></div>
+<div id="x8d86bce4cc8547e49a39851076b807c4"></div>
+<div id="x8fc467df56c043108ebc0bf2de542729"></div>
 <script charset="utf-8">
 
  var d3 = require("d3");
 
  var config = {"width": 800.0, "height": 550.0, "unit": "px", "dpi": 96, "margin": null, "layout": "force", "temporal": true, "coordinates": false, "euclidean": false, "min_max_node_size": null, "min_max_edge_size": null, "keep_aspect_ratio": true, "forceCharge": -20, "forceRepel": -300, "forceAlpha": 0.1, "restartAlpha": 1, "alphaMin": 0.001, "targetAlpha": 0, "chargeDistance": 800, "repelDistance": 200, "velocityDecay": 0.4, "lookoutStrokeWidth": 1, "lookoutOpacity": 0.5, "lookoutWeight": 0.0, "radiusMinSize": 4, "radiusMaxSize": 16, "nodeTransitionDuration": 100, "defaultEdgeWeight": 1, "targetAlphaDragStarted": 0.3, "targetAlphaDragEnd": 0.0, "linkStrengthMin": 0.0, "linkStrengthMax": 0.45, "template": null, "css": null, "backend": ["tikz"], "fileformat": ["tex"], "latex_class_options": "", "interactiv": {"backend": ["d3js"], "fileformat": ["html"]}, "animation": {"enabled": false, "start": "1970-01-01T00:00:00", "end": "1970-01-01T00:16:40", "steps": 20, "speed": 100, "unit": "seconds"}, "label": {"centered": true, "enabled": true, "color": "white"}, "label_centered": true, "label_enabled": true, "label_color": "white", "curved": true, "directed": true, "widgets": {"tooltip": {"enabled": false, "size": "100px"}, "save": {"title": "Save", "enabled": true, "tooltip": "Save the network as [svg] or [png]."}, "zoom": {"title": "Zoom", "enabled": true, "tooltip": "Zoom-in with [+] <br> zoom-out with [-] <br> or reset zoom with [Reset]. <br> Furthermore, with [Shift+mouse wheel] you can also zoom."}, "filter": {"title": "Filter", "enabled": false, "tooltip": "Filter the nodes base on given groups.", "groups": ["all"]}, "search": {"title": "Search", "enabled": true, "tooltip": "Search for a node in the network."}, "layout": {"title": "Layout", "enabled": false, "tooltip": "Change the layout of the Network. Per default a [Force] directed layout is used. If x and y coordinates are given, an [Coord] layout can be used."}, "animation": {"title": "Animation", "enabled": true, "tooltip": "Play and pause animation of the temproal network."}, "aggregation": {"title": "Aggregation", "enabled": true, "tooltip": "Aggregate time steps.", "past": 2, "future": 2, "aggregation": 1}}}
 
- var data = {"nodes": [{"uid": "a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "d", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "changes": [], "tedges": [{"uid": "0x7fa091497670", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa091497760", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa0914979a0", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa091497b80", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa091497cd0", "startTime": 0, "endTime": 19, "active": true}], "tnodes": [{"uid": "a", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "a", "startTime": 2, "endTime": 2, "color": "blue"}, {"uid": "a", "startTime": 6, "endTime": 6, "color": "red"}, {"uid": "a", "startTime": 8, "endTime": 8, "color": "blue"}, {"uid": "a", "startTime": 11, "endTime": 11, "color": "red"}, {"uid": "a", "startTime": 13, "endTime": 13, "color": "blue"}, {"uid": "a", "startTime": 17, "endTime": 17, "color": "red"}, {"uid": "a", "startTime": 19, "endTime": 19, "color": "blue"}, {"uid": "b", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "b", "startTime": 2, "endTime": 2, "color": "red"}, {"uid": "b", "startTime": 4, "endTime": 4, "color": "blue"}, {"uid": "b", "startTime": 8, "endTime": 8, "color": "red"}, {"uid": "b", "startTime": 10, "endTime": 10, "color": "blue"}, {"uid": "b", "startTime": 13, "endTime": 13, "color": "red"}, {"uid": "b", "startTime": 15, "endTime": 15, "color": "blue"}, {"uid": "b", "startTime": 19, "endTime": 19, "color": "red"}, {"uid": "c", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "c", "startTime": 4, "endTime": 4, "color": "red"}, {"uid": "c", "startTime": 6, "endTime": 6, "color": "blue"}, {"uid": "c", "startTime": 10, "endTime": 10, "color": "red"}, {"uid": "c", "startTime": 11, "endTime": 11, "color": "blue"}, {"uid": "c", "startTime": 15, "endTime": 15, "color": "red"}, {"uid": "c", "startTime": 17, "endTime": 17, "color": "blue"}, {"uid": "d", "startTime": 0, "endTime": 0, "color": "blue"}], "links": [{"uid": "0x7fa091497670", "size": 2.0, "color": "black", "opacity": 1, "source": "a", "target": "b", "directed": true, "curved": 0.5}, {"uid": "0x7fa091497760", "size": 2.0, "color": "black", "opacity": 1, "source": "b", "target": "c", "directed": true, "curved": 0.5}, {"uid": "0x7fa0914979a0", "size": 2.0, "color": "black", "opacity": 1, "source": "c", "target": "a", "directed": true, "curved": 0.5}, {"uid": "0x7fa091497b80", "size": 2.0, "color": "black", "opacity": 1, "source": "c", "target": "d", "directed": true, "curved": 0.5}, {"uid": "0x7fa091497cd0", "size": 2.0, "color": "black", "opacity": 1, "source": "d", "target": "a", "directed": true, "curved": 0.5}]}
+ var data = {"nodes": [{"uid": "a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "d", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "changes": [], "tedges": [{"uid": "0x7fb6600e2580", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6600e2c40", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6600e2c70", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6600e2eb0", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6c13265b0", "startTime": 0, "endTime": 19, "active": true}], "tnodes": [{"uid": "a", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "a", "startTime": 2, "endTime": 2, "color": "red"}, {"uid": "a", "startTime": 4, "endTime": 4, "color": "blue"}, {"uid": "a", "startTime": 8, "endTime": 8, "color": "red"}, {"uid": "a", "startTime": 10, "endTime": 10, "color": "blue"}, {"uid": "a", "startTime": 13, "endTime": 13, "color": "red"}, {"uid": "a", "startTime": 15, "endTime": 15, "color": "blue"}, {"uid": "a", "startTime": 19, "endTime": 19, "color": "red"}, {"uid": "b", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "b", "startTime": 4, "endTime": 4, "color": "red"}, {"uid": "b", "startTime": 6, "endTime": 6, "color": "blue"}, {"uid": "b", "startTime": 10, "endTime": 10, "color": "red"}, {"uid": "b", "startTime": 11, "endTime": 11, "color": "blue"}, {"uid": "b", "startTime": 15, "endTime": 15, "color": "red"}, {"uid": "b", "startTime": 17, "endTime": 17, "color": "blue"}, {"uid": "c", "startTime": 0, "endTime": 0, "color": "red"}, {"uid": "c", "startTime": 2, "endTime": 2, "color": "blue"}, {"uid": "c", "startTime": 6, "endTime": 6, "color": "red"}, {"uid": "c", "startTime": 8, "endTime": 8, "color": "blue"}, {"uid": "c", "startTime": 11, "endTime": 11, "color": "red"}, {"uid": "c", "startTime": 13, "endTime": 13, "color": "blue"}, {"uid": "c", "startTime": 17, "endTime": 17, "color": "red"}, {"uid": "c", "startTime": 19, "endTime": 19, "color": "blue"}, {"uid": "d", "startTime": 0, "endTime": 0, "color": "blue"}], "links": [{"uid": "0x7fb6600e2c40", "size": 2.0, "color": "black", "opacity": 1, "source": "a", "target": "b", "directed": true, "curved": 0.5}, {"uid": "0x7fb6600e2c70", "size": 2.0, "color": "black", "opacity": 1, "source": "b", "target": "c", "directed": true, "curved": 0.5}, {"uid": "0x7fb6600e2580", "size": 2.0, "color": "black", "opacity": 1, "source": "c", "target": "a", "directed": true, "curved": 0.5}, {"uid": "0x7fb6600e2eb0", "size": 2.0, "color": "black", "opacity": 1, "source": "c", "target": "d", "directed": true, "curved": 0.5}, {"uid": "0x7fb6c13265b0", "size": 2.0, "color": "black", "opacity": 1, "source": "d", "target": "a", "directed": true, "curved": 0.5}]}
 
  function tooltip(tooltipId, width){
    // Local variable to hold tooltip div for
@@ -8081,7 +8165,7 @@ hr.tooltip-hr {
 
 
  var myNetwork = network(config);
- myNetwork("#x8b9dc95dce6f4a19911ae21876901e82", data);
+ myNetwork("#x8fc467df56c043108ebc0bf2de542729", data);
 
  /* function widgets(container,config,network){ */
 
@@ -8388,7 +8472,7 @@ hr.tooltip-hr {
     }; */
 
 
- setupMenu("#xadb0886602294535be2b9c88bd9b730e",config,myNetwork);
+ setupMenu("#x8d86bce4cc8547e49a39851076b807c4",config,myNetwork);
 
 
  function sliderMenu(container,config,network){
@@ -8844,7 +8928,7 @@ hr.tooltip-hr {
  }; // End of sliderMenu
 
  if (config.temporal === true){
-   sliderMenu("#xadb0886602294535be2b9c88bd9b730e",config,myNetwork);};
+   sliderMenu("#x8d86bce4cc8547e49a39851076b807c4",config,myNetwork);};
 
 </script><p>We now see the trrajectory of a random walk in the first-order network,
 where the random walker follows the dynamics of the underlying
@@ -8862,14 +8946,14 @@ automatically mapped to the first-order node space:</p>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">First</span> <span class="n">path</span>
 <span class="o">-----</span>
-<span class="s1">&#39;c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b&#39;</span>
+<span class="s1">&#39;b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a&#39;</span>
 <span class="n">Path</span> <span class="n">collection</span>
 <span class="o">-----</span>
-<span class="s1">&#39;c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b&#39;</span>
-<span class="s1">&#39;c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b&#39;</span>
-<span class="s1">&#39;b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; d -&gt; a -&gt; b -&gt; c&#39;</span>
-<span class="s1">&#39;a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c&#39;</span>
-<span class="s1">&#39;b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; d&#39;</span>
+<span class="s1">&#39;b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a&#39;</span>
+<span class="s1">&#39;b -&gt; c -&gt; d -&gt; a -&gt; b -&gt; c -&gt; d -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b&#39;</span>
+<span class="s1">&#39;b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a&#39;</span>
+<span class="s1">&#39;b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; d -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c&#39;</span>
+<span class="s1">&#39;d -&gt; a -&gt; b -&gt; c -&gt; d -&gt; a -&gt; b -&gt; c -&gt; a -&gt; b -&gt; c -&gt; a&#39;</span>
 </pre></div>
 </div>
 <p>Note that you will have to specify higher-order seed node uids if you
@@ -8880,17 +8964,17 @@ node is needed to determine the transition probabilities):</p>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">run_id</span> <span class="n">seed</span>  <span class="n">time</span> <span class="n">node</span>  <span class="n">state</span>
-<span class="mi">0</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
+<span class="mi">0</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>  <span class="kc">False</span>
 <span class="mi">1</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>  <span class="kc">False</span>
-<span class="mi">2</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>  <span class="kc">False</span>
-<span class="mi">3</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>   <span class="kc">True</span>
-<span class="mi">4</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">d</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
+<span class="mi">2</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
+<span class="mi">3</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">d</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
+<span class="mi">4</span>        <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>     <span class="mi">0</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>   <span class="kc">True</span>
 <span class="o">..</span>     <span class="o">...</span>  <span class="o">...</span>   <span class="o">...</span>  <span class="o">...</span>    <span class="o">...</span>
-<span class="mi">85</span>       <span class="mi">1</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>    <span class="mi">18</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>  <span class="kc">False</span>
-<span class="mi">86</span>       <span class="mi">1</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>    <span class="mi">19</span>  <span class="n">d</span><span class="o">-</span><span class="n">a</span>   <span class="kc">True</span>
-<span class="mi">87</span>       <span class="mi">1</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>    <span class="mi">19</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>  <span class="kc">False</span>
-<span class="mi">88</span>       <span class="mi">1</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>    <span class="mi">20</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>   <span class="kc">True</span>
-<span class="mi">89</span>       <span class="mi">1</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>    <span class="mi">20</span>  <span class="n">d</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
+<span class="mi">85</span>       <span class="mi">1</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>    <span class="mi">18</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>  <span class="kc">False</span>
+<span class="mi">86</span>       <span class="mi">1</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>    <span class="mi">19</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>   <span class="kc">True</span>
+<span class="mi">87</span>       <span class="mi">1</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>    <span class="mi">19</span>  <span class="n">a</span><span class="o">-</span><span class="n">b</span>  <span class="kc">False</span>
+<span class="mi">88</span>       <span class="mi">1</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>    <span class="mi">20</span>  <span class="n">c</span><span class="o">-</span><span class="n">a</span>   <span class="kc">True</span>
+<span class="mi">89</span>       <span class="mi">1</span>  <span class="n">c</span><span class="o">-</span><span class="n">d</span>    <span class="mi">20</span>  <span class="n">b</span><span class="o">-</span><span class="n">c</span>  <span class="kc">False</span>
 
 <span class="p">[</span><span class="mi">90</span> <span class="n">rows</span> <span class="n">x</span> <span class="mi">5</span> <span class="n">columns</span><span class="p">]</span>
 </pre></div>
@@ -9113,15 +9197,15 @@ hr.tooltip-hr {
 }
 
 </style>
-<div id="x6a7e6e3a716e47348c35c7d8c38bcd36"></div>
-<div id="x727a31ce8ccf4925907b4bfc4011c183"></div>
+<div id="xfb082955bce647c1a68111a07d8219f8"></div>
+<div id="x28b9be6c245e43c8b1e0df71f645faca"></div>
 <script charset="utf-8">
 
  var d3 = require("d3");
 
  var config = {"width": 800.0, "height": 550.0, "unit": "px", "dpi": 96, "margin": null, "layout": "force", "temporal": true, "coordinates": false, "euclidean": false, "min_max_node_size": null, "min_max_edge_size": null, "keep_aspect_ratio": true, "forceCharge": -20, "forceRepel": -300, "forceAlpha": 0.1, "restartAlpha": 1, "alphaMin": 0.001, "targetAlpha": 0, "chargeDistance": 800, "repelDistance": 200, "velocityDecay": 0.4, "lookoutStrokeWidth": 1, "lookoutOpacity": 0.5, "lookoutWeight": 0.0, "radiusMinSize": 4, "radiusMaxSize": 16, "nodeTransitionDuration": 100, "defaultEdgeWeight": 1, "targetAlphaDragStarted": 0.3, "targetAlphaDragEnd": 0.0, "linkStrengthMin": 0.0, "linkStrengthMax": 0.45, "template": null, "css": null, "backend": ["tikz"], "fileformat": ["tex"], "latex_class_options": "", "interactiv": {"backend": ["d3js"], "fileformat": ["html"]}, "animation": {"enabled": false, "start": "1970-01-01T00:00:00", "end": "1970-01-01T00:33:20", "steps": 20, "speed": 100, "unit": "seconds"}, "label": {"centered": true, "enabled": true, "color": "white"}, "label_centered": true, "label_enabled": true, "label_color": "white", "curved": true, "directed": true, "widgets": {"tooltip": {"enabled": false, "size": "100px"}, "save": {"title": "Save", "enabled": true, "tooltip": "Save the network as [svg] or [png]."}, "zoom": {"title": "Zoom", "enabled": true, "tooltip": "Zoom-in with [+] <br> zoom-out with [-] <br> or reset zoom with [Reset]. <br> Furthermore, with [Shift+mouse wheel] you can also zoom."}, "filter": {"title": "Filter", "enabled": false, "tooltip": "Filter the nodes base on given groups.", "groups": ["all"]}, "search": {"title": "Search", "enabled": true, "tooltip": "Search for a node in the network."}, "layout": {"title": "Layout", "enabled": false, "tooltip": "Change the layout of the Network. Per default a [Force] directed layout is used. If x and y coordinates are given, an [Coord] layout can be used."}, "animation": {"title": "Animation", "enabled": true, "tooltip": "Play and pause animation of the temproal network."}, "aggregation": {"title": "Aggregation", "enabled": true, "tooltip": "Aggregate time steps.", "past": 2, "future": 2, "aggregation": 1}}}
 
- var data = {"nodes": [{"uid": "a-b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b-c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "c-a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "c-d", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "d-a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "changes": [], "tedges": [{"uid": "0x7fa091497130", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa091497160", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa091497370", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa091497550", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa091497970", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fa091497a00", "startTime": 0, "endTime": 19, "active": true}], "tnodes": [{"uid": "a-b", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "a-b", "startTime": 3, "endTime": 3, "color": "red"}, {"uid": "a-b", "startTime": 4, "endTime": 4, "color": "blue"}, {"uid": "a-b", "startTime": 6, "endTime": 6, "color": "red"}, {"uid": "a-b", "startTime": 7, "endTime": 7, "color": "blue"}, {"uid": "a-b", "startTime": 9, "endTime": 9, "color": "red"}, {"uid": "a-b", "startTime": 10, "endTime": 10, "color": "blue"}, {"uid": "a-b", "startTime": 11, "endTime": 11, "color": "red"}, {"uid": "a-b", "startTime": 12, "endTime": 12, "color": "blue"}, {"uid": "a-b", "startTime": 14, "endTime": 14, "color": "red"}, {"uid": "a-b", "startTime": 15, "endTime": 15, "color": "blue"}, {"uid": "a-b", "startTime": 17, "endTime": 17, "color": "red"}, {"uid": "a-b", "startTime": 18, "endTime": 18, "color": "blue"}, {"uid": "b-c", "startTime": 0, "endTime": 0, "color": "red"}, {"uid": "b-c", "startTime": 1, "endTime": 1, "color": "blue"}, {"uid": "b-c", "startTime": 4, "endTime": 4, "color": "red"}, {"uid": "b-c", "startTime": 5, "endTime": 5, "color": "blue"}, {"uid": "b-c", "startTime": 7, "endTime": 7, "color": "red"}, {"uid": "b-c", "startTime": 8, "endTime": 8, "color": "blue"}, {"uid": "b-c", "startTime": 10, "endTime": 10, "color": "red"}, {"uid": "b-c", "startTime": 10, "endTime": 10, "color": "blue"}, {"uid": "b-c", "startTime": 12, "endTime": 12, "color": "red"}, {"uid": "b-c", "startTime": 13, "endTime": 13, "color": "blue"}, {"uid": "b-c", "startTime": 15, "endTime": 15, "color": "red"}, {"uid": "b-c", "startTime": 16, "endTime": 16, "color": "blue"}, {"uid": "b-c", "startTime": 18, "endTime": 18, "color": "red"}, {"uid": "b-c", "startTime": 19, "endTime": 19, "color": "blue"}, {"uid": "c-a", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "c-a", "startTime": 5, "endTime": 5, "color": "red"}, {"uid": "c-a", "startTime": 6, "endTime": 6, "color": "blue"}, {"uid": "c-a", "startTime": 8, "endTime": 8, "color": "red"}, {"uid": "c-a", "startTime": 9, "endTime": 9, "color": "blue"}, {"uid": "c-a", "startTime": 10, "endTime": 10, "color": "red"}, {"uid": "c-a", "startTime": 11, "endTime": 11, "color": "blue"}, {"uid": "c-a", "startTime": 13, "endTime": 13, "color": "red"}, {"uid": "c-a", "startTime": 14, "endTime": 14, "color": "blue"}, {"uid": "c-a", "startTime": 16, "endTime": 16, "color": "red"}, {"uid": "c-a", "startTime": 17, "endTime": 17, "color": "blue"}, {"uid": "c-a", "startTime": 19, "endTime": 19, "color": "red"}, {"uid": "c-d", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "c-d", "startTime": 1, "endTime": 1, "color": "red"}, {"uid": "c-d", "startTime": 2, "endTime": 2, "color": "blue"}, {"uid": "d-a", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "d-a", "startTime": 2, "endTime": 2, "color": "red"}, {"uid": "d-a", "startTime": 3, "endTime": 3, "color": "blue"}], "links": [{"uid": "0x7fa091497970", "size": 2.0, "color": "black", "opacity": 1, "source": "a-b", "target": "b-c", "directed": true, "curved": 0.5}, {"uid": "0x7fa091497550", "size": 2.0, "color": "black", "opacity": 1, "source": "b-c", "target": "c-a", "directed": true, "curved": 0.5}, {"uid": "0x7fa091497130", "size": 2.0, "color": "black", "opacity": 1, "source": "b-c", "target": "c-d", "directed": true, "curved": 0.5}, {"uid": "0x7fa091497160", "size": 2.0, "color": "black", "opacity": 1, "source": "c-a", "target": "a-b", "directed": true, "curved": 0.5}, {"uid": "0x7fa091497a00", "size": 2.0, "color": "black", "opacity": 1, "source": "c-d", "target": "d-a", "directed": true, "curved": 0.5}, {"uid": "0x7fa091497370", "size": 2.0, "color": "black", "opacity": 1, "source": "d-a", "target": "a-b", "directed": true, "curved": 0.5}]}
+ var data = {"nodes": [{"uid": "a-b", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "b-c", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "c-a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "c-d", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}, {"uid": "d-a", "size": 15.0, "color": "CornflowerBlue", "opacity": 0.2, "id_as_label": true}], "changes": [], "tedges": [{"uid": "0x7fb6600e2580", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6600e2a00", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6600e2e20", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6600e2e50", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6e066d130", "startTime": 0, "endTime": 19, "active": true}, {"uid": "0x7fb6e066d8e0", "startTime": 0, "endTime": 19, "active": true}], "tnodes": [{"uid": "a-b", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "a-b", "startTime": 2, "endTime": 2, "color": "red"}, {"uid": "a-b", "startTime": 3, "endTime": 3, "color": "blue"}, {"uid": "a-b", "startTime": 5, "endTime": 5, "color": "red"}, {"uid": "a-b", "startTime": 6, "endTime": 6, "color": "blue"}, {"uid": "a-b", "startTime": 9, "endTime": 9, "color": "red"}, {"uid": "a-b", "startTime": 10, "endTime": 10, "color": "blue"}, {"uid": "a-b", "startTime": 11, "endTime": 11, "color": "red"}, {"uid": "a-b", "startTime": 12, "endTime": 12, "color": "blue"}, {"uid": "a-b", "startTime": 14, "endTime": 14, "color": "red"}, {"uid": "a-b", "startTime": 15, "endTime": 15, "color": "blue"}, {"uid": "a-b", "startTime": 17, "endTime": 17, "color": "red"}, {"uid": "a-b", "startTime": 18, "endTime": 18, "color": "blue"}, {"uid": "b-c", "startTime": 0, "endTime": 0, "color": "red"}, {"uid": "b-c", "startTime": 1, "endTime": 1, "color": "blue"}, {"uid": "b-c", "startTime": 3, "endTime": 3, "color": "red"}, {"uid": "b-c", "startTime": 4, "endTime": 4, "color": "blue"}, {"uid": "b-c", "startTime": 6, "endTime": 6, "color": "red"}, {"uid": "b-c", "startTime": 7, "endTime": 7, "color": "blue"}, {"uid": "b-c", "startTime": 10, "endTime": 10, "color": "red"}, {"uid": "b-c", "startTime": 10, "endTime": 10, "color": "blue"}, {"uid": "b-c", "startTime": 12, "endTime": 12, "color": "red"}, {"uid": "b-c", "startTime": 13, "endTime": 13, "color": "blue"}, {"uid": "b-c", "startTime": 15, "endTime": 15, "color": "red"}, {"uid": "b-c", "startTime": 16, "endTime": 16, "color": "blue"}, {"uid": "b-c", "startTime": 18, "endTime": 18, "color": "red"}, {"uid": "b-c", "startTime": 19, "endTime": 19, "color": "blue"}, {"uid": "c-a", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "c-a", "startTime": 1, "endTime": 1, "color": "red"}, {"uid": "c-a", "startTime": 2, "endTime": 2, "color": "blue"}, {"uid": "c-a", "startTime": 4, "endTime": 4, "color": "red"}, {"uid": "c-a", "startTime": 5, "endTime": 5, "color": "blue"}, {"uid": "c-a", "startTime": 10, "endTime": 10, "color": "red"}, {"uid": "c-a", "startTime": 11, "endTime": 11, "color": "blue"}, {"uid": "c-a", "startTime": 13, "endTime": 13, "color": "red"}, {"uid": "c-a", "startTime": 14, "endTime": 14, "color": "blue"}, {"uid": "c-a", "startTime": 16, "endTime": 16, "color": "red"}, {"uid": "c-a", "startTime": 17, "endTime": 17, "color": "blue"}, {"uid": "c-a", "startTime": 19, "endTime": 19, "color": "red"}, {"uid": "c-d", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "c-d", "startTime": 7, "endTime": 7, "color": "red"}, {"uid": "c-d", "startTime": 8, "endTime": 8, "color": "blue"}, {"uid": "d-a", "startTime": 0, "endTime": 0, "color": "blue"}, {"uid": "d-a", "startTime": 8, "endTime": 8, "color": "red"}, {"uid": "d-a", "startTime": 9, "endTime": 9, "color": "blue"}], "links": [{"uid": "0x7fb6e066d130", "size": 2.0, "color": "black", "opacity": 1, "source": "a-b", "target": "b-c", "directed": true, "curved": 0.5}, {"uid": "0x7fb6e066d8e0", "size": 2.0, "color": "black", "opacity": 1, "source": "b-c", "target": "c-a", "directed": true, "curved": 0.5}, {"uid": "0x7fb6600e2e50", "size": 2.0, "color": "black", "opacity": 1, "source": "b-c", "target": "c-d", "directed": true, "curved": 0.5}, {"uid": "0x7fb6600e2a00", "size": 2.0, "color": "black", "opacity": 1, "source": "c-a", "target": "a-b", "directed": true, "curved": 0.5}, {"uid": "0x7fb6600e2580", "size": 2.0, "color": "black", "opacity": 1, "source": "c-d", "target": "d-a", "directed": true, "curved": 0.5}, {"uid": "0x7fb6600e2e20", "size": 2.0, "color": "black", "opacity": 1, "source": "d-a", "target": "a-b", "directed": true, "curved": 0.5}]}
 
  function tooltip(tooltipId, width){
    // Local variable to hold tooltip div for
@@ -10289,7 +10373,7 @@ hr.tooltip-hr {
 
 
  var myNetwork = network(config);
- myNetwork("#x727a31ce8ccf4925907b4bfc4011c183", data);
+ myNetwork("#x28b9be6c245e43c8b1e0df71f645faca", data);
 
  /* function widgets(container,config,network){ */
 
@@ -10596,7 +10680,7 @@ hr.tooltip-hr {
     }; */
 
 
- setupMenu("#x6a7e6e3a716e47348c35c7d8c38bcd36",config,myNetwork);
+ setupMenu("#xfb082955bce647c1a68111a07d8219f8",config,myNetwork);
 
 
  function sliderMenu(container,config,network){
@@ -11052,7 +11136,7 @@ hr.tooltip-hr {
  }; // End of sliderMenu
 
  if (config.temporal === true){
-   sliderMenu("#x6a7e6e3a716e47348c35c7d8c38bcd36",config,myNetwork);};
+   sliderMenu("#xfb082955bce647c1a68111a07d8219f8",config,myNetwork);};
 
 </script><p>The same holds if we want to return a path consisting of higher-order
 nodes:</p>
@@ -11060,7 +11144,7 @@ nodes:</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; -&gt; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">d</span> <span class="o">-&gt;</span> <span class="n">d</span><span class="o">-</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">d</span> <span class="o">-&gt;</span> <span class="n">d</span><span class="o">-</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">-</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span>
 </pre></div>
 </div>
 <p>If we use the iterator interface to iterate through the steps of a
@@ -11091,10 +11175,17 @@ first-order node space, you can use the mapping function
 <code class="docutils literal notranslate"><span class="pre">first_order_node</span></code> to map a higher-order node to the (last visited)
 first-order node. Moreover, the first-order visitation frequencies of
 the higher-order random walk are recorded in the property
-<code class="docutils literal notranslate"><span class="pre">first_order_visitation_frequencies</span></code>.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">time</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">rw2</span><span class="o">.</span><span class="n">simulation_run</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="s1">&#39;b-c&#39;</span><span class="p">):</span>
+<code class="docutils literal notranslate"><span class="pre">first_order_visitation_frequencies</span></code>. Similarly, you can assess the
+current distance to the stationary distribution in the first-order state
+space using the property <code class="docutils literal notranslate"><span class="pre">first_order_total_variation_distance</span></code>.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">tvds</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">time</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">rw2</span><span class="o">.</span><span class="n">simulation_run</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="s1">&#39;b-c&#39;</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Current node = </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rw2</span><span class="o">.</span><span class="n">first_order_node</span><span class="p">(</span><span class="n">rw2</span><span class="o">.</span><span class="n">current_node</span><span class="p">)))</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">rw2</span><span class="o">.</span><span class="n">first_order_visitation_frequencies</span><span class="p">)</span>
+
+    <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+    <span class="n">tvds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rw2</span><span class="o">.</span><span class="n">first_order_total_variation_distance</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">d</span>
@@ -11105,19 +11196,19 @@ the higher-order random walk are recorded in the property
 <span class="p">[</span><span class="mf">0.25</span> <span class="mf">0.25</span> <span class="mf">0.25</span> <span class="mf">0.25</span><span class="p">]</span>
 <span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
 <span class="p">[</span><span class="mf">0.2</span> <span class="mf">0.2</span> <span class="mf">0.4</span> <span class="mf">0.2</span><span class="p">]</span>
+<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
+<span class="p">[</span><span class="mf">0.33333333</span> <span class="mf">0.16666667</span> <span class="mf">0.33333333</span> <span class="mf">0.16666667</span><span class="p">]</span>
+<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
+<span class="p">[</span><span class="mf">0.28571429</span> <span class="mf">0.28571429</span> <span class="mf">0.28571429</span> <span class="mf">0.14285714</span><span class="p">]</span>
+<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
+<span class="p">[</span><span class="mf">0.25</span>  <span class="mf">0.25</span>  <span class="mf">0.375</span> <span class="mf">0.125</span><span class="p">]</span>
+<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
+<span class="p">[</span><span class="mf">0.33333333</span> <span class="mf">0.22222222</span> <span class="mf">0.33333333</span> <span class="mf">0.11111111</span><span class="p">]</span>
+<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
+<span class="p">[</span><span class="mf">0.3</span> <span class="mf">0.3</span> <span class="mf">0.3</span> <span class="mf">0.1</span><span class="p">]</span>
+<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
+<span class="p">[</span><span class="mf">0.27272727</span> <span class="mf">0.27272727</span> <span class="mf">0.36363636</span> <span class="mf">0.09090909</span><span class="p">]</span>
 <span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">d</span>
-<span class="p">[</span><span class="mf">0.16666667</span> <span class="mf">0.16666667</span> <span class="mf">0.33333333</span> <span class="mf">0.33333333</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.28571429</span> <span class="mf">0.14285714</span> <span class="mf">0.28571429</span> <span class="mf">0.28571429</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="p">[</span><span class="mf">0.25</span> <span class="mf">0.25</span> <span class="mf">0.25</span> <span class="mf">0.25</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
-<span class="p">[</span><span class="mf">0.22222222</span> <span class="mf">0.22222222</span> <span class="mf">0.33333333</span> <span class="mf">0.22222222</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.3</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.2</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="p">[</span><span class="mf">0.27272727</span> <span class="mf">0.27272727</span> <span class="mf">0.27272727</span> <span class="mf">0.18181818</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
 <span class="p">[</span><span class="mf">0.25</span>       <span class="mf">0.25</span>       <span class="mf">0.33333333</span> <span class="mf">0.16666667</span><span class="p">]</span>
 <span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
 <span class="p">[</span><span class="mf">0.30769231</span> <span class="mf">0.23076923</span> <span class="mf">0.30769231</span> <span class="mf">0.15384615</span><span class="p">]</span>
@@ -11131,74 +11222,21 @@ the higher-order random walk are recorded in the property
 <span class="p">[</span><span class="mf">0.29411765</span> <span class="mf">0.29411765</span> <span class="mf">0.29411765</span> <span class="mf">0.11764706</span><span class="p">]</span>
 <span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
 <span class="p">[</span><span class="mf">0.27777778</span> <span class="mf">0.27777778</span> <span class="mf">0.33333333</span> <span class="mf">0.11111111</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">d</span>
-<span class="p">[</span><span class="mf">0.26315789</span> <span class="mf">0.26315789</span> <span class="mf">0.31578947</span> <span class="mf">0.15789474</span><span class="p">]</span>
 <span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.3</span>  <span class="mf">0.25</span> <span class="mf">0.3</span>  <span class="mf">0.15</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="p">[</span><span class="mf">0.28571429</span> <span class="mf">0.28571429</span> <span class="mf">0.28571429</span> <span class="mf">0.14285714</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
-<span class="p">[</span><span class="mf">0.27272727</span> <span class="mf">0.27272727</span> <span class="mf">0.31818182</span> <span class="mf">0.13636364</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.30434783</span> <span class="mf">0.26086957</span> <span class="mf">0.30434783</span> <span class="mf">0.13043478</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="p">[</span><span class="mf">0.29166667</span> <span class="mf">0.29166667</span> <span class="mf">0.29166667</span> <span class="mf">0.125</span>     <span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
-<span class="p">[</span><span class="mf">0.28</span> <span class="mf">0.28</span> <span class="mf">0.32</span> <span class="mf">0.12</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.30769231</span> <span class="mf">0.26923077</span> <span class="mf">0.30769231</span> <span class="mf">0.11538462</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="p">[</span><span class="mf">0.2962963</span>  <span class="mf">0.2962963</span>  <span class="mf">0.2962963</span>  <span class="mf">0.11111111</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
-<span class="p">[</span><span class="mf">0.28571429</span> <span class="mf">0.28571429</span> <span class="mf">0.32142857</span> <span class="mf">0.10714286</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.31034483</span> <span class="mf">0.27586207</span> <span class="mf">0.31034483</span> <span class="mf">0.10344828</span><span class="p">]</span>
+<span class="p">[</span><span class="mf">0.31578947</span> <span class="mf">0.26315789</span> <span class="mf">0.31578947</span> <span class="mf">0.10526316</span><span class="p">]</span>
 <span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
 <span class="p">[</span><span class="mf">0.3</span> <span class="mf">0.3</span> <span class="mf">0.3</span> <span class="mf">0.1</span><span class="p">]</span>
 <span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
-<span class="p">[</span><span class="mf">0.29032258</span> <span class="mf">0.29032258</span> <span class="mf">0.32258065</span> <span class="mf">0.09677419</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.3125</span>  <span class="mf">0.28125</span> <span class="mf">0.3125</span>  <span class="mf">0.09375</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="p">[</span><span class="mf">0.3030303</span>  <span class="mf">0.3030303</span>  <span class="mf">0.3030303</span>  <span class="mf">0.09090909</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
-<span class="p">[</span><span class="mf">0.29411765</span> <span class="mf">0.29411765</span> <span class="mf">0.32352941</span> <span class="mf">0.08823529</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.31428571</span> <span class="mf">0.28571429</span> <span class="mf">0.31428571</span> <span class="mf">0.08571429</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="p">[</span><span class="mf">0.30555556</span> <span class="mf">0.30555556</span> <span class="mf">0.30555556</span> <span class="mf">0.08333333</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
-<span class="p">[</span><span class="mf">0.2972973</span>  <span class="mf">0.2972973</span>  <span class="mf">0.32432432</span> <span class="mf">0.08108108</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.31578947</span> <span class="mf">0.28947368</span> <span class="mf">0.31578947</span> <span class="mf">0.07894737</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="p">[</span><span class="mf">0.30769231</span> <span class="mf">0.30769231</span> <span class="mf">0.30769231</span> <span class="mf">0.07692308</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
-<span class="p">[</span><span class="mf">0.3</span>   <span class="mf">0.3</span>   <span class="mf">0.325</span> <span class="mf">0.075</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.31707317</span> <span class="mf">0.29268293</span> <span class="mf">0.31707317</span> <span class="mf">0.07317073</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="p">[</span><span class="mf">0.30952381</span> <span class="mf">0.30952381</span> <span class="mf">0.30952381</span> <span class="mf">0.07142857</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
-<span class="p">[</span><span class="mf">0.30232558</span> <span class="mf">0.30232558</span> <span class="mf">0.3255814</span>  <span class="mf">0.06976744</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.31818182</span> <span class="mf">0.29545455</span> <span class="mf">0.31818182</span> <span class="mf">0.06818182</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="p">[</span><span class="mf">0.31111111</span> <span class="mf">0.31111111</span> <span class="mf">0.31111111</span> <span class="mf">0.06666667</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
-<span class="p">[</span><span class="mf">0.30434783</span> <span class="mf">0.30434783</span> <span class="mf">0.32608696</span> <span class="mf">0.06521739</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.31914894</span> <span class="mf">0.29787234</span> <span class="mf">0.31914894</span> <span class="mf">0.06382979</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="p">[</span><span class="mf">0.3125</span> <span class="mf">0.3125</span> <span class="mf">0.3125</span> <span class="mf">0.0625</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">c</span>
-<span class="p">[</span><span class="mf">0.30612245</span> <span class="mf">0.30612245</span> <span class="mf">0.32653061</span> <span class="mf">0.06122449</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">a</span>
-<span class="p">[</span><span class="mf">0.32</span> <span class="mf">0.3</span>  <span class="mf">0.32</span> <span class="mf">0.06</span><span class="p">]</span>
-<span class="n">Current</span> <span class="n">node</span> <span class="o">=</span> <span class="n">b</span>
-<span class="p">[</span><span class="mf">0.31372549</span> <span class="mf">0.31372549</span> <span class="mf">0.31372549</span> <span class="mf">0.05882353</span><span class="p">]</span>
+<span class="p">[</span><span class="mf">0.28571429</span> <span class="mf">0.28571429</span> <span class="mf">0.33333333</span> <span class="mf">0.0952381</span> <span class="p">]</span>
 </pre></div>
 </div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">tvds</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span> <span class="n">at</span> <span class="mh">0x7fb6c12fafd0</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+<img alt="../_images/higher_order_random_walks_27_1.png" src="../_images/higher_order_random_walks_27_1.png" />
 </div>
 
 

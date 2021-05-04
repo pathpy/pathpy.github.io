@@ -343,10 +343,10 @@
       </ul></li>
       <li><a href="generated/pathpy.algorithms.centralities.eigenvector_centrality.html#pathpy.algorithms.centralities.eigenvector_centrality">eigenvector_centrality() (in module pathpy.algorithms.centralities)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/pathpy.Path.end.html#pathpy.Path.end">end() (pathpy.Path property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/pathpy.processes.epidemic_spreading.EpidemicSIR.html#pathpy.processes.epidemic_spreading.EpidemicSIR">EpidemicSIR (class in pathpy.processes.epidemic_spreading)</a>
 </li>
       <li><a href="generated/pathpy.generators.random_graphs.ER_nm.html#pathpy.generators.random_graphs.ER_nm">ER_nm() (in module pathpy.generators.random_graphs)</a>
@@ -356,6 +356,8 @@
       <li><a href="generated/pathpy.generators.random_graphs.ER_np.html#pathpy.generators.random_graphs.ER_np">ER_np() (in module pathpy.generators.random_graphs)</a>
 </li>
       <li><a href="generated/pathpy.generators.random_graphs.ER_np_randomize.html#pathpy.generators.random_graphs.ER_np_randomize">ER_np_randomize() (in module pathpy.generators.random_graphs)</a>
+</li>
+      <li><a href="generated/pathpy.algorithms.path_extraction.extract_path_collection.html#pathpy.algorithms.path_extraction.extract_path_collection">extract_path_collection() (in module pathpy.algorithms.path_extraction)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -371,12 +373,16 @@
       </ul></li>
       <li><a href="generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_node">first_order_node() (pathpy.processes.random_walk.HigherOrderRandomWalk method)</a>
 </li>
-      <li><a href="generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_visitation_frequencies">first_order_visitation_frequencies() (pathpy.processes.random_walk.HigherOrderRandomWalk property)</a>
+      <li><a href="generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_stationary_state">first_order_stationary_state() (pathpy.processes.random_walk.HigherOrderRandomWalk method)</a>
 </li>
-      <li><a href="generated/pathpy.io.pandas.from_network.html#pathpy.io.pandas.from_network">from_network() (in module pathpy.io.pandas)</a>
+      <li><a href="generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_total_variation_distance">first_order_total_variation_distance() (pathpy.processes.random_walk.HigherOrderRandomWalk property)</a>
+</li>
+      <li><a href="generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_visitation_frequencies">first_order_visitation_frequencies() (pathpy.processes.random_walk.HigherOrderRandomWalk property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/pathpy.io.pandas.from_network.html#pathpy.io.pandas.from_network">from_network() (in module pathpy.io.pandas)</a>
+</li>
       <li><a href="generated/pathpy.converters.from_networkx.html#pathpy.converters.from_networkx">from_networkx() (in module pathpy.converters)</a>
 </li>
       <li><a href="generated/pathpy.Network.from_paths.html#pathpy.Network.from_paths">from_paths() (pathpy.Network class method)</a>
@@ -385,6 +391,8 @@
         <li><a href="generated/pathpy.statistics.subpaths.SubPathCollection.html#pathpy.statistics.subpaths.SubPathCollection.from_paths">(pathpy.statistics.subpaths.SubPathCollection class method)</a>
 </li>
       </ul></li>
+      <li><a href="generated/pathpy.io.infomap.from_state_file.html#pathpy.io.infomap.from_state_file">from_state_file() (in module pathpy.io.infomap)</a>
+</li>
       <li><a href="generated/pathpy.io.pandas.from_temporal_network.html#pathpy.io.pandas.from_temporal_network">from_temporal_network() (in module pathpy.io.pandas)</a>
 
       <ul>
@@ -548,6 +556,8 @@
         <li><a href="generated/pathpy.io.graphml.html#module-pathpy.io.graphml">pathpy.io.graphml</a>
 </li>
         <li><a href="generated/pathpy.io.graphtool.html#module-pathpy.io.graphtool">pathpy.io.graphtool</a>
+</li>
+        <li><a href="generated/pathpy.io.infomap.html#module-pathpy.io.infomap">pathpy.io.infomap</a>
 </li>
         <li><a href="generated/pathpy.io.konect.html#module-pathpy.io.konect">pathpy.io.konect</a>
 </li>
@@ -755,6 +765,13 @@
 
       <ul>
         <li><a href="generated/pathpy.io.graphtool.html#module-pathpy.io.graphtool">module</a>
+</li>
+      </ul></li>
+      <li>
+    pathpy.io.infomap
+
+      <ul>
+        <li><a href="generated/pathpy.io.infomap.html#module-pathpy.io.infomap">module</a>
 </li>
       </ul></li>
       <li>
@@ -1052,24 +1069,34 @@
       </ul></li>
       <li><a href="generated/pathpy.io.pandas.to_dataframe.html#pathpy.io.pandas.to_dataframe">to_dataframe() (in module pathpy.io.pandas)</a>
 </li>
+      <li><a href="generated/pathpy.processes.epidemic_spreading.EpidemicSIR.html#pathpy.processes.epidemic_spreading.EpidemicSIR.to_directed_acylic_graph">to_directed_acylic_graph() (pathpy.processes.epidemic_spreading.EpidemicSIR method)</a>
+
+      <ul>
+        <li><a href="generated/pathpy.processes.process.BaseProcess.html#pathpy.processes.process.BaseProcess.to_directed_acylic_graph">(pathpy.processes.process.BaseProcess method)</a>
+</li>
+        <li><a href="generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.to_directed_acylic_graph">(pathpy.processes.random_walk.HigherOrderRandomWalk method)</a>
+</li>
+        <li><a href="generated/pathpy.processes.random_walk.RandomWalk.html#pathpy.processes.random_walk.RandomWalk.to_directed_acylic_graph">(pathpy.processes.random_walk.RandomWalk method)</a>
+</li>
+      </ul></li>
       <li><a href="generated/pathpy.io.pandas.to_network.html#pathpy.io.pandas.to_network">to_network() (in module pathpy.io.pandas)</a>
 </li>
       <li><a href="generated/pathpy.converters.to_networkx.html#pathpy.converters.to_networkx">to_networkx() (in module pathpy.converters)</a>
 </li>
-      <li><a href="generated/pathpy.algorithms.path_extraction.to_path_collection.html#pathpy.algorithms.path_extraction.to_path_collection">to_path_collection() (in module pathpy.algorithms.path_extraction)</a>
+      <li><a href="generated/pathpy.io.infomap.to_state_file.html#pathpy.io.infomap.to_state_file">to_state_file() (in module pathpy.io.infomap)</a>
 </li>
       <li><a href="generated/pathpy.io.pandas.to_temporal_network.html#pathpy.io.pandas.to_temporal_network">to_temporal_network() (in module pathpy.io.pandas)</a>
 </li>
       <li><a href="generated/pathpy.Network.to_weighted_network.html#pathpy.Network.to_weighted_network">to_weighted_network() (pathpy.Network class method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/pathpy.Path.tolist.html#pathpy.Path.tolist">tolist() (pathpy.Path method)</a>
 
       <ul>
         <li><a href="generated/pathpy.statistics.subpaths.SubPathCollection.html#pathpy.statistics.subpaths.SubPathCollection.tolist">(pathpy.statistics.subpaths.SubPathCollection method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/pathpy.processes.random_walk.HigherOrderRandomWalk.html#pathpy.processes.random_walk.HigherOrderRandomWalk.total_variation_distance">total_variation_distance() (pathpy.processes.random_walk.HigherOrderRandomWalk property)</a>
 
       <ul>

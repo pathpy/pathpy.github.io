@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.io.infomap &#8212; pathpy 3.0.0a2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../examples/index.html">Gallery</a></li>
+                <li><a href="../../../tutorial.html">Tutorial</a></li>
+                <li><a href="../../../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pathpy.io.infomap</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Functions to export paths and higher-order models to state files used by InfoMap&quot;&quot;&quot;</span>
+<span class="c1">#!/usr/bin/python -tt</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># File      : infomap.py -- Converter classes to infomap</span>
+<span class="c1"># Author    : Ingo Scholtes &lt;scholtes@uni-wuppertal.de&gt;</span>
+<span class="c1"># Time-stamp: &lt;Tue 2021-04-27 11:12 ingo&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2016-2021 Pathpy Developers</span>
+<span class="c1"># =============================================================================</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">pathpy.core.api</span> <span class="kn">import</span> <span class="n">PathCollection</span>
+
+<div class="viewcode-block" id="to_state_file"><a class="viewcode-back" href="../../../generated/pathpy.io.infomap.to_state_file.html#pathpy.io.infomap.to_state_file">[docs]</a><span class="k">def</span> <span class="nf">to_state_file</span><span class="p">(</span><span class="n">paths</span><span class="p">:</span> <span class="n">PathCollection</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Writes paths from a PathCollection instance into a state file that can be read by InfoMap.</span>
+
+<span class="sd">    .. [1] M. Rosvall, Daniel Axelsson, Carl T. Bergstrom, &quot;The map equation&quot; The European Physical Journal Special Topics 178.1 (2009): 13-23.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    paths : PathCollection</span>
+<span class="sd">        the PathCollection instance that will be used to generate the state file</span>
+
+<span class="sd">    file : str</span>
+<span class="sd">        Path where the state file will be saved</span>
+
+<span class="sd">    weight : Optional[str]=None</span>
+<span class="sd">        if not None (default), the given path attribute will be used to set link weights in the state file</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Create a state file from a PathCollection with three paths</span>
+
+<span class="sd">    &gt;&gt;&gt; pc = pp.PathCollection()</span>
+<span class="sd">    &gt;&gt;&gt; a = pp.Node(&#39;a&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; b = pp.Node(&#39;b&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; c = pp.Node(&#39;c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; d = pp.Node(&#39;d&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; e1 = pp.Edge(a, b, uid=&#39;a-b&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; e2 = pp.Edge(b, c, uid=&#39;b-c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; e3 = pp.Edge(c, d, uid=&#39;c-d&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pc.add(pp.Path(e1, frequency=15))</span>
+<span class="sd">    &gt;&gt;&gt; pc.add(pp.Path(e1, e2, frequency=42))</span>
+<span class="sd">    &gt;&gt;&gt; pc.add(pp.Path(e1, e2, e3, frequency=41))</span>
+<span class="sd">    &gt;&gt;&gt; pp.converters.to_state_file(pc, &#39;paths.state&#39;, weight=&#39;frequency&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; with open(&#39;test.state&#39;, &#39;r&#39;) as f:</span>
+<span class="sd">    &gt;&gt;&gt; print(f.read())</span>
+<span class="sd">    *Vertices 4</span>
+<span class="sd">    1 &quot;b&quot;</span>
+<span class="sd">    2 &quot;d&quot;</span>
+<span class="sd">    3 &quot;a&quot;</span>
+<span class="sd">    4 &quot;c&quot;</span>
+<span class="sd">    *States</span>
+<span class="sd">    1 1 &quot;{a}_b&quot;</span>
+<span class="sd">    2 4 &quot;{b}_c&quot;</span>
+<span class="sd">    3 4 &quot;{a-b}_c&quot;</span>
+<span class="sd">    4 2 &quot;{b-c}_d&quot;</span>
+<span class="sd">    5 1  &quot;{eps}_a&quot;</span>
+<span class="sd">    *Links</span>
+<span class="sd">    1 2 42</span>
+<span class="sd">    3 4 41</span>
+<span class="sd">    5 1 15</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">state_file</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>        
+        <span class="c1"># total number of nodes traversed by paths</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+
+        <span class="c1"># generate list of nodes with 1-based index</span>
+        <span class="n">state_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;*Vertices </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">nodes_to_index</span> <span class="o">=</span> <span class="p">{</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">paths</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">paths</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">uids</span><span class="p">:</span>
+            <span class="n">state_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nodes_to_index</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">v</span><span class="p">))</span>
+
+        <span class="c1"># use paths to generate list of state nodes (with 1-based index) as well as links</span>
+        <span class="n">state_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;*States&#39;</span><span class="p">)</span>
+        <span class="n">states_by_index</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">states_to_index</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">links</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+            <span class="c1"># print(&#39; -&gt; &#39;.join(v.uid for v in p.nodes))</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">current_node</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># map first edge (v, w) to transition {eps}_v -&gt; {v}_w</span>
+                    <span class="n">current_state</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{eps}</span><span class="s1">_&#39;</span> <span class="o">+</span> <span class="n">current_node</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">current_state</span> <span class="o">=</span> <span class="s1">&#39;{&#39;</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span><span class="p">[:</span><span class="n">k</span><span class="p">]])</span> <span class="o">+</span> <span class="s1">&#39;}_&#39;</span> <span class="o">+</span> <span class="n">current_node</span>
+                <span class="n">next_node</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span>
+                <span class="n">next_state</span> <span class="o">=</span> <span class="s1">&#39;{&#39;</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">nodes</span><span class="p">[:</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span> <span class="o">+</span> <span class="s1">&#39;}_&#39;</span> <span class="o">+</span> <span class="n">next_node</span>
+
+                <span class="c1"># add state nodes with indices</span>
+                <span class="k">if</span> <span class="n">current_state</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">states_to_index</span><span class="p">:</span>
+                    <span class="n">states_by_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="n">current_state</span><span class="p">)</span>
+                    <span class="n">states_to_index</span><span class="p">[</span><span class="n">current_state</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">next_state</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">states_to_index</span><span class="p">:</span>
+                    <span class="n">states_by_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">next_node</span><span class="p">,</span> <span class="n">next_state</span><span class="p">)</span>
+                    <span class="n">states_to_index</span><span class="p">[</span><span class="n">next_state</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">weight</span><span class="p">:</span>
+                    <span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">current_state</span><span class="p">,</span> <span class="n">next_state</span><span class="p">,</span> <span class="n">paths</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">weight</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">current_state</span><span class="p">,</span> <span class="n">next_state</span><span class="p">))</span>
+            <span class="c1"># for i in range(1, len(p.nodes)):</span>
+            <span class="c1">#     # extract pair of connected state nodes and associated nodes</span>
+            <span class="c1">#     node = p.nodes[-2].uid</span>
+            <span class="c1">#     state = &#39;{&#39; + &#39;-&#39;.join([v.uid for v in p.nodes[:-2]]) + &#39;}_&#39; + node</span>
+            <span class="c1">#     next_node = p.nodes[-1].uid</span>
+            <span class="c1">#     next_state = &#39;{&#39; + &#39;-&#39;.join([v.uid for v in p.nodes[i:-1]]) + &#39;}_&#39; + next_node</span>
+
+            <span class="c1">#     # add state nodes with indices</span>
+            <span class="c1">#     if state not in states_to_index:</span>
+            <span class="c1">#         states_by_index[i] = (node, state)</span>
+            <span class="c1">#         states_to_index[state] = i</span>
+            <span class="c1">#         i += 1</span>
+            <span class="c1">#     if next_state not in states_to_index:</span>
+            <span class="c1">#         states_by_index[i] = (next_node, next_state)</span>
+            <span class="c1">#         states_to_index[next_state] = i</span>
+            <span class="c1">#         i += 1</span>
+            <span class="c1">#     if weight:</span>
+            <span class="c1">#         links.append((state, next_state, paths[p][weight]))</span>
+            <span class="c1">#     else:</span>
+            <span class="c1">#         links.append((state, next_state))</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">states_by_index</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">state_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1"> &quot;</span><span class="si">{2}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">nodes_to_index</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="c1"># write links to file</span>
+        <span class="n">state_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;*Links&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">weight</span><span class="p">:</span>
+                <span class="n">state_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1"> </span><span class="si">{2}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">states_to_index</span><span class="p">[</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">states_to_index</span><span class="p">[</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">l</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">state_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">states_to_index</span><span class="p">[</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">states_to_index</span><span class="p">[</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">state_file</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="from_state_file"><a class="viewcode-back" href="../../../generated/pathpy.io.infomap.from_state_file.html#pathpy.io.infomap.from_state_file">[docs]</a><span class="k">def</span> <span class="nf">from_state_file</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PathCollection</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads path statistics from a state file</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

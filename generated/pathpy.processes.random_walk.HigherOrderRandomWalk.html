@@ -254,38 +254,44 @@ the random walk transition probabilities.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_node" title="pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">first_order_node</span></code></a>(higher_order_node)</p></td>
 <td><p>Maps a given uid of a node in the higher-order network to the corresponding  first-order node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.get_path" title="pathpy.processes.random_walk.HigherOrderRandomWalk.get_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_path</span></code></a>(data[, run_id])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_stationary_state" title="pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_stationary_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">first_order_stationary_state</span></code></a>(**kwargs)</p></td>
+<td><p>Returns current normalized visitation frequencies of first-order nodes based on the history of the higher-order random walk.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.get_path" title="pathpy.processes.random_walk.HigherOrderRandomWalk.get_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_path</span></code></a>(data[, run_id])</p></td>
 <td><p>Returns a path that represents the sequence of (first-order) nodes traversed  by a single random walk.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.get_paths" title="pathpy.processes.random_walk.HigherOrderRandomWalk.get_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_paths</span></code></a>(data[, run_ids])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.get_paths" title="pathpy.processes.random_walk.HigherOrderRandomWalk.get_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_paths</span></code></a>(data[, run_ids])</p></td>
 <td><p>Returns a PathCollection where each</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.init" title="pathpy.processes.random_walk.HigherOrderRandomWalk.init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code></a>(seed)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.init" title="pathpy.processes.random_walk.HigherOrderRandomWalk.init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code></a>(seed)</p></td>
 <td><p>Creates a biased random walk process in a network.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.node_state" title="pathpy.processes.random_walk.HigherOrderRandomWalk.node_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_state</span></code></a>(v)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.node_state" title="pathpy.processes.random_walk.HigherOrderRandomWalk.node_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_state</span></code></a>(v)</p></td>
 <td><p>Returns a boolean variable indicating whether the walker is currently  visiting (first-order) node v</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.plot" title="pathpy.processes.random_walk.HigherOrderRandomWalk.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(data[, run_id, timescale])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.plot" title="pathpy.processes.random_walk.HigherOrderRandomWalk.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(data[, run_id, timescale])</p></td>
 <td><p>Displays an interactive plot of the random walk dynamics, projected to a first-order network based on a recorded simulation experiment</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.random_seed" title="pathpy.processes.random_walk.HigherOrderRandomWalk.random_seed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_seed</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.random_seed" title="pathpy.processes.random_walk.HigherOrderRandomWalk.random_seed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_seed</span></code></a>()</p></td>
 <td><p>Returns a random node from the network, chosen uniformly at random</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.run_experiment" title="pathpy.processes.random_walk.HigherOrderRandomWalk.run_experiment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_experiment</span></code></a>(steps[, runs])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.run_experiment" title="pathpy.processes.random_walk.HigherOrderRandomWalk.run_experiment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_experiment</span></code></a>(steps[, runs])</p></td>
 <td><p>Perform one or more simulation runs of the process with a given number of steps.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.simulation_run" title="pathpy.processes.random_walk.HigherOrderRandomWalk.simulation_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulation_run</span></code></a>(steps[, seed])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.simulation_run" title="pathpy.processes.random_walk.HigherOrderRandomWalk.simulation_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulation_run</span></code></a>(steps[, seed])</p></td>
 <td><p>Abstract generator method that initializes the process, runs a number of steps and yields a tuple consisting of the current time and the set of nodes whose state has changed in each step.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.state_to_color" title="pathpy.processes.random_walk.HigherOrderRandomWalk.state_to_color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_to_color</span></code></a>(state)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.state_to_color" title="pathpy.processes.random_walk.HigherOrderRandomWalk.state_to_color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_to_color</span></code></a>(state)</p></td>
 <td><p>Maps the current (visitation) state of nodes to colors for visualization.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.stationary_state" title="pathpy.processes.random_walk.HigherOrderRandomWalk.stationary_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stationary_state</span></code></a>(**kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.stationary_state" title="pathpy.processes.random_walk.HigherOrderRandomWalk.stationary_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stationary_state</span></code></a>(**kwargs)</p></td>
 <td><p>Computes stationary visitation probabilities.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.step" title="pathpy.processes.random_walk.HigherOrderRandomWalk.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.step" title="pathpy.processes.random_walk.HigherOrderRandomWalk.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>()</p></td>
 <td><p>Function that will be called for each step of the random walk.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.to_directed_acylic_graph" title="pathpy.processes.random_walk.HigherOrderRandomWalk.to_directed_acylic_graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_directed_acylic_graph</span></code></a>(data[, run_id, …])</p></td>
+<td><p>Returns a directed acyclic graph representation of all state changes over time.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.transition_matrix_pd" title="pathpy.processes.random_walk.HigherOrderRandomWalk.transition_matrix_pd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix_pd</span></code></a>()</p></td>
 <td><p>Returns the transition matrix as pandas DataFrame with proper row/column labels.</p></td>
@@ -308,22 +314,25 @@ the random walk transition probabilities.</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">current_node</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_visitation_frequencies" title="pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_visitation_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">first_order_visitation_frequencies</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_total_variation_distance" title="pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_total_variation_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">first_order_total_variation_distance</span></code></a></p></td>
+<td><p>Returns the total variation distance between stationary  visitation probabilities and the current visitation frequencies, projected to nodes in the first_order_network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_visitation_frequencies" title="pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_visitation_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">first_order_visitation_frequencies</span></code></a></p></td>
 <td><p>Returns current normalized visitation frequencies of first-order nodes based on the history of the higher-order random walk.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">network</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">network</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.time" title="pathpy.processes.random_walk.HigherOrderRandomWalk.time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.time" title="pathpy.processes.random_walk.HigherOrderRandomWalk.time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time</span></code></a></p></td>
 <td><p>The current time of the random walk process, i.e. the number of steps taken since the start node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.total_variation_distance" title="pathpy.processes.random_walk.HigherOrderRandomWalk.total_variation_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">total_variation_distance</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.total_variation_distance" title="pathpy.processes.random_walk.HigherOrderRandomWalk.total_variation_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">total_variation_distance</span></code></a></p></td>
 <td><p>Returns the total variation distance between stationary  visitation probabilities and the current visitation frequencies</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.transition_matrix" title="pathpy.processes.random_walk.HigherOrderRandomWalk.transition_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.transition_matrix" title="pathpy.processes.random_walk.HigherOrderRandomWalk.transition_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix</span></code></a></p></td>
 <td><p>Returns the transition matrix of the random walk</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.visitation_frequencies" title="pathpy.processes.random_walk.HigherOrderRandomWalk.visitation_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visitation_frequencies</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.visitation_frequencies" title="pathpy.processes.random_walk.HigherOrderRandomWalk.visitation_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visitation_frequencies</span></code></a></p></td>
 <td><p>Returns current normalized visitation frequencies of nodes based on the history of the random walk.</p></td>
 </tr>
 </tbody>
@@ -372,6 +381,24 @@ first-order node.</p>
 </dl>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_stationary_state">
+<code class="sig-name descname">first_order_stationary_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; numpy.array<a class="reference internal" href="../_modules/pathpy/processes/random_walk.html#HigherOrderRandomWalk.first_order_stationary_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_stationary_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current normalized visitation frequencies of first-order nodes based on the history of
+the higher-order random walk. Initially, all visitation probabilities are zero except for the last node of the higher-order seed node.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_total_variation_distance">
+<em class="property">property </em><code class="sig-name descname">first_order_total_variation_distance</code><a class="headerlink" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.first_order_total_variation_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the total variation distance between stationary 
+visitation probabilities and the current visitation frequencies, projected
+to nodes in the first_order_network.</p>
+<p>Computes the total variation distance between the current (first-order) node visitation
+probabilities and the (first-order) stationary node visitation probabilities. This quantity converges to zero for HigherOrderRandomWalk.time -&gt; np.infty and its magnitude indicates the
+current relaxation of the higher-order random walk process.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -571,6 +598,30 @@ returns a tuple, where the first entry is the uids of the currently visited high
 <dt id="pathpy.processes.random_walk.HigherOrderRandomWalk.time">
 <em class="property">property </em><code class="sig-name descname">time</code><a class="headerlink" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.time" title="Permalink to this definition">¶</a></dt>
 <dd><p>The current time of the random walk process, i.e. the number of steps taken since the start node.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pathpy.processes.random_walk.HigherOrderRandomWalk.to_directed_acylic_graph">
+<code class="sig-name descname">to_directed_acylic_graph</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">run_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">states</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Iterable<span class="p">[</span>Any<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; pathpy.models.directed_acyclic_graph.DirectedAcyclicGraph<a class="headerlink" href="#pathpy.processes.random_walk.HigherOrderRandomWalk.to_directed_acylic_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a directed acyclic graph representation of all state changes over time.
+In this graph an edge (v_t’ -&gt; w_t) indicates that node w changed to state x at time t after a 
+connected node v previously changed its state to x at time t’ &lt; t (i.e. (v,w) exists in the network).</p>
+<p>A link (v-t’) -&gt; (w-t) in the directed acyclic graph indicates that node v may have causally influenced node w at time t. As an example, for a an SIR epidemic spreading process, the DAG representation captures possible transmission routes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data: DataFrame</strong></dt><dd><p>recorded state changes of nodes, as returned by <cite>run_experiment</cite></p>
+</dd>
+<dt><strong>run_id: Optional[int]=0</strong></dt><dd><p>identifier of simulation run to turn into DAG</p>
+</dd>
+<dt><strong>time_delta: Optional[int]=None</strong></dt><dd><p>maximum time difference of possible influence, i.e. if set to delta, any state changes between connected nodes that are apart further than delta time steps are not considered. If None (default) the last prior state change of any connected node is considered, independent of the 
+time distance</p>
+</dd>
+<dt><strong>states: Optional[Iterable[Any]]=None</strong></dt><dd><p>Only changes to states in this set will be considered. If None (default) all state changes will be considered</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

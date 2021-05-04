@@ -127,6 +127,7 @@
 <span class="kn">from</span> <span class="nn">pathpy.core.classes</span> <span class="kn">import</span> <span class="n">BaseClass</span>
 <span class="kn">from</span> <span class="nn">pathpy.core.api</span> <span class="kn">import</span> <span class="n">Node</span>
 <span class="kn">from</span> <span class="nn">pathpy.models.network</span> <span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.directed_acyclic_graph</span> <span class="kn">import</span> <span class="n">DirectedAcyclicGraph</span>
 <span class="kn">from</span> <span class="nn">pathpy.models.temporal_network</span> <span class="kn">import</span> <span class="n">TemporalNetwork</span><span class="p">,</span> <span class="n">TemporalNode</span>
 <span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
@@ -268,7 +269,74 @@
         <span class="c1"># update state</span>
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">evolution</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>            
             <span class="n">tn</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;node&#39;</span><span class="p">]][</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">timescale</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_to_color</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">tn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">tn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseProcess.to_directed_acylic_graph"><a class="viewcode-back" href="../../../generated/pathpy.processes.process.BaseProcess.html#pathpy.processes.epidemic_spreading.BaseProcess.to_directed_acylic_graph">[docs]</a>    <span class="k">def</span> <span class="nf">to_directed_acylic_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">states</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DirectedAcyclicGraph</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a directed acyclic graph representation of all state changes over time.</span>
+<span class="sd">        In this graph an edge (v_t&#39; -&gt; w_t) indicates that node w changed to state x at time t after a </span>
+<span class="sd">        connected node v previously changed its state to x at time t&#39; &lt; t (i.e. (v,w) exists in the network).</span>
+
+<span class="sd">        A link (v-t&#39;) -&gt; (w-t) in the directed acyclic graph indicates that node v may have causally influenced node w at time t. As an example, for a an SIR epidemic spreading process, the DAG representation captures possible transmission routes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: DataFrame</span>
+<span class="sd">            recorded state changes of nodes, as returned by `run_experiment`</span>
+
+<span class="sd">        run_id: Optional[int]=0</span>
+<span class="sd">            identifier of simulation run to turn into DAG</span>
+
+<span class="sd">        time_delta: Optional[int]=None</span>
+<span class="sd">            maximum time difference of possible influence, i.e. if set to delta, any state changes between connected nodes that are apart further than delta time steps are not considered. If None (default) the last prior state change of any connected node is considered, independent of the </span>
+<span class="sd">            time distance</span>
+
+<span class="sd">        states: Optional[Iterable[Any]]=None</span>
+<span class="sd">            Only changes to states in this set will be considered. If None (default) all state changes will be considered</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dag</span> <span class="o">=</span> <span class="n">DirectedAcyclicGraph</span><span class="p">(</span><span class="n">uid</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">run_id</span><span class="p">))</span>
+        <span class="n">run</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;run_id&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">run_id</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>            
+            <span class="c1"># add temporal node            </span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span>            
+            <span class="k">if</span> <span class="n">states</span> <span class="ow">and</span> <span class="n">state</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">states</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">w</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;node&#39;</span><span class="p">]</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
+            <span class="n">uid</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">-</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+            <span class="n">dag</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span> <span class="n">node_label</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">)</span>
+
+            <span class="c1"># find predecessor of node v that last changed its state</span>
+            <span class="n">predecessors</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_network</span><span class="o">.</span><span class="n">predecessors</span><span class="p">[</span><span class="n">w</span><span class="p">]:</span>
+
+                <span class="c1"># get all state changes of node v prior to time t</span>
+                <span class="n">candidates</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">run</span><span class="p">[</span><span class="s1">&#39;node&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">run</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">&lt;</span><span class="n">t</span><span class="p">)]</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+
+                    <span class="c1"># find time stamp and new state of last state change</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="n">candidates</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
+                    <span class="n">last_time</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
+                    <span class="n">last_state</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="s1">&#39;state&#39;</span><span class="p">]</span>
+
+                    <span class="c1"># check last state change and time difference</span>
+                    <span class="k">if</span>  <span class="n">last_state</span> <span class="ow">in</span> <span class="n">states</span> <span class="ow">and</span> <span class="p">(</span><span class="n">time_delta</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">last_time</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">time_delta</span><span class="p">):</span>
+                        <span class="n">pred_uid</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">-</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">last_time</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">pred_uid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dag</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                            <span class="n">predecessors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Node</span><span class="p">(</span><span class="n">pred_uid</span><span class="p">,</span> <span class="n">node_label</span><span class="o">=</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">last_time</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">last_state</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">predecessors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dag</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">pred_uid</span><span class="p">])</span>
+                        <span class="c1"># predecessors = [&#39;{0}-{1}&#39;.format(v.uid, t_p)]                        </span>
+                    <span class="c1">#elif :                        </span>
+
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">predecessors</span><span class="p">:</span>
+                <span class="n">dag</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dag</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">uid</span><span class="p">])</span>
+            
+        <span class="k">return</span> <span class="n">dag</span></div></div>
+
+
 </pre></div>
 
     </div>
