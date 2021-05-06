@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pathpy.io.pandas &#8212; pathpy 3.0.0a2 documentation</title>
+    <title>pathpy.io.pandas &#8212; pathpy 3.0.22 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.22</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -402,7 +402,7 @@
 
     <span class="n">nodes</span> <span class="o">=</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">):</span> <span class="n">TemporalNode</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">node_set</span><span class="p">}</span>
 
-    <span class="n">net</span> <span class="o">=</span> <span class="n">TemporalNetwork</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="n">multiedges</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">net</span> <span class="o">=</span> <span class="n">TemporalNetwork</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">multiedges</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># add nodes to the network</span>
     <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Exporting path data as InfoMap state files &#8212; pathpy 3.0.0a2 documentation</title>
+    <title>Exporting path data as InfoMap state files &#8212; pathpy 3.0.22 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
@@ -42,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.22</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -121,6 +121,7 @@ Colab</a></div>
 notebook</a></div>
 </div>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pathpy</span> <span class="k">as</span> <span class="nn">pp</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
 </pre></div>
 </div>
 <script charset="utf-8">
@@ -140,7 +141,15 @@ console.log("ERROR: NO requireJS was detected");
 require(['d3'], function(d3){
 console.log("OKAY: d3js was detected");
 });
-</script><p>The following code generates a simple example instance for a set of
+</script><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pc_to_cnt</span><span class="p">(</span><span class="n">pc</span><span class="p">):</span>
+    <span class="n">cnt</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">pc</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">nodes</span><span class="p">])</span>
+        <span class="n">cnt</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">pc</span><span class="p">[</span><span class="n">path</span><span class="p">][</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">cnt</span>
+</pre></div>
+</div>
+<p>The following code generates a simple example instance for a set of
 paths. We use a custum attribute <code class="docutils literal notranslate"><span class="pre">frequency</span></code> to store the observed
 frequencies of each path. Right now, the construction of paths is based
 on an edge sequence. The interface is more cumbersome than it needs to
@@ -168,30 +177,95 @@ week.</p>
 <span class="c1"># 41 observations of path a-b-c-d</span>
 <span class="c1"># this leads to state nodes a-b-c and b-c-d connected by a link with weight 41</span>
 <span class="n">pc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span> <span class="n">e3</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">41</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">pc</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">&lt;</span><span class="n">pathpy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Path</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7f9708343190</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">pathpy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Path</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7f9708343130</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">pathpy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Path</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7f9708343340</span><span class="o">&gt;</span><span class="p">}</span>
-</pre></div>
-</div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">infomap</span><span class="o">.</span><span class="n">to_state_file</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="s1">&#39;test.state&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;frequency&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">infomap</span><span class="o">.</span><span class="n">to_state_file</span><span class="p">(</span><span class="n">pc_to_cnt</span><span class="p">(</span><span class="n">pc</span><span class="p">),</span> <span class="s1">&#39;test.state&#39;</span><span class="p">)</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test.state&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">Vertices</span> <span class="mi">4</span>
-<span class="mi">1</span> <span class="s2">&quot;c&quot;</span>
-<span class="mi">2</span> <span class="s2">&quot;b&quot;</span>
-<span class="mi">3</span> <span class="s2">&quot;a&quot;</span>
 <span class="mi">4</span> <span class="s2">&quot;d&quot;</span>
+<span class="mi">1</span> <span class="s2">&quot;a&quot;</span>
+<span class="mi">2</span> <span class="s2">&quot;b&quot;</span>
+<span class="mi">3</span> <span class="s2">&quot;c&quot;</span>
 <span class="o">*</span><span class="n">States</span>
-<span class="mi">1</span> <span class="mi">2</span> <span class="s2">&quot;</span><span class="si">{a}</span><span class="s2">_b&quot;</span>
-<span class="mi">2</span> <span class="mi">1</span> <span class="s2">&quot;</span><span class="si">{b}</span><span class="s2">_c&quot;</span>
-<span class="mi">3</span> <span class="mi">1</span> <span class="s2">&quot;{a-b}_c&quot;</span>
-<span class="mi">4</span> <span class="mi">4</span> <span class="s2">&quot;{b-c}_d&quot;</span>
+<span class="mi">1</span> <span class="mi">1</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_a&quot;</span>
+<span class="mi">2</span> <span class="mi">2</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_b&quot;</span>
+<span class="mi">3</span> <span class="mi">2</span> <span class="s2">&quot;</span><span class="si">{a}</span><span class="s2">_b&quot;</span>
+<span class="mi">4</span> <span class="mi">3</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_c&quot;</span>
+<span class="mi">5</span> <span class="mi">3</span> <span class="s2">&quot;</span><span class="si">{b}</span><span class="s2">_c&quot;</span>
+<span class="mi">6</span> <span class="mi">4</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_d&quot;</span>
 <span class="o">*</span><span class="n">Links</span>
-<span class="mi">1</span> <span class="mi">2</span> <span class="mi">42</span>
-<span class="mi">3</span> <span class="mi">4</span> <span class="mi">41</span>
+<span class="mi">1</span> <span class="mi">2</span> <span class="mi">15</span>
+<span class="mi">1</span> <span class="mi">3</span> <span class="mi">83</span>
+<span class="mi">3</span> <span class="mi">4</span> <span class="mi">42</span>
+<span class="mi">3</span> <span class="mi">5</span> <span class="mi">41</span>
+<span class="mi">5</span> <span class="mi">6</span> <span class="mi">41</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pc</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">PathCollection</span><span class="p">()</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># 1 observation of path a-b</span>
+<span class="n">e1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;a-b&#39;</span><span class="p">)</span>
+<span class="n">pc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># 1 observation of path b-c-d</span>
+<span class="n">e2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;b-c&#39;</span><span class="p">)</span>
+<span class="n">e3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;c-d&#39;</span><span class="p">)</span>
+<span class="n">pc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">e2</span><span class="p">,</span> <span class="n">e3</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># 1 observation of path c-d-a-c</span>
+<span class="n">e4</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;d-a&#39;</span><span class="p">)</span>
+<span class="n">e5</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;a-c&#39;</span><span class="p">)</span>
+<span class="n">pc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">e3</span><span class="p">,</span> <span class="n">e4</span><span class="p">,</span> <span class="n">e5</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># 1 observation of path b-c-b-a-c</span>
+<span class="n">e6</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;c-b&#39;</span><span class="p">)</span>
+<span class="n">e7</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;b-a&#39;</span><span class="p">)</span>
+<span class="n">pc</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">e2</span><span class="p">,</span> <span class="n">e6</span><span class="p">,</span> <span class="n">e7</span><span class="p">,</span> <span class="n">e5</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">pc</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">&lt;</span><span class="n">pathpy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Path</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7fb0ca12b940</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">pathpy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Path</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7fb0ca11d310</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">pathpy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Path</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7fb0ca11d3a0</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">pathpy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">Path</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7fb0ca11dac0</span><span class="o">&gt;</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">infomap</span><span class="o">.</span><span class="n">to_state_file</span><span class="p">(</span><span class="n">pc_to_cnt</span><span class="p">(</span><span class="n">pc</span><span class="p">),</span> <span class="s1">&#39;test.state&#39;</span><span class="p">,</span> <span class="n">max_memory</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test.state&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">Vertices</span> <span class="mi">4</span>
+<span class="mi">4</span> <span class="s2">&quot;d&quot;</span>
+<span class="mi">1</span> <span class="s2">&quot;a&quot;</span>
+<span class="mi">2</span> <span class="s2">&quot;b&quot;</span>
+<span class="mi">3</span> <span class="s2">&quot;c&quot;</span>
+<span class="o">*</span><span class="n">States</span>
+<span class="mi">1</span> <span class="mi">1</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_a&quot;</span>
+<span class="mi">2</span> <span class="mi">2</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_b&quot;</span>
+<span class="mi">3</span> <span class="mi">3</span> <span class="s2">&quot;</span><span class="si">{b}</span><span class="s2">_c&quot;</span>
+<span class="mi">4</span> <span class="mi">4</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_d&quot;</span>
+<span class="mi">5</span> <span class="mi">3</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_c&quot;</span>
+<span class="mi">6</span> <span class="mi">4</span> <span class="s2">&quot;</span><span class="si">{c}</span><span class="s2">_d&quot;</span>
+<span class="mi">7</span> <span class="mi">1</span> <span class="s2">&quot;</span><span class="si">{d}</span><span class="s2">_a&quot;</span>
+<span class="mi">8</span> <span class="mi">2</span> <span class="s2">&quot;</span><span class="si">{c}</span><span class="s2">_b&quot;</span>
+<span class="mi">9</span> <span class="mi">1</span> <span class="s2">&quot;</span><span class="si">{b}</span><span class="s2">_a&quot;</span>
+<span class="o">*</span><span class="n">Links</span>
+<span class="mi">1</span> <span class="mi">2</span> <span class="mi">1</span>
+<span class="mi">2</span> <span class="mi">3</span> <span class="mi">2</span>
+<span class="mi">3</span> <span class="mi">4</span> <span class="mi">1</span>
+<span class="mi">5</span> <span class="mi">6</span> <span class="mi">1</span>
+<span class="mi">6</span> <span class="mi">7</span> <span class="mi">1</span>
+<span class="mi">7</span> <span class="mi">5</span> <span class="mi">1</span>
+<span class="mi">3</span> <span class="mi">8</span> <span class="mi">1</span>
+<span class="mi">8</span> <span class="mi">9</span> <span class="mi">1</span>
+<span class="mi">9</span> <span class="mi">5</span> <span class="mi">1</span>
 </pre></div>
 </div>
 </div>

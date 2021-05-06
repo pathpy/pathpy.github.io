@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pathpy.algorithms.path_extraction.all_paths_from_temporal_network &#8212; pathpy 3.0.22 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pathpy.algorithms.path_extraction.generate_causal_tree" href="pathpy.algorithms.path_extraction.generate_causal_tree.html" />
+    <link rel="prev" title="pathpy.algorithms.path_extraction.all_paths_from_dag" href="pathpy.algorithms.path_extraction.all_paths_from_dag.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/pathpy_logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.22</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../examples/index.html">Gallery</a></li>
+                <li><a href="../tutorial.html">Tutorial</a></li>
+                <li><a href="../api.html">API</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Example gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contributing</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">pathpy.algorithms.path_extraction.all_paths_from_temporal_network</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  </div>
+<div class="col-md-9"><div class="section" id="pathpy-algorithms-path-extraction-all-paths-from-temporal-network">
+<h1>pathpy.algorithms.path_extraction.all_paths_from_temporal_network<a class="headerlink" href="#pathpy-algorithms-path-extraction-all-paths-from-temporal-network" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="pathpy.algorithms.path_extraction.all_paths_from_temporal_network">
+<code class="sig-prename descclassname">pathpy.algorithms.path_extraction.</code><code class="sig-name descname">all_paths_from_temporal_network</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tempnet</span><span class="p">:</span> <span class="n">pathpy.models.temporal_network.TemporalNetwork</span></em>, <em class="sig-param"><span class="n">delta</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">max_subpath_length</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">- 1</span></em><span class="sig-paren">)</span> &#x2192; collections.Counter<a class="reference internal" href="../_modules/pathpy/algorithms/path_extraction.html#all_paths_from_temporal_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pathpy.algorithms.path_extraction.all_paths_from_temporal_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the frequency of causal paths in a temporal network assuming a 
+maximum temporal distance of delta between consecutive
+time-stamped links on a path. This method first creates a directed and acyclic
+time-unfolded graph based on the given parameter delta. This directed acyclic
+graph is used to calculate all time-respecting paths for a given delta.
+I.e., for time-stamped links (a,b,1), (b,c,5), (b,d,7) and delta = 5 the
+time-respecting path (a,b,c) will be found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>tempnet</strong><span class="classifier">pathpy.TemporalNetwork</span></dt><dd><p>TemporalNetwork to extract the time-respecting paths from</p>
+</dd>
+<dt><strong>delta</strong><span class="classifier">int</span></dt><dd><p>Indicates the maximum temporal distance up to which time-stamped
+links will be considered to contribute to a causal path.
+For (u,v;3) and (v,w;7) a causal path (u,v,w) is generated
+for 0 &lt; delta &lt;= 4, while no causal path is generated for
+delta &gt; 4. Every time-stamped edge is a causal path of
+length one. Default value is 1.</p>
+</dd>
+<dt><strong>max_subpath_length</strong><span class="classifier">int</span></dt><dd><p>Can be used to limit the calculation of sub path statistics to a given
+maximum length. This is useful as statistics of sub paths of length k
+are only needed to fit higher-order model with order k and larger. If model
+selection is limited to a maximum order K, we can set the maximum sub path length
+to K. Default is None, which means all subpaths are calculated.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Paths</dt><dd><p>An instance of the class Paths, which can be used to generate higher- and multi-order
+models of causal paths in temporal networks.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">TemporalNetwork</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="o">&gt;&gt;&gt;</span><span class="n">causal_paths</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">path_extraction</span><span class="o">.</span><span class="n">paths_from_temporal_network_dag</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">Severity</span><span class="o">.</span><span class="n">INFO</span><span class="p">]</span> <span class="n">Constructing</span> <span class="n">time</span><span class="o">-</span><span class="n">unfolded</span> <span class="n">DAG</span> <span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">Severity</span><span class="o">.</span><span class="n">INFO</span><span class="p">]</span> <span class="n">finished</span><span class="o">.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">Severity</span><span class="o">.</span><span class="n">INFO</span><span class="p">]</span> <span class="n">Generating</span> <span class="n">causal</span> <span class="n">trees</span> <span class="k">for</span> <span class="mi">2</span> <span class="n">root</span> <span class="n">nodes</span> <span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">Severity</span><span class="o">.</span><span class="n">INFO</span><span class="p">]</span> <span class="n">finished</span><span class="o">.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">causal_paths</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Total</span> <span class="n">path</span> <span class="n">count</span><span class="p">:</span>               <span class="mf">4.0</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">Unique</span> <span class="o">/</span> <span class="n">Sub</span> <span class="n">paths</span> <span class="o">/</span> <span class="n">Total</span><span class="p">]:</span>   <span class="p">[</span><span class="mf">4.0</span> <span class="o">/</span> <span class="mf">24.0</span> <span class="o">/</span> <span class="mf">28.0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Nodes</span><span class="p">:</span>                              <span class="mi">4</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Edges</span><span class="p">:</span>                              <span class="mi">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Max</span><span class="o">.</span> <span class="n">path</span> <span class="n">length</span><span class="p">:</span>               <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Avg</span> <span class="n">path</span> <span class="n">length</span><span class="p">:</span>                <span class="mf">2.25</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Paths</span> <span class="n">of</span> <span class="n">length</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>           <span class="mf">0.0</span> <span class="p">[</span> <span class="mf">0.0</span> <span class="o">/</span> <span class="mf">13.0</span> <span class="o">/</span> <span class="mf">13.0</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Paths</span> <span class="n">of</span> <span class="n">length</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span>           <span class="mf">0.0</span> <span class="p">[</span> <span class="mf">0.0</span> <span class="o">/</span> <span class="mf">9.0</span> <span class="o">/</span> <span class="mf">9.0</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Paths</span> <span class="n">of</span> <span class="n">length</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span>           <span class="mf">3.0</span> <span class="p">[</span> <span class="mf">3.0</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="mf">5.0</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Paths</span> <span class="n">of</span> <span class="n">length</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span>           <span class="mf">1.0</span> <span class="p">[</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">0.0</span> <span class="o">/</span> <span class="mf">1.0</span> <span class="p">]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">The</span> <span class="n">calculated</span> <span class="p">(</span><span class="n">longest</span><span class="p">)</span> <span class="n">causal</span> <span class="n">paths</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">example</span> <span class="n">are</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Pathpy Developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

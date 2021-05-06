@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pathpy.algorithms.path_extraction &#8212; pathpy 3.0.0a2 documentation</title>
+    <title>pathpy.algorithms.path_extraction &#8212; pathpy 3.0.22 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/pathpy_logo.png"></span>
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>3.0.0a2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.0.22</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -112,21 +112,25 @@
 <span class="c1"># !/usr/bin/python -tt</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1"># =============================================================================</span>
-<span class="c1"># File      : path_extraction.py -- Algorithms to compute paths in temporal networks</span>
+<span class="c1"># File      : path_extraction.py -- Algorithms to compute paths in temporal networks and DAGs</span>
 <span class="c1"># Author    : Ingo Scholtes &lt;scholtes@uni-wuppertal.de&gt;</span>
-<span class="c1"># Time-stamp: &lt;Tue 2021-04-26 18:28 ingo&gt;</span>
+<span class="c1"># Time-stamp: &lt;Wed 2021-05-05 18:14 ingo&gt;</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (c) 2016-2021 Pathpy Developers</span>
 <span class="c1"># =============================================================================</span>
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">pathpy.models.temporal_network</span> <span class="kn">import</span> <span class="n">TemporalNetwork</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">deque</span>
+<span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span>
+<span class="kn">import</span> <span class="nn">functools</span> <span class="k">as</span> <span class="nn">ft</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
 
-<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">pathpy</span> <span class="kn">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">tqdm</span>
 
-<span class="kn">from</span> <span class="nn">pathpy.core.api</span> <span class="kn">import</span> <span class="n">NodeCollection</span>
+<span class="kn">from</span> <span class="nn">pathpy.core.api</span> <span class="kn">import</span> <span class="n">NodeCollection</span><span class="p">,</span> <span class="n">Node</span>
 <span class="kn">from</span> <span class="nn">pathpy.core.api</span> <span class="kn">import</span> <span class="n">EdgeCollection</span>
 <span class="kn">from</span> <span class="nn">pathpy.core.api</span> <span class="kn">import</span> <span class="n">PathCollection</span>
 <span class="kn">from</span> <span class="nn">pathpy.models.classes</span> <span class="kn">import</span> <span class="n">BaseTemporalNetwork</span>
@@ -135,77 +139,294 @@
 <span class="c1"># create logger</span>
 <span class="n">LOG</span> <span class="o">=</span> <span class="n">logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-<div class="viewcode-block" id="extract_path_collection"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.path_extraction.extract_path_collection.html#pathpy.algorithms.path_extraction.extract_path_collection">[docs]</a><span class="nd">@singledispatch</span>
-<span class="k">def</span> <span class="nf">extract_path_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PathCollection</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<span class="nd">@extract_path_collection</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ABCDirectedAcyclicGraph</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">_dag_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Calculates path statistics from a directed acyclic graph</span>
+<span class="k">def</span> <span class="nf">_remove_repetitions</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove repeated nodes in the path</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; remove_repetitions((1, 2, 2, 3, 4, 1))</span>
+<span class="sd">    (1, 2, 3, 4, 1)</span>
+<span class="sd">    &gt;&gt;&gt; remove_repetitions((1, 2, 2, 2, 3)) == remove_repetitions((1, 2, 2, 3, 3))</span>
+<span class="sd">    True</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">it</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
 
-    <span class="c1"># check if dag is acyclic</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">acyclic</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">topological_sorting</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">acyclic</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_expand_set_paths</span><span class="p">(</span><span class="n">set_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;returns all possible paths which are consistent with the sequence of sets</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    set_path: list</span>
+<span class="sd">        a list of sets or other iterable</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; node_path = [{1, 2}, {2, 5}, {1, 2}]</span>
+<span class="sd">    &gt;&gt;&gt; list(expand_set_paths(node_path))</span>
+<span class="sd">    [(1, 2, 1), (2, 2, 1), (1, 5, 1), (2, 5, 1), (1, 2, 2), (2, 2, 2), (1, 5, 2), (2, 5, 2)]</span>
+<span class="sd">    &gt;&gt;&gt; node_path = [{1, 2}, {5}, {2, 5}]</span>
+<span class="sd">    &gt;&gt;&gt; list(expand_set_paths(node_path))</span>
+<span class="sd">    [(1, 5, 2), (2, 5, 2), (1, 5, 5), (2, 5, 5)]</span>
+
+
+<span class="sd">    Yields</span>
+<span class="sd">    ------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        a possible path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># how many possible combinations are there</span>
+    <span class="n">node_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">set_path</span><span class="p">]</span>
+    <span class="n">num_possibilities</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">,</span> <span class="n">node_sizes</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># create a list of lists such that each iterator is repeated the number of times</span>
+    <span class="c1"># his predecessors have completed their cycle</span>
+    <span class="n">all_periodics</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">current_length</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">node_set</span> <span class="ow">in</span> <span class="n">set_path</span><span class="p">:</span>
+        <span class="n">periodic_num</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">node_set</span><span class="p">:</span>
+            <span class="n">periodic_num</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">num</span><span class="p">]</span> <span class="o">*</span> <span class="n">current_length</span><span class="p">)</span>
+        <span class="n">current_length</span> <span class="o">*=</span> <span class="nb">len</span><span class="p">(</span><span class="n">node_set</span><span class="p">)</span>
+        <span class="n">all_periodics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">periodic_num</span><span class="p">)</span>
+
+    <span class="n">iterator</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">periodic</span><span class="p">)</span> <span class="k">for</span> <span class="n">periodic</span> <span class="ow">in</span> <span class="n">all_periodics</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">elements</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">num_possibilities</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">yield</span> <span class="n">elements</span>
+
+
+
+<div class="viewcode-block" id="all_paths_from_dag"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.path_extraction.all_paths_from_dag.html#pathpy.algorithms.path_extraction.all_paths_from_dag">[docs]</a><span class="k">def</span> <span class="nf">all_paths_from_dag</span><span class="p">(</span><span class="n">dag</span><span class="p">:</span> <span class="n">ABCDirectedAcyclicGraph</span><span class="p">,</span> <span class="n">node_mapping</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_subpath_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">repetitions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Counter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates path statistics in a directed acyclic graph.</span>
+<span class="sd">    All paths between all roots (nodes with zero indegree)</span>
+<span class="sd">    and all leafs (nodes with zero outdegree) are generated.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dag: DAG</span>
+<span class="sd">        the directed acyclic graph instance for which paths are calculated</span>
+<span class="sd">    node_mapping: dict</span>
+<span class="sd">        can be a simple mapping (1-to-1) or a 1-to-many (a dict with sets as values)</span>
+<span class="sd">    max_subpath_length: int</span>
+<span class="sd">        This can be used to limit the calculation of sub path statistics to a given</span>
+<span class="sd">        maximum length. This is useful, as the statistics of sub paths of length k</span>
+<span class="sd">        are only needed to fit a higher-order model with order k. Hence, if we know</span>
+<span class="sd">        that the model selection is limited to a given maximum order K, we can safely</span>
+<span class="sd">        set the maximum sub path length to K. By default, sub paths of any length</span>
+<span class="sd">        will be calculated. Note that, independent of the sub path calculation</span>
+<span class="sd">        longest path of any length will be considered in the likelihood calculation!</span>
+<span class="sd">    separator: str</span>
+<span class="sd">        separator to use to separate nodes in the generated Paths object. Default is &#39;,&#39;.</span>
+<span class="sd">    repetitions: bool</span>
+<span class="sd">        whether or not to remove repeated nodes in the paths. Such repeated paths can occur</span>
+<span class="sd">        if a non-injective node_mapping is applied. If set to True, a path a,a,b,b,c,c,d is</span>
+<span class="sd">        returned as a,b,c,d.</span>
+<span class="sd">    unique: bool</span>
+<span class="sd">        whether or not multiple identical mapped paths should be counted separately. For</span>
+<span class="sd">        DAG representations of temporal networks with delta &gt; 1, where nodes are temporal copies,</span>
+<span class="sd">        we do not want to count multiple paths from the same root that pass through different</span>
+<span class="sd">        temporal copies of the same physical node. For instance with delta=2, time-stamped edges</span>
+<span class="sd">        (a,b;1), (b,c;3) are transformed into a DAG a1-&gt;b2, a1-&gt;b3, b3-&gt;c4. With the mapping to</span>
+<span class="sd">        physical nodes we would find two different paths a-&gt;b-&gt;c of length two, which only differ</span>
+<span class="sd">        in terms of WHEN they arrive in node c</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Paths</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check whether we are doing a one-to-many mapping</span>
+    <span class="k">if</span> <span class="n">node_mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">node_mapping</span> <span class="o">=</span> <span class="p">{</span> <span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dag</span><span class="o">.</span><span class="n">nodes</span> <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">node_mapping</span><span class="p">:</span>
+        <span class="n">first_key</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ONE_TO_MANY</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_mapping</span><span class="p">[</span><span class="n">first_key</span><span class="p">],</span> <span class="nb">set</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ONE_TO_MANY</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Try to topologically sort the graph if not already sorted</span>
+    <span class="k">if</span> <span class="n">dag</span><span class="o">.</span><span class="n">acyclic</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dag</span><span class="o">.</span><span class="n">topological_sorting</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dag</span><span class="o">.</span><span class="n">acyclic</span><span class="p">:</span>
         <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Cannot extract statistics from a cyclic graph&#39;</span><span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># path object which will hold the detected (projected) paths</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="c1"># if max_subpath_length:</span>
+        <span class="c1">#     p.max_subpath_length = max_subpath_length</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     p.max_subpath_length = sys.maxsize</span>
 
-    <span class="n">paths</span> <span class="o">=</span> <span class="n">PathCollection</span><span class="p">(</span><span class="n">edges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Creating paths from directed acyclic graph&#39;</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">roots</span><span class="p">:</span>
-        <span class="n">paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes_from</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span>
+        <span class="c1"># construct all paths originating from root nodes for 1 to 1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ONE_TO_MANY</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">dag</span><span class="o">.</span><span class="n">roots</span><span class="p">:</span>
+                <span class="n">extracted_paths</span> <span class="o">=</span> <span class="n">dag</span><span class="o">.</span><span class="n">routes_from</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">node_mapping</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">unique</span><span class="p">:</span>
+                    <span class="n">extracted_paths</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">extracted_paths</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">extracted_paths</span><span class="p">:</span>   <span class="c1"># add detected paths to paths object                    </span>
+                    <span class="k">if</span> <span class="n">repetitions</span><span class="p">:</span>
+                        <span class="n">paths</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">paths</span><span class="p">[</span><span class="n">_remove_repetitions</span><span class="p">(</span><span class="n">path</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">path_counter</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">dag</span><span class="o">.</span><span class="n">roots</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">set_path</span> <span class="ow">in</span> <span class="n">dag</span><span class="o">.</span><span class="n">routes_from_node</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">node_mapping</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">blown_up_path</span> <span class="ow">in</span> <span class="n">_expand_set_paths</span><span class="p">(</span><span class="n">set_path</span><span class="p">):</span>
+                        <span class="n">path_counter</span><span class="p">[</span><span class="n">blown_up_path</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="k">return</span> <span class="n">paths</span>
+            <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">path_counter</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">repetitions</span><span class="p">:</span>
+                    <span class="n">paths</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">+=</span> <span class="n">count</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">paths</span><span class="p">[</span><span class="n">path</span><span class="p">][</span><span class="n">_remove_repetitions</span><span class="p">(</span><span class="n">path</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">count</span>
+
+        <span class="c1">#LOG.info(&#39;Expanding Subpaths&#39;)</span>
+        <span class="c1"># p.expand_subpaths()</span>
+        <span class="c1">#LOG.info(&#39;finished.&#39;)</span>
+        <span class="k">return</span> <span class="n">paths</span></div>
 
 
-<span class="nd">@extract_path_collection</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">BaseTemporalNetwork</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">_temporal_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert a temporal network to paths.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="all_paths_from_temporal_network"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.path_extraction.all_paths_from_temporal_network.html#pathpy.algorithms.path_extraction.all_paths_from_temporal_network">[docs]</a><span class="k">def</span> <span class="nf">all_paths_from_temporal_network</span><span class="p">(</span><span class="n">tempnet</span><span class="p">:</span> <span class="n">TemporalNetwork</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_subpath_length</span><span class="p">:</span> <span class="nb">int</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Counter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the frequency of causal paths in a temporal network assuming a </span>
+<span class="sd">    maximum temporal distance of delta between consecutive</span>
+<span class="sd">    time-stamped links on a path. This method first creates a directed and acyclic</span>
+<span class="sd">    time-unfolded graph based on the given parameter delta. This directed acyclic</span>
+<span class="sd">    graph is used to calculate all time-respecting paths for a given delta.</span>
+<span class="sd">    I.e., for time-stamped links (a,b,1), (b,c,5), (b,d,7) and delta = 5 the</span>
+<span class="sd">    time-respecting path (a,b,c) will be found.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tempnet : pathpy.TemporalNetwork</span>
+<span class="sd">        TemporalNetwork to extract the time-respecting paths from</span>
+<span class="sd">    delta : int</span>
+<span class="sd">        Indicates the maximum temporal distance up to which time-stamped</span>
+<span class="sd">        links will be considered to contribute to a causal path.</span>
+<span class="sd">        For (u,v;3) and (v,w;7) a causal path (u,v,w) is generated</span>
+<span class="sd">        for 0 &lt; delta &lt;= 4, while no causal path is generated for</span>
+<span class="sd">        delta &gt; 4. Every time-stamped edge is a causal path of</span>
+<span class="sd">        length one. Default value is 1.</span>
+<span class="sd">    max_subpath_length : int</span>
+<span class="sd">        Can be used to limit the calculation of sub path statistics to a given</span>
+<span class="sd">        maximum length. This is useful as statistics of sub paths of length k</span>
+<span class="sd">        are only needed to fit higher-order model with order k and larger. If model</span>
+<span class="sd">        selection is limited to a maximum order K, we can set the maximum sub path length</span>
+<span class="sd">        to K. Default is None, which means all subpaths are calculated.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Paths</span>
+<span class="sd">        An instance of the class Paths, which can be used to generate higher- and multi-order</span>
+<span class="sd">        models of causal paths in temporal networks.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    &gt;&gt;&gt; t = pp.TemporalNetwork()</span>
+<span class="sd">    &gt;&gt;&gt; t.add_edge(&#39;a&#39;, &#39;b&#39;, 1)</span>
+<span class="sd">    &gt;&gt;&gt; t.add_edge(&#39;b&#39;, &#39;a&#39;, 3)</span>
+<span class="sd">    &gt;&gt;&gt; t.add_edge(&#39;b&#39;, &#39;c&#39;, 3)</span>
+<span class="sd">    &gt;&gt;&gt; t.add_edge(&#39;d&#39;, &#39;c&#39;, 4)</span>
+<span class="sd">    &gt;&gt;&gt; t.add_edge(&#39;c&#39;, &#39;d&#39;, 5)</span>
+<span class="sd">    &gt;&gt;&gt; t.add_edge(&#39;c&#39;, &#39;b&#39;, 6)</span>
+
+<span class="sd">    &gt;&gt;&gt; &gt;&gt;&gt;causal_paths = pp.path_extraction.paths_from_temporal_network_dag(t, delta=2)</span>
+<span class="sd">    &gt;&gt;&gt; [Severity.INFO]	Constructing time-unfolded DAG ...</span>
+<span class="sd">    &gt;&gt;&gt; [Severity.INFO]	finished.</span>
+<span class="sd">    &gt;&gt;&gt; [Severity.INFO]	Generating causal trees for 2 root nodes ...</span>
+<span class="sd">    &gt;&gt;&gt; [Severity.INFO]	finished.</span>
+<span class="sd">    &gt;&gt;&gt; print(causal_paths)</span>
+<span class="sd">    &gt;&gt;&gt; Total path count: 		4.0 </span>
+<span class="sd">    &gt;&gt;&gt; [Unique / Sub paths / Total]: 	[4.0 / 24.0 / 28.0]</span>
+<span class="sd">    &gt;&gt;&gt; Nodes:				    4 </span>
+<span class="sd">    &gt;&gt;&gt; Edges:				    6</span>
+<span class="sd">    &gt;&gt;&gt; Max. path length:		3</span>
+<span class="sd">    &gt;&gt;&gt; Avg path length:		2.25 </span>
+<span class="sd">    &gt;&gt;&gt; Paths of length k = 0		0.0 [ 0.0 / 13.0 / 13.0 ]</span>
+<span class="sd">    &gt;&gt;&gt; Paths of length k = 1		0.0 [ 0.0 / 9.0 / 9.0 ]</span>
+<span class="sd">    &gt;&gt;&gt; Paths of length k = 2		3.0 [ 3.0 / 2.0 / 5.0 ]</span>
+<span class="sd">    &gt;&gt;&gt; Paths of length k = 3		1.0 [ 1.0 / 0.0 / 1.0 ]</span>
+
+<span class="sd">    &gt;&gt;&gt; The calculated (longest) causal paths in this example are:</span>
+<span class="sd">    &gt;&gt;&gt; (a, b, c, d), (d, c, b), (d, c, d), (a, b, a)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">pathpy.models.directed_acyclic_graph</span> <span class="kn">import</span> <span class="n">DirectedAcyclicGraph</span>
-
-    <span class="c1">#paths = PathCollection(edges=self.edges.copy())</span>
-    <span class="n">paths</span> <span class="o">=</span> <span class="n">PathCollection</span><span class="p">()</span>
-
-    <span class="n">delta</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;delta&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># generate a single time-unfolded DAG</span>
-    <span class="n">dag</span> <span class="o">=</span> <span class="n">DirectedAcyclicGraph</span><span class="o">.</span><span class="n">from_temporal_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">)</span>
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Constructing time-unfolded DAG ...&#39;</span><span class="p">)</span>
+    <span class="n">dag</span> <span class="o">=</span> <span class="n">DirectedAcyclicGraph</span><span class="o">.</span><span class="n">from_temporal_network</span><span class="p">(</span><span class="n">tempnet</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
+    <span class="n">node_map</span> <span class="o">=</span> <span class="p">{</span> <span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dag</span><span class="o">.</span><span class="n">nodes</span> <span class="p">}</span>
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;finished.&#39;</span><span class="p">)</span>
 
-    <span class="c1"># extract causal tree for each root node</span>
-    <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">dag</span><span class="o">.</span><span class="n">roots</span><span class="p">:</span>
-        <span class="n">causal_tree</span> <span class="o">=</span> <span class="n">_causal_tree</span><span class="p">(</span><span class="n">dag</span><span class="p">,</span> <span class="n">root</span><span class="p">)</span>
+    <span class="c1"># path statistics</span>
+    <span class="n">causal_paths</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+    
+    <span class="c1"># For each root in the time-unfolded DAG, we generate a</span>
+    <span class="c1"># causal tree and use it to count all causal paths</span>
+    <span class="c1"># that originate at this root</span>
+    <span class="n">num_roots</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dag</span><span class="o">.</span><span class="n">roots</span><span class="p">)</span>
+    <span class="n">current_root</span> <span class="o">=</span> <span class="mi">1</span>
 
-        <span class="n">_paths</span> <span class="o">=</span> <span class="n">causal_tree</span><span class="o">.</span><span class="n">to_paths</span><span class="p">()</span>
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Generating causal trees for </span><span class="si">{0}</span><span class="s1"> root nodes ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_roots</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">dag</span><span class="o">.</span><span class="n">roots</span><span class="p">):</span>
 
-        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">_paths</span><span class="p">:</span>
-            <span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">edges</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">edges</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
-                <span class="n">paths</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">*</span><span class="n">edges</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">paths</span><span class="p">[</span><span class="n">edges</span><span class="p">][</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="n">paths</span>
+        <span class="c1"># generate the causal tree from this root node</span>
+        <span class="n">causal_tree</span><span class="p">,</span> <span class="n">causal_mapping</span> <span class="o">=</span> <span class="n">generate_causal_tree</span><span class="p">(</span><span class="n">dag</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">node_map</span><span class="p">)</span>
+
+        <span class="c1"># output</span>
+        <span class="k">if</span> <span class="n">num_roots</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="n">num_roots</span><span class="o">/</span><span class="mi">10</span>
+            <span class="k">if</span> <span class="n">current_root</span> <span class="o">%</span> <span class="n">step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Analyzing tree </span><span class="si">{0}</span><span class="s1">/</span><span class="si">{1}</span><span class="s1"> ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current_root</span><span class="p">,</span> <span class="n">num_roots</span><span class="p">))</span>
+
+        <span class="c1"># calculate all unique longest path in the causal tree</span>
+        <span class="n">causal_paths</span> <span class="o">+=</span> <span class="n">all_paths_from_dag</span><span class="p">(</span><span class="n">causal_tree</span><span class="p">,</span> <span class="n">causal_mapping</span><span class="p">,</span> <span class="n">repetitions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">max_subpath_length</span><span class="o">=</span><span class="n">max_subpath_length</span><span class="p">)</span>
+        <span class="n">current_root</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;finished.&#39;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">causal_paths</span></div>
 
 
-<span class="k">def</span> <span class="nf">_causal_tree</span><span class="p">(</span><span class="n">dag</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Generates a causal tree in a DAG, starting from a </span>
-<span class="sd">    given root node</span>
+<div class="viewcode-block" id="generate_causal_tree"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.path_extraction.generate_causal_tree.html#pathpy.algorithms.path_extraction.generate_causal_tree">[docs]</a><span class="k">def</span> <span class="nf">generate_causal_tree</span><span class="p">(</span><span class="n">dag</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">node_map</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For a directed acyclic graph and a non-injective mapping of nodes,</span>
+<span class="sd">    this method creates a *causal tree* for a given root node.</span>
+<span class="sd">    This is useful for the extraction of causal paths in time-unfolded DAG</span>
+<span class="sd">    representations of temporal networks. The nodes &quot;{v}_{d}&quot; in the resulting</span>
+<span class="sd">    causal tree capture that - starting from the root node at step 0 - there is</span>
+<span class="sd">    a causal path to node v at distance d from the root. Note that the same node</span>
+<span class="sd">    can be represented by multiple nodes in the causal tree (at different distances d).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Generate causal tree for root: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
     <span class="kn">from</span> <span class="nn">pathpy.models.directed_acyclic_graph</span> <span class="kn">import</span> <span class="n">DirectedAcyclicGraph</span>
+    <span class="n">causal_tree</span> <span class="o">=</span> <span class="n">DirectedAcyclicGraph</span><span class="p">()</span>
 
-    <span class="n">tree</span> <span class="o">=</span> <span class="n">DirectedAcyclicGraph</span><span class="p">()</span>
-    <span class="n">node_map</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">edge_map</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">causal_mapping</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">visited</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span><span class="p">)</span>
     <span class="n">queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
 
     <span class="c1"># launch breadth-first-search at root of tree</span>
     <span class="c1"># root nodes are necessarily at depth 0</span>
-    <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">root</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">root</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="p">[]</span>
-
     <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
         <span class="c1"># take out left-most element from FIFO queue</span>
         <span class="n">v</span><span class="p">,</span> <span class="n">depth</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
@@ -215,34 +436,151 @@
         <span class="c1"># the root of the causal tree. These IDs ensure</span>
         <span class="c1"># that the same physical nodes can occur at different</span>
         <span class="c1"># distances from the root</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">_</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
-        <span class="n">node_map</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">_</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node_map</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">depth</span><span class="p">)</span>
+        <span class="n">causal_mapping</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_map</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
 
         <span class="c1"># process nodes at next level</span>
-        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">dag</span><span class="o">.</span><span class="n">successors</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">]:</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">queue</span><span class="p">:</span>
-                <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">w</span><span class="p">,</span> <span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">dag</span><span class="o">.</span><span class="n">successors</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">queue</span><span class="p">:</span>
+                <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
                 <span class="c1"># only consider nodes that have not already</span>
                 <span class="c1"># been added to this level</span>
-
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">visited</span><span class="p">[</span><span class="n">w</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">visited</span><span class="p">[</span><span class="n">node_map</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">],</span> <span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
                     <span class="c1"># add edge to causal tree</span>
-                    <span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">_</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">_</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node_map</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">],</span> <span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
                     <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
 
-                    <span class="n">visited</span><span class="p">[</span><span class="n">w</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="n">node_map</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">]</span>
-                    <span class="n">edge_map</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">dag</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">][</span><span class="s1">&#39;original&#39;</span><span class="p">]</span>
+                    <span class="n">visited</span><span class="p">[</span><span class="n">node_map</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">],</span> <span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">causal_mapping</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_map</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">]</span>
+    
+    <span class="c1"># Adding all edges at once is more efficient!</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="n">causal_tree</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
-            <span class="n">tree</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">original</span><span class="o">=</span><span class="n">node_map</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">y</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
-            <span class="n">tree</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">original</span><span class="o">=</span><span class="n">node_map</span><span class="p">[</span><span class="n">y</span><span class="p">])</span>
-        <span class="n">tree</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">original</span><span class="o">=</span><span class="n">edge_map</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">causal_tree</span><span class="p">,</span> <span class="n">causal_mapping</span></div>
 
-    <span class="k">return</span> <span class="n">tree</span>
+
+    
+<div class="viewcode-block" id="PaCo"><a class="viewcode-back" href="../../../generated/pathpy.algorithms.path_extraction.PaCo.html#pathpy.algorithms.path_extraction.PaCo">[docs]</a><span class="k">def</span> <span class="nf">PaCo</span><span class="p">(</span>
+    <span class="n">tn</span><span class="p">:</span> <span class="n">BaseTemporalNetwork</span><span class="p">,</span>
+    <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">skip_first</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">up_to_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PathCollection</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Path counting algorithm PaCo.</span>
+<span class="sd">    Published at TempWeb 2021 workshop.</span>
+<span class="sd">    in: </span>
+<span class="sd">        tn : BaseTemporalNetwork,</span>
+<span class="sd">            temporal network in which we count paths.</span>
+
+<span class="sd">        delta : float</span>
+<span class="sd">            maximal time difference that between two links that can form a path.  </span>
+<span class="sd">        </span>
+<span class="sd">        skip_first = 0 : int,</span>
+<span class="sd">            paths computed in the first `skip_first&#39; temporal links are not counted towards the total path count. This feature is for parallel computing.</span>
+
+<span class="sd">        up_to_k = 10 : int</span>
+<span class="sd">            maximal lengt of paths that we count.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># all the entries that are at max distance delta away from the current entry</span>
+    <span class="n">delta_window</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">path_stack</span> <span class="o">=</span> <span class="n">PathCollection</span><span class="p">()</span>
+
+    <span class="c1"># current_path_stack[i][p] is the number of paths p that go from</span>
+    <span class="c1"># current_edge of index i.</span>
+    <span class="n">current_path_stack</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+
+    <span class="c1"># for e, current_edge in enumerate(D):</span>
+    <span class="k">for</span> <span class="n">e</span><span class="p">,</span> <span class="p">((</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">uid</span><span class="p">),</span> <span class="n">edge</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tn</span><span class="o">.</span><span class="n">tedges</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="n">current_edge</span> <span class="o">=</span> <span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">)</span>
+        <span class="c1"># since we go in forward direction, delta window is back in time.</span>
+        <span class="c1"># not every entry from delta window is important for the current</span>
+        <span class="c1"># considered current_edge some are happening at the same time.</span>
+
+        <span class="c1"># check if there is anything to update about delta window</span>
+        <span class="c1"># and current stack</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">delta_window</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># I throw away the ones in delta_window that are too far away</span>
+            <span class="c1"># (in temporal sense)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">didnt_find_one_yet</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># since the data is sorted, I just need to find the one that</span>
+            <span class="c1"># is inside the delta time window.</span>
+            <span class="c1"># This while loop identifies the first entry saved in delta window,</span>
+            <span class="c1"># that is inside the new delta window so it only loops through the</span>
+            <span class="c1"># ones that are outside the new delta window.</span>
+            <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">delta_window</span><span class="p">)</span> <span class="ow">and</span> <span class="n">didnt_find_one_yet</span><span class="p">:</span>
+                <span class="c1"># i&#39;th entry [i], then I need the entry,</span>
+                <span class="c1"># and not the ennumerator [1],</span>
+                <span class="c1"># and then I need time, which is the third column[2]</span>
+                <span class="k">if</span> <span class="n">delta_window</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">current_edge</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">delta</span><span class="p">:</span>
+                    <span class="n">didnt_find_one_yet</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># i didn&#39;t find yet one which is inside the new delta window.</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># keep all starting from the first that is inside the</span>
+            <span class="c1"># new delta window.</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">delta_window</span><span class="p">):</span>
+                <span class="n">first_index_in_delta_window</span> <span class="o">=</span> <span class="n">delta_window</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">old_inx</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">e</span> <span class="k">for</span> <span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">current_edge</span><span class="p">)</span> <span class="ow">in</span> <span class="n">delta_window</span> <span class="k">if</span> <span class="n">e</span> <span class="o">&lt;</span> <span class="n">first_index_in_delta_window</span><span class="p">]</span>
+                <span class="n">delta_window</span> <span class="o">=</span> <span class="n">delta_window</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># all from delta window should be removed.</span>
+                <span class="c1"># asign current index</span>
+                <span class="n">first_index_in_delta_window</span> <span class="o">=</span> <span class="n">e</span>
+                <span class="n">old_inx</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">e</span> <span class="k">for</span> <span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">current_edge</span><span class="p">)</span> <span class="ow">in</span> <span class="n">delta_window</span> <span class="k">if</span> <span class="n">e</span> <span class="o">&lt;</span> <span class="n">first_index_in_delta_window</span><span class="p">]</span>
+                <span class="n">delta_window</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># delta_window is now corresponding to the current_edge that I am</span>
+            <span class="c1"># considering.</span>
+            <span class="c1"># go through outdated indices</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">old_inx</span><span class="p">:</span>
+                <span class="c1"># remove them from the current stack.</span>
+                <span class="k">del</span> <span class="n">current_path_stack</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="c1"># all stacks updated now.</span>
+
+        <span class="c1"># compute for the next</span>
+        <span class="k">for</span> <span class="n">enu</span><span class="p">,</span> <span class="n">past_edge</span> <span class="ow">in</span> <span class="n">delta_window</span><span class="p">:</span>
+            <span class="c1"># if target of the link in delta_window is the same as the</span>
+            <span class="c1"># source in considered entry</span>
+            <span class="k">if</span> <span class="n">past_edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">current_edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="c1"># the interactions should not happen at the same time!</span>
+                <span class="c1"># the considered one should happen AFTER the one from the</span>
+                <span class="c1"># delta window.</span>
+                <span class="k">if</span> <span class="n">current_edge</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">past_edge</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                    <span class="c1"># i know that the link happened in the appropriate time,</span>
+                    <span class="c1"># and that the link continues the link I consider.</span>
+                    <span class="c1"># so I can add the paths to the current_path_stack</span>
+                    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">current_path_stack</span><span class="p">[</span><span class="n">enu</span><span class="p">]:</span>
+                        <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="n">current_edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">up_to_k</span><span class="p">:</span>
+                            <span class="n">current_path_stack</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="n">p</span><span class="p">]</span> <span class="o">+=</span> <span class="n">current_path_stack</span><span class="p">[</span><span class="n">enu</span><span class="p">][</span><span class="n">path</span><span class="p">]</span>
+
+                            <span class="k">if</span> <span class="n">e</span> <span class="o">&gt;=</span> <span class="n">skip_first</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">path_stack</span><span class="p">:</span>
+                                    <span class="n">path_stack</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                                        <span class="n">p</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="n">current_path_stack</span><span class="p">[</span><span class="n">enu</span><span class="p">][</span><span class="n">path</span><span class="p">])</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">path_stack</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">current_path_stack</span><span class="p">[</span><span class="n">enu</span><span class="p">][</span><span class="n">path</span><span class="p">]</span>
+        <span class="n">current_path_stack</span><span class="p">[</span><span class="n">e</span><span class="p">][(</span><span class="n">current_edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">current_edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">e</span> <span class="o">&gt;=</span> <span class="n">skip_first</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">current_edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">path_stack</span><span class="p">:</span>
+                <span class="n">path_stack</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">path_stack</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># add this current_edge at the end of delta_window,</span>
+        <span class="c1"># so that the next current_edge can have all the entries it needs.</span>
+        <span class="n">delta_window</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">e</span><span class="p">,</span> <span class="n">current_edge</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">path_stack</span></div>
+
+    
 </pre></div>
 
     </div>
